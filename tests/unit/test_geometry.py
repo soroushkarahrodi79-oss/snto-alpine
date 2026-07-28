@@ -330,6 +330,20 @@ class TestAsymmetricTrailBuffer:
         assert abs(buf_wide_down.area - buf_wide_up.area) / max(buf_wide_down.area, 1) < 0.30
 
 
+# ── COG streaming environment ────────────────────────────────────────────────
+
+def test_dem_cog_env_allows_anonymous_s3() -> None:
+    """The Copernicus DEM asset is an anonymous S3 object; GDAL must not sign.
+
+    Without AWS_NO_SIGN_REQUEST=YES, fetch_dem_window() fails with
+    "InvalidCredentials" on any machine without AWS credentials. Regression
+    guard for that latent failure.
+    """
+    from src.geospatial.geometry import _GDAL_COG_ENV
+
+    assert _GDAL_COG_ENV.get("AWS_NO_SIGN_REQUEST") == "YES"
+
+
 # ── fetch_dem_window (STAC + rasterio fully mocked) ──────────────────────────
 
 class TestFetchDemWindow:
