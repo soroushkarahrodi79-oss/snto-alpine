@@ -1,17 +1,19 @@
 <div align="center">
 
-# 🏔 SNTO — Smart Nature Tourism Observatory
+# 🏔 Smart Natural Tourism Observatory — Alpine Edition (Sierra Nevada Pilot)
 
-**Capa de inteligencia para la decisión en espacios naturales protegidos.** Código abierto, para uso académico.
+**Capa de inteligencia para la decisión en espacios naturales protegidos de alta montaña.** Código abierto, para uso académico.
 
-De la teledetección Sentinel-2 a la decisión de inversión pública: indicadores ambientales calibrados, atribución causal de la degradación y priorización presupuestaria sobre el **Parque Nacional Sierra de Guadarrama (PNSG)**, primer territorio de la Red de Parques Nacionales (OAPN) integrado.
+De la teledetección Sentinel-2 a la decisión de inversión pública sobre el **Parque Nacional de Sierra Nevada** (Andalucía): innivación invernal, erosión estival de *borreguiles* por BTT y senderismo, atribución causal frente al clima, y traducción financiera TRAGSA para la administración pública (Junta de Andalucía, MITECO, Cetursa Sierra Nevada).
+
+> **Edición Alpina.** Deriva del [SNTO base](https://github.com/soroushkarahrodi79-oss/snto-smart-tourism-observatory) (piloto Sierra de Guadarrama) y conserva su arquitectura íntegra: consultas espaciales PostGIS, puerta de calidad del dato (DCS), módulo de causalidad espacial (SCM) y traducción financiera TRAGSA. Lo que añade es la **doble estacionalidad** que la alta montaña mediterránea impone y que el modelo base no expresaba — ver [§2bis](#2bis-arquitectura-alpina-el-pipeline-de-doble-temporada).
 
 > SNTO **no reemplaza** a ArcGIS, Google Earth Engine, Sentinel Hub, Tableau ni Power BI: se sitúa **por encima** de las plataformas GIS, de observación de la Tierra y de BI, y traduce su señal en decisiones de conservación defendibles (riesgo de presión de visitantes, prioridad e inversión, con nivel de confianza).
 
-[![Tests](https://img.shields.io/badge/tests-927%20passing-brightgreen)](#8-tests)
+[![Tests](https://img.shields.io/badge/tests-1039%20passing-brightgreen)](#8-tests)
 [![Python](https://img.shields.io/badge/python-%E2%89%A53.12-blue)](https://www.python.org/)
-[![CI](https://github.com/soroushkarahrodi79-oss/snto-smart-tourism-observatory/actions/workflows/ci.yml/badge.svg)](https://github.com/soroushkarahrodi79-oss/snto-smart-tourism-observatory/actions/workflows/ci.yml)
-[![Deploy](https://github.com/soroushkarahrodi79-oss/snto-smart-tourism-observatory/actions/workflows/deploy-azure-container-apps.yml/badge.svg)](https://github.com/soroushkarahrodi79-oss/snto-smart-tourism-observatory/actions/workflows/deploy-azure-container-apps.yml)
+[![CI](https://github.com/soroushkarahrodi79-oss/snto-alpine/actions/workflows/ci.yml/badge.svg)](https://github.com/soroushkarahrodi79-oss/snto-alpine/actions/workflows/ci.yml)
+[![Deploy](https://github.com/soroushkarahrodi79-oss/snto-alpine/actions/workflows/deploy-azure-container-apps.yml/badge.svg)](https://github.com/soroushkarahrodi79-oss/snto-alpine/actions/workflows/deploy-azure-container-apps.yml)
 [![Deploy target](https://img.shields.io/badge/deploy-Azure%20Container%20Apps-0078D4?logo=microsoftazure&logoColor=white)](#7-despliegue)
 [![Status](https://img.shields.io/badge/estado-investigaci%C3%B3n%20activa-blue)](#1-estado-del-proyecto)
 [![License](https://img.shields.io/badge/uso-acad%C3%A9mico-lightgrey)](LICENSE)
@@ -27,7 +29,7 @@ De la teledetección Sentinel-2 a la decisión de inversión pública: indicador
 
 La mayoría de los espacios naturales protegidos gestionan el impacto del turismo de forma **reactiva**: actúan cuando la degradación ya es visible. El SNTO transforma ese paradigma en **gobernanza regenerativa proactiva** — detecta el estrés ecológico desde el satélite antes de que sea irreversible, distingue si la causa es el uso turístico o el clima, y traduce cada hallazgo en una **prioridad de inversión con presupuesto y nivel de confianza**.
 
-> **Para evaluadores y revisores:** este repositorio es un proyecto de investigación académica de la **Universidad Complutense de Madrid (UCM)**: un observatorio que evalúa el estado de senderos y enclaves de turismo natural por teledetección satelital, detecta zonas de riesgo de degradación y prioriza la intervención con fórmulas financieras. Demuestra un pipeline geoespacial real sobre el **Parque Nacional Sierra de Guadarrama** (218 senderos analizados con cartografía oficial OAPN) y un sistema completo de inteligencia territorial de 7 fases, con capas de **andamiaje temporal (serie 2021–2026), trazabilidad/confianza del dato, baselines estratificados, incertidumbre del ranking y validación de campo**. **927 tests, CI separado del deploy, dos pipelines arquitectónicamente desacoplados.** La gobernanza se alinea con los marcos europeos de reporte de espacios protegidos (Natura 2000 / EUROPARC / SISMOTUR), validada inicialmente sobre la Reserva de la Biosfera Sierra del Rincón como piloto de calibración.
+> **Para evaluadores y revisores:** este repositorio es un proyecto de investigación académica de la **Universidad Complutense de Madrid (UCM)**: un observatorio que evalúa el estado de senderos y enclaves de turismo natural por teledetección satelital, detecta zonas de riesgo de degradación y prioriza la intervención con fórmulas financieras. Demuestra un pipeline geoespacial real sobre el **Parque Nacional Sierra de Guadarrama** (218 senderos analizados con cartografía oficial OAPN) y un sistema completo de inteligencia territorial de 7 fases, con capas de **andamiaje temporal (serie 2021–2026), trazabilidad/confianza del dato, baselines estratificados, incertidumbre del ranking y validación de campo**. **1.039 tests, CI separado del deploy, dos pipelines arquitectónicamente desacoplados.** La gobernanza se alinea con los marcos europeos de reporte de espacios protegidos (Natura 2000 / EUROPARC / SISMOTUR), validada inicialmente sobre la Reserva de la Biosfera Sierra del Rincón como piloto de calibración.
 
 > **Estado de versión:** [`v2.0.0`](https://github.com/soroushkarahrodi79-oss/snto-smart-tourism-observatory/releases/tag/v2.0.0) es la última release estable; `main` está en `v2.1.0.dev0` (marcador de desarrollo, no una release final). v2.0.0 consuma la visión v2.0 del roadmap (arquitectura modular + backend persistente + evolución de UI por roles). Se apoya en los cimientos ya publicados en v1.5.0 — la **modularización de `app.py`** (#27: de ~3.170 a ~285 líneas, UI extraída a `src/ui/`), las **vistas por audiencia** (#28: Técnica/Gestor/Auditoría con cifras financieras invariantes) y los **fundamentos del backend persistente** (Fase 5, ADR-011: persistencia SQLAlchemy+Alembic, API `/api/v2`, ciclo de vida, auditoría; producción sobre Azure PostgreSQL desde el cutover 2026-07-18) — y añade la **evolución de UI por roles** (Fase 6): la información se reorganiza en **cuatro capas de decisión** (Decidir · Diagnosticar · Evidenciar · Gobernar) con *home* por audiencia, el **activo como página**, triaje de alertas en «Acciones Urgentes», y los módulos de simulación, presión/capacidad, confianza, proveniencia, informes/exportaciones y configuración territorial. Ningún cambio relaja la separación de evidencia ni afirma validación de campo (campaña #26 aún pendiente). En `main` (sin nueva release estable todavía) ya han aterrizado además los primeros hitos post-v2.0: **v2.1** (activación y gobernanza — deploy gateado por CI, CI endurecido, `DataStatus` de la capa curada), **v2.2** (profundidad analítica — forecasting `SIMULATED`, feed real de movilidad MITMA, capacidad LAC/ROS, zonas SCM reales), la **puerta de validación v2.5** (runner de concordancia y captura de parcelas; la campaña de campo sigue pendiente) y los primeros cimientos de **v3.0** (identidad y multi-tenancy, aprovisionamiento, registro territorial editable y autorización de escritura en `/api/v2`; SSO/Entra ID sigue pendiente).
 
@@ -49,6 +51,7 @@ _Shell de 4 capas de decisión (Fase 6, v2.0) — Decidir · Diagnosticar · Evi
 
 1. [Estado del proyecto](#1-estado-del-proyecto)
 2. [Arquitectura: dos pipelines](#2-arquitectura-dos-pipelines)
+2bis. [Arquitectura alpina: pipeline de doble temporada](#2bis-arquitectura-alpina-el-pipeline-de-doble-temporada)
 3. [Capacidades técnicas implementadas](#3-capacidades-técnicas-implementadas)
 4. [Stack tecnológico](#4-stack-tecnológico)
 5. [Estructura del repositorio](#5-estructura-del-repositorio)
@@ -158,6 +161,70 @@ class F,G,H,I,J dash;
 
 ---
 
+## 2bis. Arquitectura alpina: el pipeline de doble temporada
+
+Sierra Nevada plantea **dos problemas espectralmente opuestos en el mismo territorio**, y esa oposición es la que estructura toda la edición alpina:
+
+| | **Invierno** | **Verano** |
+|---|---|---|
+| Problema | Retroceso del manto nivoso | Erosión de borreguiles por BTT y senderismo |
+| La nieve es… | **la señal** | **ruido** |
+| Índice | NDSI = (B03 − B11) / (B03 + B11) | EVI + NDMI |
+| Máscara SCL | **conserva** la clase 11 | **descarta** la clase 11 |
+| Salidas | Cota de nieve (m s.n.m.), duración del manto | Índice de degradación del suelo |
+
+**La asimetría de máscara es el núcleo de la edición.** El SNTO base excluye la clase SCL 11 (nieve/hielo) como contaminación — correcto para un parque de media montaña, catastrófico para un índice de nieve: vaciaría la escena justo en los meses de interés. `src/features/alpine_spectral.py` define dos conjuntos de exclusión y el conmutador que elige entre ellos.
+
+El agua se excluye en ambas temporadas: comparte la firma NDSI de la nieve (verde alto, SWIR bajo), y las lagunas glaciares están precisamente en la cota que determina la línea de nieve. Por eso `is_snow_pixel()` exige además un **suelo de reflectancia NIR** — la nieve sigue siendo reflectante en el infrarrojo cercano; el agua líquida no.
+
+### Flujo por capas
+
+```mermaid
+flowchart LR
+  subgraph ING["Ingesta"]
+    S2["Sentinel-2 L2A vía STAC<br/>B03·B04·B08·B11·SCL"]
+    DEM["Copernicus DEM-30<br/>vía STAC · EPSG:25830"]
+  end
+  subgraph FEAT["Extracción de rasgos"]
+    MASK["Máscara SCL estacional<br/>alpine_valid_mask()"]
+    WIN["Invierno: NDSI · cota de nieve<br/>· duración del manto"]
+    SUM["Verano: EVI · NDMI<br/>· degradación del suelo"]
+    SLOPE["Pendiente y orientación<br/>compute_slope_aspect()"]
+    BUF["Buffer asimétrico escalado<br/>15 m arriba / 60→80 m abajo"]
+  end
+  subgraph RISK["Motor de riesgo"]
+    SCM["SCM alpino: zona local 0–50 m<br/>vs control 200–500 m<br/>MISMA COTA ±50 m"]
+    ATTR["Índice de atribución<br/>+ puerta de pendiente"]
+    ROI["Coste TRAGSA × factor pendiente<br/>+ empleos e ingresos"]
+  end
+  subgraph UI["Interfaz"]
+    DASH["Conmutador de temporada · mapa PyDeck<br/>· simulador 50 K–1 M € · matriz TPI"]
+  end
+
+  S2 --> MASK --> WIN & SUM
+  DEM --> SLOPE --> BUF
+  SUM --> SCM
+  BUF --> SCM --> ATTR --> ROI
+  WIN --> DASH
+  ATTR --> DASH
+  ROI --> DASH
+```
+
+### Qué aporta cada módulo
+
+| Módulo | Aportación sobre el SNTO base |
+|---|---|
+| `src/features/alpine_spectral.py` | NDSI, máscara SCL estacional, discriminación nieve/agua, cota de nieve, duración del manto, índice de degradación de borreguiles. Reutiliza `compute_evi`/`compute_ndmi` del módulo base. |
+| `src/geospatial/alpine_dem.py` | **Escalado del corredor por magnitud de pendiente.** El buffer base calcula la pendiente y la descarta (`_, aspect_deg = ...`): conoce *hacia dónde* corre el agua, no *con cuánta fuerza*. Aquí el lado de aguas abajo pasa de 60 a 80 m entre 20° y 30°; el de aguas arriba se mantiene en 15 m, porque la escorrentía no sube. |
+| `src/spatial_causality/alpine_causality.py` | **Zona de control emparejada por altitud.** El anillo base de 200–1000 m puede abarcar de pinar a roquedo periglaciar; atribuir ese gradiente altitudinal a los ciclistas es un error de bulto. El anillo se estrecha a 200–500 m y se intersecta con la banda del DEM ±50 m de la cota del sendero. |
+| `src/risk_engine/public_roi.py` | Tarifa TRAGSA de 15,50 €/m ajustada por pendiente (×1,0 → ×1,8) y traducida a empleos e ingresos hosteleros dependientes. |
+| `src/platform/alpine_dashboard.py` | Constructores puros (sin Streamlit) de mapa y matriz por temporada. |
+| `src/ui/tabs/tab_alpine.py` | Superficie Streamlit: conmutador, mapa, simulador presupuestario, matriz TPI. |
+
+> **Disciplina de evidencia.** Toda cifra socioeconómica es una estimación *proxy*, no una observación INE/ALMUDENA, y `PublicROIStatement` transporta su `EvidenceClass`. Conforme a la matriz de `src/platform/evidence.py`, una afirmación `SIMULATED` **no sostiene ninguna decisión de gasto por sí sola**. Nada en esta edición está validado en campo.
+
+---
+
 ## 3. Capacidades técnicas implementadas
 
 - **EHS operacional** calibrado por percentiles de escena (P90 → referencia sana, P10 → suelo degradado) sobre la distribución real de píxeles de cada imagen Sentinel-2, por estación e índice (NDVI, NDMI).
@@ -198,7 +265,7 @@ class F,G,H,I,J dash;
 ## 5. Estructura del repositorio
 
 ```
-snto-smart-tourism-observatory/
+snto-alpine/
 ├── README.md
 ├── ARCHITECTURE.md
 ├── WHITEPAPER_SNTO_Architecture_Blueprint.md
@@ -386,5 +453,5 @@ Fichero de cita: [`CITATION.cff`](CITATION.cff) · Contribuciones: [`CONTRIBUTIN
 ---
 
 <div align="center">
-<sub>SNTO v2.1.0.dev0 · Python ≥ 3.12 · 927 tests passing · julio 2026</sub>
+<sub>SNTO v2.1.0.dev0 · Python ≥ 3.12 · 1039 tests passing · julio 2026</sub>
 </div>

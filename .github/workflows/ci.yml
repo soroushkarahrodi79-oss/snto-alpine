@@ -53,7 +53,11 @@ jobs:
             src/spatial_causality/zone_loader.py \
             src/spatial_causality/__init__.py tests/unit/test_scm_real_zones.py \
             src/socioeconomic/series.py tests/unit/test_socio_series.py \
-            src/ui/services/field_agreement.py tests/persistence/test_field_agreement.py
+            src/ui/services/field_agreement.py tests/persistence/test_field_agreement.py \
+            src/features/alpine_spectral.py src/geospatial/alpine_dem.py \
+            src/spatial_causality/alpine_causality.py src/risk_engine/public_roi.py \
+            src/platform/alpine_dashboard.py src/ui/tabs/tab_alpine.py \
+            tests/unit/test_alpine_pipeline.py tests/unit/test_alpine_dashboard.py
       - name: Ruff — full repo (report-only, lint debt)
         continue-on-error: true
         run: ruff check src tests *.py --output-format=github

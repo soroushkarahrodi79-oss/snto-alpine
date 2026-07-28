@@ -52,6 +52,7 @@ NAVIGATION_LAYERS = (
         question="¿Es real la señal y dónde ocurre?",
         modules=(
             NavigationModule("spatial", "Diagnóstico espacial"),
+            NavigationModule("alpine", "Observatorio alpino"),
             NavigationModule("assets", "Catálogo de activos y sendas"),
             NavigationModule("pressure", "Presión y capacidad de carga"),
             NavigationModule("forecast", "Proyección de tendencia"),

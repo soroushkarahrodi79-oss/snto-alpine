@@ -30,13 +30,15 @@ def test_every_legacy_module_has_exactly_one_layer_owner() -> None:
     module_keys = [
         module.key for layer in NAVIGATION_LAYERS for module in layer.modules
     ]
-    assert len(module_keys) == len(set(module_keys)) == 14
+    assert len(module_keys) == len(set(module_keys)) == 15
     assert set(module_keys) == {
         "panorama",
         "urgent_actions",
         "budget",
         "socioeconomic",
         "spatial",
+        # Alpine Edition: dual-season Sierra Nevada observatory (snow + erosion)
+        "alpine",
         "assets",
         "pressure",
         "forecast",
@@ -58,6 +60,7 @@ def test_module_order_matches_the_approved_option_a_mapping() -> None:
     ]
     assert module_tab_labels("diagnosticar") == [
         "Diagnóstico espacial",
+        "Observatorio alpino",
         "Catálogo de activos y sendas",
         "Presión y capacidad de carga",
         "Proyección de tendencia",

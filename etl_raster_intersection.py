@@ -57,6 +57,14 @@ DOWNSLOPE_M = 60       # Buffer on the downhill side (metres)
 BUFFER_M    = 50       # Symmetric fallback radius when DEM is unavailable
 BUFFER_CRS  = "EPSG:25830"  # UTM zone 30N — covers mainland Spain
 
+# Territory switch (Alpine Edition).  When set to "sierra_nevada" the buffer
+# step uses slope-magnitude-scaled corridors (src/geospatial/alpine_dem.py)
+# instead of the fixed 15/60 m widths above: alpine MTB descents concentrate on
+# the steepest sectors, where the sediment plume travels further downhill.
+# Any other value keeps the inherited PNSG behaviour byte-for-byte.
+TERRITORY = os.getenv("SNTO_TERRITORY", "pnsg")
+ALPINE_TERRITORY = "sierra_nevada"
+
 # ── Credentials (override via environment variables) ──────────────────────────
 DB_HOST = os.getenv("SNTO_DB_HOST", "localhost")
 DB_PORT = int(os.getenv("SNTO_DB_PORT", "5432"))
@@ -147,10 +155,10 @@ def _compute_zonal_stats(
     print(f"    Buffer CRS          : EPSG:{buf_epsg}")
 
     if not crs_match:
-        print(f"    CRS mismatch — reprojecting buffers to raster CRS ...")
+        print("    CRS mismatch — reprojecting buffers to raster CRS ...")
         aligned = buffers_gdf.to_crs(raster_crs.to_wkt())
     else:
-        print(f"    CRS match — no reprojection needed.")
+        print("    CRS match — no reprojection needed.")
         aligned = buffers_gdf
 
     # rasterstats.zonal_stats accepts a GeoDataFrame directly (v0.18+)
@@ -235,6 +243,8 @@ def main() -> None:
     # ── [5/7] Fetch DEM + build asymmetric trail buffers ─────────────────────
     from src.geospatial.geometry import build_trail_buffer, fetch_dem_window
 
+    is_alpine = TERRITORY == ALPINE_TERRITORY
+
     # Determine overall bounding box (W, S, E, N) in EPSG:4326
     bounds = trails_gdf.total_bounds   # [minx, miny, maxx, maxy]
     dem_bbox = (float(bounds[0]), float(bounds[1]), float(bounds[2]), float(bounds[3]))
@@ -247,9 +257,21 @@ def main() -> None:
             f"    DEM loaded: {dem_array.shape[1]}×{dem_array.shape[0]} px  "
             f"elevation range {dem_array.min():.0f}–{dem_array.max():.0f} m"
         )
-        print(
-            f"    Asymmetric buffer: {UPSLOPE_M} m upslope / {DOWNSLOPE_M} m downslope"
-        )
+        if is_alpine:
+            from src.geospatial.alpine_dem import (
+                ALPINE_MAX_DOWNSLOPE_M,
+                ALPINE_STEEP_SLOPE_DEG,
+            )
+            print(
+                f"    Alpine mode ({TERRITORY}): slope-scaled corridor — "
+                f"{UPSLOPE_M} m upslope, downslope {DOWNSLOPE_M}→"
+                f"{ALPINE_MAX_DOWNSLOPE_M:.0f} m above {ALPINE_STEEP_SLOPE_DEG:.0f}°"
+            )
+        else:
+            print(
+                f"    Asymmetric buffer: {UPSLOPE_M} m upslope / "
+                f"{DOWNSLOPE_M} m downslope"
+            )
     except Exception as exc:
         print(f"    DEM fetch failed ({exc})")
         print(f"    Falling back to symmetric {BUFFER_M} m buffer.")
@@ -257,13 +279,22 @@ def main() -> None:
     print(f"    Building buffers in {BUFFER_CRS} ...")
     buffer_polygons = []
     for geom in trails_gdf.geometry:
-        buf = build_trail_buffer(
-            geom, dem_array, dem_transform, dem_crs,
-            upslope_m=UPSLOPE_M,
-            downslope_m=DOWNSLOPE_M,
-            symmetric_fallback_m=BUFFER_M,
-            target_crs=BUFFER_CRS,
-        )
+        if is_alpine:
+            from src.geospatial.alpine_dem import alpine_trail_buffer
+
+            buf = alpine_trail_buffer(
+                geom, dem_array, dem_transform, dem_crs,
+                symmetric_fallback_m=BUFFER_M,
+                target_crs=BUFFER_CRS,
+            )
+        else:
+            buf = build_trail_buffer(
+                geom, dem_array, dem_transform, dem_crs,
+                upslope_m=UPSLOPE_M,
+                downslope_m=DOWNSLOPE_M,
+                symmetric_fallback_m=BUFFER_M,
+                target_crs=BUFFER_CRS,
+            )
         buffer_polygons.append(buf)
 
     buffers_gdf = gpd.GeoDataFrame(

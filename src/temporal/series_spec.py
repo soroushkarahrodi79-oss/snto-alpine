@@ -75,7 +75,7 @@ class SeriesSpec:
     end_year: int
     cadence: Cadence = Cadence.MONTHLY
     s2_tile: str = "T30TVL"
-    indices: tuple[str, ...] = ("NDVI", "NDMI", "EVI")
+    indices: tuple[str, ...] = ("NDVI", "NDMI", "EVI", "NDSI")
     min_valid_pixel_pct: float = 0.30
     collection: str = "COPERNICUS/S2_SR_HARMONIZED"
 

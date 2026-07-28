@@ -46,9 +46,10 @@ from src.ui.render_widgets import (
     _render_exec_kpis,
     _render_live_alerts,
 )
+from src.ui.tabs.tab_alpine import render_tab_alpine
 from src.ui.tabs.tab_assets import render_tab_assets
-from src.ui.tabs.tab_config import render_tab_config
 from src.ui.tabs.tab_confidence import render_tab_confidence
+from src.ui.tabs.tab_config import render_tab_config
 from src.ui.tabs.tab_diagnostic import render_tab_diagnostic
 from src.ui.tabs.tab_forecast import render_tab_forecast
 from src.ui.tabs.tab_kpis import render_tab_kpis
@@ -288,6 +289,13 @@ for _layer, _layer_container in zip(_layer_order, _layer_tabs, strict=True):
                         _view,
                         dashboard,
                         base_comps,
+                    )
+                elif _module.key == "alpine":
+                    render_tab_alpine(
+                        ranked_assets,
+                        base_comps,
+                        assets_by_id,
+                        _view,
                     )
                 elif _module.key == "assets":
                     render_tab_assets(calibration, ranked_assets, _view)

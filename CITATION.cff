@@ -1,13 +1,17 @@
 cff-version: 1.2.0
 message: "Si utilizas este software o sus resultados, por favor cítalo como se indica a continuación."
-title: "SNTO — Smart Nature Tourism Observatory"
+title: "SNTO — Smart Natural Tourism Observatory · Alpine Edition (Sierra Nevada Pilot)"
 abstract: >-
   Observatorio de inteligencia territorial de código abierto para uso académico,
   para la gobernanza regenerativa de destinos de turismo natural. Transforma teledetección
-  Sentinel-2 (NDVI/NDMI) en indicadores ambientales calibrados, atribución
+  Sentinel-2 (NDVI/NDMI/EVI/NDSI) en indicadores ambientales calibrados, atribución
   causal de la degradación (uso turístico vs. clima) y priorización
-  presupuestaria con nivel de confianza, aplicado al Parque Nacional Sierra de
-  Guadarrama (PNSG) con cartografía oficial OAPN.
+  presupuestaria con nivel de confianza. La Edición Alpina aplica el marco al
+  Parque Nacional de Sierra Nevada (Andalucía) con un pipeline de doble
+  temporada: innivación invernal (NDSI, cota de nieve, duración del manto) y
+  erosión estival de borreguiles por BTT y senderismo, con buffers de erosión
+  escalados por pendiente y zona de control emparejada por altitud. Deriva del
+  observatorio base validado sobre el Parque Nacional Sierra de Guadarrama.
 type: software
 authors:
   - given-names: Soroush
@@ -16,8 +20,8 @@ authors:
     affiliation: "Universidad Complutense de Madrid (UCM)"
     # orcid: "https://orcid.org/0000-0000-0000-0000"  # añadir si dispones de ORCID
 doi: "10.5281/zenodo.20818269"
-repository-code: "https://github.com/soroushkarahrodi79-oss/snto-smart-tourism-observatory"
-url: "https://github.com/soroushkarahrodi79-oss/snto-smart-tourism-observatory"
+repository-code: "https://github.com/soroushkarahrodi79-oss/snto-alpine"
+url: "https://github.com/soroushkarahrodi79-oss/snto-alpine"
 # Licencia de uso académico/no-comercial: ver fichero LICENSE (no es un identificador SPDX estándar).
 version: "2.1.0.dev0"
 date-released: "2026-07-20"

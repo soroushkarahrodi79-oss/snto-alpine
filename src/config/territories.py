@@ -17,7 +17,6 @@ Adding a new territory
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Optional
 
 
 @dataclass(frozen=True)
@@ -84,6 +83,39 @@ TERRITORIES: dict[str, TerritoryConfig] = {
             "MITERD OAPN — límite administrativo PNSG, ZEC, senderos oficiales: "
             "https://www.miteco.gob.es/es/red-parques-nacionales/nuestros-parques/guadarrama/",
             "OSM — red de senderos, miradores, aparcamientos",
+        ],
+    ),
+
+    "sierra_nevada": TerritoryConfig(
+        key="sierra_nevada",
+        display_name="Parque Nacional de Sierra Nevada",
+        # Macizo completo: vertiente norte (Granada / estación de esquí) y
+        # vertiente sur (Alpujarra). Cubre Veleta (3.396 m) y Mulhacén (3.479 m),
+        # el punto más alto de la península ibérica.
+        bbox_wgs84=(-3.60, 36.90, -2.85, 37.20),
+        # Cuatro tiles MGRS cubren el macizo; 30SVF es el de la zona alta y el
+        # que usan por defecto los scripts de descarga.
+        s2_tile="T30SVF",
+        raw_raster_folder="Sierra Nevada",
+        protection_category="National Park (Red de Parques Nacionales)",
+        trails_geojson="sierra_nevada_oapn_trails.geojson",
+        dashboard_key="sn",
+        region="Andalucía",
+        notes="Alpine Edition pilot. Doble estacionalidad: innivación invernal "
+              "(NDSI, cota de nieve, duración del manto) y erosión estival de "
+              "borreguiles por BTT y senderismo. Municipios: Monachil, "
+              "Güéjar Sierra, Capileira, Trevélez, Bubión, Pampaneira. "
+              "Tiles adicionales: 30SWF, 30SVG, 30SWG. "
+              "NO validado en campo — ver campaña de validación pendiente.",
+        external_sources=[
+            "OAPN MITECO — límite del parque y senderos oficiales: "
+            "https://www.miteco.gob.es/es/red-parques-nacionales/nuestros-parques/sierra-nevada/",
+            "Junta de Andalucía REDIAM — cartografía ambiental y usos del suelo: "
+            "https://www.juntadeandalucia.es/medioambiente/portal/acceso-rediam",
+            "INE — padrón municipal y estadística de turismo de Andalucía: "
+            "https://www.ine.es/dyngs/INEbase/es/categoria.htm?c=Estadistica_P&cid=1254734710984",
+            "Copernicus DEM GLO-30 (STAC) — pendiente y orientación",
+            "OSM — red de senderos y rutas BTT",
         ],
     ),
 }

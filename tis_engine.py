@@ -55,6 +55,7 @@ from src.config.constants import (
     SCM_LOCALIZED_FACTOR,
     SCM_MIXED_FACTOR,
     SCM_LANDSCAPE_FACTOR,
+    TRAGSA_BASE_RATE_EUR_PER_M,
 )
 
 SEP = "=" * 72
@@ -64,7 +65,7 @@ DIV = "-" * 72
 PRIORITY_CRITICAL_THRESHOLD: float = 60.0
 EHS_WEIGHT: float = 0.60
 TRAFFIC_WEIGHT: float = 0.40
-BASE_RESTORATION_COST_EUR_PER_M: float = 15.50
+BASE_RESTORATION_COST_EUR_PER_M: float = TRAGSA_BASE_RATE_EUR_PER_M
 # Which seasonal EHS column to use for priority and budget.
 # Must be "summer" or "spring"; must match EHS_SEASON_FOR_BUDGET in
 # src/config/constants.py (used by calculate_delta_ehs.py to produce the column).
