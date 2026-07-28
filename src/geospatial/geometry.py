@@ -33,12 +33,18 @@ _N_ASPECT_SAMPLES = 12
 # Minimum number of valid DEM pixels required (guard against empty windows)
 _MIN_DEM_PIXELS = 4
 
-# GDAL hints for COG HTTP streaming — same as etl_raster_processor.py
+# GDAL hints for COG HTTP streaming.
+# AWS_NO_SIGN_REQUEST is required because the Copernicus DEM GLO-30 asset on
+# Earth Search resolves to an anonymous S3 object (s3://…). Without it, GDAL's
+# /vsis3/ handler demands AWS credentials and fetch_dem_window() fails with
+# "InvalidCredentials" on any machine that has none. The DEM bucket is public,
+# so unsigned access is correct.
 _GDAL_COG_ENV: dict[str, str] = {
     "GDAL_HTTP_MERGE_CONSECUTIVE_RANGES": "YES",
     "GDAL_HTTP_MULTIPLEX":               "YES",
     "GDAL_HTTP_VERSION":                 "2",
     "GDAL_DISABLE_READDIR_ON_OPEN":      "EMPTY_DIR",
+    "AWS_NO_SIGN_REQUEST":               "YES",
 }
 
 
