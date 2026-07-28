@@ -13,13 +13,13 @@ De la teledetección Sentinel-2 a la decisión de inversión pública sobre el *
 [![Tests](https://img.shields.io/badge/tests-1039%20passing-brightgreen)](#8-tests)
 [![Python](https://img.shields.io/badge/python-%E2%89%A53.12-blue)](https://www.python.org/)
 [![CI](https://github.com/soroushkarahrodi79-oss/snto-alpine/actions/workflows/ci.yml/badge.svg)](https://github.com/soroushkarahrodi79-oss/snto-alpine/actions/workflows/ci.yml)
-[![Deploy](https://github.com/soroushkarahrodi79-oss/snto-alpine/actions/workflows/deploy-azure-container-apps.yml/badge.svg)](https://github.com/soroushkarahrodi79-oss/snto-alpine/actions/workflows/deploy-azure-container-apps.yml)
-[![Deploy target](https://img.shields.io/badge/deploy-Azure%20Container%20Apps-0078D4?logo=microsoftazure&logoColor=white)](#7-despliegue)
-[![Status](https://img.shields.io/badge/estado-investigaci%C3%B3n%20activa-blue)](#1-estado-del-proyecto)
+[![Version](https://img.shields.io/badge/versi%C3%B3n-0.1.0.dev0-orange)](#1-estado-del-proyecto)
+[![Status](https://img.shields.io/badge/estado-edici%C3%B3n%20derivada%20·%20sin%20validar-lightgrey)](#1-estado-del-proyecto)
 [![License](https://img.shields.io/badge/uso-acad%C3%A9mico-lightgrey)](LICENSE)
-[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20818269-1682D4?logo=zenodo&logoColor=white)](https://doi.org/10.5281/zenodo.20818269)
 
-**🔴 [Dashboard en vivo](https://snto-observatory.happyground-be027676.swedencentral.azurecontainerapps.io/)** · 📄 [Whitepaper](WHITEPAPER_SNTO_Architecture_Blueprint.md) · 🏗 [Arquitectura](ARCHITECTURE.md)
+📄 [Whitepaper (base)](WHITEPAPER_SNTO_Architecture_Blueprint.md) · 🏗 [Arquitectura](ARCHITECTURE.md) · 🌱 [Observatorio base](https://github.com/soroushkarahrodi79-oss/snto-smart-tourism-observatory)
+
+> ℹ️ **Edición derivada, versión 0.1.0.dev0.** Este repositorio es un *fork* del observatorio base y **reutiliza gran parte de su código y su documentación**. No hereda su linaje de versiones (v1.0→v2.0), ni su DOI de Zenodo, ni su despliegue en vivo — esos pertenecen al [proyecto base](https://github.com/soroushkarahrodi79-oss/snto-smart-tourism-observatory). La aportación específicamente alpina se describe en [§2bis](#2bis-arquitectura-alpina-el-pipeline-de-doble-temporada); las secciones técnicas restantes describen la **infraestructura heredada**, todavía no readaptada a Sierra Nevada.
 
 </div>
 
@@ -29,9 +29,9 @@ De la teledetección Sentinel-2 a la decisión de inversión pública sobre el *
 
 La mayoría de los espacios naturales protegidos gestionan el impacto del turismo de forma **reactiva**: actúan cuando la degradación ya es visible. El SNTO transforma ese paradigma en **gobernanza regenerativa proactiva** — detecta el estrés ecológico desde el satélite antes de que sea irreversible, distingue si la causa es el uso turístico o el clima, y traduce cada hallazgo en una **prioridad de inversión con presupuesto y nivel de confianza**.
 
-> **Para evaluadores y revisores:** este repositorio es un proyecto de investigación académica de la **Universidad Complutense de Madrid (UCM)**: un observatorio que evalúa el estado de senderos y enclaves de turismo natural por teledetección satelital, detecta zonas de riesgo de degradación y prioriza la intervención con fórmulas financieras. Demuestra un pipeline geoespacial real sobre el **Parque Nacional Sierra de Guadarrama** (218 senderos analizados con cartografía oficial OAPN) y un sistema completo de inteligencia territorial de 7 fases, con capas de **andamiaje temporal (serie 2021–2026), trazabilidad/confianza del dato, baselines estratificados, incertidumbre del ranking y validación de campo**. **1.039 tests, CI separado del deploy, dos pipelines arquitectónicamente desacoplados.** La gobernanza se alinea con los marcos europeos de reporte de espacios protegidos (Natura 2000 / EUROPARC / SISMOTUR), validada inicialmente sobre la Reserva de la Biosfera Sierra del Rincón como piloto de calibración.
+> **Para evaluadores y revisores:** la **Edición Alpina** adapta el observatorio SNTO (proyecto de investigación de la **Universidad Complutense de Madrid**) al **Parque Nacional de Sierra Nevada**, con un pipeline de doble temporada: innivación invernal (NDSI, cota de nieve, duración del manto) y erosión estival de *borreguiles* por BTT y senderismo, con buffers de erosión escalados por pendiente, zona de control emparejada por altitud y traducción financiera TRAGSA ajustada a la alta montaña. **Toda la infraestructura común —EHS, SCM, DCS, capa temporal, persistencia, UI de 4 capas— se hereda del observatorio base**, que fue demostrado sobre el Parque Nacional Sierra de Guadarrama (cartografía oficial OAPN). Los ~1.039 tests incluyen los 112 propios de la edición alpina sobre los del base. **Nada de la Edición Alpina está validado en campo**, y sus cifras socioeconómicas son estimaciones *proxy*, no observaciones INE/ALMUDENA.
 
-> **Estado de versión:** [`v2.0.0`](https://github.com/soroushkarahrodi79-oss/snto-smart-tourism-observatory/releases/tag/v2.0.0) es la última release estable; `main` está en `v2.1.0.dev0` (marcador de desarrollo, no una release final). v2.0.0 consuma la visión v2.0 del roadmap (arquitectura modular + backend persistente + evolución de UI por roles). Se apoya en los cimientos ya publicados en v1.5.0 — la **modularización de `app.py`** (#27: de ~3.170 a ~285 líneas, UI extraída a `src/ui/`), las **vistas por audiencia** (#28: Técnica/Gestor/Auditoría con cifras financieras invariantes) y los **fundamentos del backend persistente** (Fase 5, ADR-011: persistencia SQLAlchemy+Alembic, API `/api/v2`, ciclo de vida, auditoría; producción sobre Azure PostgreSQL desde el cutover 2026-07-18) — y añade la **evolución de UI por roles** (Fase 6): la información se reorganiza en **cuatro capas de decisión** (Decidir · Diagnosticar · Evidenciar · Gobernar) con *home* por audiencia, el **activo como página**, triaje de alertas en «Acciones Urgentes», y los módulos de simulación, presión/capacidad, confianza, proveniencia, informes/exportaciones y configuración territorial. Ningún cambio relaja la separación de evidencia ni afirma validación de campo (campaña #26 aún pendiente). En `main` (sin nueva release estable todavía) ya han aterrizado además los primeros hitos post-v2.0: **v2.1** (activación y gobernanza — deploy gateado por CI, CI endurecido, `DataStatus` de la capa curada), **v2.2** (profundidad analítica — forecasting `SIMULATED`, feed real de movilidad MITMA, capacidad LAC/ROS, zonas SCM reales), la **puerta de validación v2.5** (runner de concordancia y captura de parcelas; la campaña de campo sigue pendiente) y los primeros cimientos de **v3.0** (identidad y multi-tenancy, aprovisionamiento, registro territorial editable y autorización de escritura en `/api/v2`; SSO/Entra ID sigue pendiente).
+> **Estado de versión:** `0.1.0.dev0` — **primera iteración, sin release cortada y sin validación de campo**. La Edición Alpina reinicia el versionado desde 0.x deliberadamente: es una línea de producto nueva y **no hereda** el historial de releases del observatorio base (donde v1.0→v2.0 sí están etiquetadas y publicadas). El código base subyacente corresponde a la línea v2.x del observatorio original (arquitectura modular, backend persistente, UI por roles); esa madurez es del **motor heredado**, no de la adaptación alpina, que está en fase de prototipo. El historial de releases, el DOI de Zenodo y el despliegue en vivo del proyecto base **no aplican a este repositorio**.
 
 ---
 
@@ -41,7 +41,7 @@ La mayoría de los espacios naturales protegidos gestionan el impacto del turism
 
 ![Dashboard ejecutivo SNTO](docs/screenshot-dashboard.png)
 
-_Shell de 4 capas de decisión (Fase 6, v2.0) — Decidir · Diagnosticar · Evidenciar · **Gobernar**, aquí en la vista **Auditoría científica** sobre «Metodología y auditoría», con la puerta de validación satélite↔campo (v2.5) y el panel de alertas activas del PNSG. Desplegado en Azure Container Apps (Sweden Central)._
+_Captura **heredada del observatorio base** (shell de 4 capas de decisión sobre el PNSG), incluida como referencia de la UI compartida. La Edición Alpina añade sobre esta UI la pestaña **«Observatorio alpino»** (conmutador de temporada, mapa PyDeck, simulador presupuestario y matriz TPI); su captura propia de Sierra Nevada está pendiente._
 
 </div>
 
@@ -67,9 +67,26 @@ _Shell de 4 capas de decisión (Fase 6, v2.0) — Decidir · Diagnosticar · Evi
 
 ## 1. Estado del proyecto
 
+### Edición Alpina — Sierra Nevada (este repositorio)
+
 | Componente | Territorio | Estado |
 |---|---|---|
-| **Pipeline A — Geoespacial** | **Parque Nacional Sierra de Guadarrama (PNSG)** — territorio principal | ✅ Operacional con datos Sentinel-2 reales (2 escenas: primavera 2026 + verano 2025); **218 senderos** con cartografía oficial OAPN |
+| **Índices alpinos (NDSI + doble temporada)** | Sierra Nevada | 🟡 Implementado y con tests; verano usa la serie GEE real de 53 activos (sin NDSI); **invierno pendiente** de rasteres NDSI (ejecutar `etl_raster_processor.py --territory sierra_nevada`) |
+| **Buffer de erosión escalado por pendiente** | Sierra Nevada | 🟡 Implementado y con tests; requiere DEM Copernicus vía STAC en ejecución real |
+| **SCM alpino (control emparejado por altitud)** | Sierra Nevada | 🟡 Implementado y con tests; evidencia `SIMULATED` hasta disponer de zonas reales |
+| **ROI público (TRAGSA × pendiente + socioeconómico)** | Sierra Nevada | 🟡 Implementado; cifras socioeconómicas *proxy*, **no** INE/ALMUDENA |
+| **Dashboard alpino (pestaña dual-season)** | Sierra Nevada | 🟡 Implementado y cableado; sin captura ni despliegue propios |
+| **Validación de campo** | Sierra Nevada | ⛔ **No realizada.** Nada de la Edición Alpina está validado sobre el terreno |
+
+🟡 = implementado y verificado con tests, **no** validado en campo ni ejecutado sobre datos reales completos.
+
+### Infraestructura heredada del observatorio base
+
+> La tabla siguiente inventaria el **motor heredado** del [observatorio base](https://github.com/soroushkarahrodi79-oss/snto-smart-tourism-observatory) (demostrado sobre el PNSG y otros parques OAPN). La Edición Alpina lo reutiliza; estos estados y territorios pertenecen al proyecto base, no a Sierra Nevada.
+
+| Componente | Territorio | Estado |
+|---|---|---|
+| **Pipeline A — Geoespacial** | **Parque Nacional Sierra de Guadarrama (PNSG)** — territorio del base | ✅ Operacional con datos Sentinel-2 reales (2 escenas: primavera 2026 + verano 2025); **218 senderos** con cartografía oficial OAPN |
 | **Capa temporal Sentinel-2 real (v1.1.1)** | PNSG — 21 activos reales | ✅ Real 2021–2026 (GEE); Mann-Kendall **desestacionalizado y verificado con Yue-Pilon** (ver §9) |
 | **Expansión Red OAPN — piloto de replicabilidad (v1.2.0)** | Tablas de Daimiel (humedal, 5 activos) + Monfragüe (dehesa, 21 activos) | ✅ Series Sentinel-2 reales 2021–2026 validadas y en el selector de Tab 6; 13 parques restantes preparados como plantillas GEE, pendientes de validación por bioma |
 | **Rigor estadístico (v1.3.0)** | PNSG + pilotos OAPN | ✅ Punto de cambio abrupto (Pettitt), IC 95% del EHS por bootstrap de bloques, sensibilidad global (Morris) y validación cruzada inter-sensor NDVI (Sentinel-2 vs MODIS); ver [nota metodológica](docs/nota_metodologica_rigor_estadistico.md) |
@@ -377,7 +394,7 @@ bash deploy/azure-bootstrap.sh
 
 Secrets requeridos en GitHub (`Settings ▸ Secrets and variables ▸ Actions`): `AZURE_CREDENTIALS`, `ACR_NAME`. Ver cabecera de [`.github/workflows/deploy-azure-container-apps.yml`](.github/workflows/deploy-azure-container-apps.yml) para el detalle.
 
-> **🔴 Dashboard en vivo:** https://snto-observatory.happyground-be027676.swedencentral.azurecontainerapps.io/
+> ⚠️ **La Edición Alpina no tiene despliegue en vivo propio.** El pipeline de despliegue se hereda del observatorio base pero no se ha ejecutado para este repositorio. El dashboard en vivo del proyecto base ejecuta el **código base**, no el alpino. Para verlo en local: `streamlit run app.py`.
 
 ---
 
@@ -444,14 +461,14 @@ El código se distribuye para uso académico y de investigación con atribución
 
 ### Cómo citar
 
-**DOI permanente — todas las versiones (Zenodo):** [10.5281/zenodo.20818269](https://doi.org/10.5281/zenodo.20818269)
+> ⚠️ **La Edición Alpina no tiene DOI propio todavía** (no se ha depositado en Zenodo). Los DOI `10.5281/zenodo.20818269` y `10.5281/zenodo.21472647` pertenecen al **observatorio base**, no a este repositorio; no los uses para citar la Edición Alpina. Mientras no exista depósito, cita este repositorio por su URL y *commit*.
 
-**DOI de la release estable v2.0.0:** [10.5281/zenodo.21472647](https://doi.org/10.5281/zenodo.21472647)
+Para citar el **marco base** del que deriva, ver el [observatorio base](https://github.com/soroushkarahrodi79-oss/snto-smart-tourism-observatory) y su DOI de Zenodo.
 
 Fichero de cita: [`CITATION.cff`](CITATION.cff) · Contribuciones: [`CONTRIBUTING.md`](CONTRIBUTING.md)
 
 ---
 
 <div align="center">
-<sub>SNTO v2.1.0.dev0 · Python ≥ 3.12 · 1039 tests passing · julio 2026</sub>
+<sub>SNTO v0.1.0.dev0 · Python ≥ 3.12 · 1039 tests passing · julio 2026</sub>
 </div>

@@ -8,9 +8,11 @@ from pathlib import Path
 from scripts.sync_readme import _apply_substitutions
 
 ROOT = Path(__file__).parent.parent
-ZENODO_CONCEPT_DOI = "10.5281/zenodo.20818269"
-ZENODO_V2_CANONICAL_DOI = "10.5281/zenodo.21472647"
-ZENODO_V2_RETIRED_DUPLICATE_DOI = "10.5281/zenodo.21512233"
+# These DOIs belong to the BASE observatory, not to the Alpine Edition. The
+# Alpine Edition has no Zenodo deposit of its own, so these must never be
+# presented as this repository's own identifiers — only cited as attribution.
+BASE_CONCEPT_DOI = "10.5281/zenodo.20818269"
+BASE_V2_CANONICAL_DOI = "10.5281/zenodo.21472647"
 
 
 def test_readme_version_matches_pyproject() -> None:
@@ -34,22 +36,52 @@ def test_citation_version_matches_pyproject() -> None:
     )
 
 
-def test_readme_and_citation_use_zenodo_concept_doi() -> None:
+def test_alpine_edition_declares_no_own_doi() -> None:
+    """The Alpine Edition has no Zenodo deposit; it must not claim a DOI.
+
+    CITATION.cff must not carry a top-level ``doi:`` field, and the README must
+    not render a DOI shields.io badge. The base DOIs may still appear, but only
+    inside an attribution/disclaimer context (verified separately).
+    """
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     citation = (ROOT / "CITATION.cff").read_text(encoding="utf-8")
 
-    assert ZENODO_CONCEPT_DOI in readme
-    assert ZENODO_V2_CANONICAL_DOI in readme
-    assert f'doi: "{ZENODO_CONCEPT_DOI}"' in citation
-    assert f'value: "{ZENODO_CONCEPT_DOI}"' in citation
-    assert ZENODO_V2_RETIRED_DUPLICATE_DOI not in readme
-    assert ZENODO_V2_RETIRED_DUPLICATE_DOI not in citation
+    assert not re.search(r'^doi:\s', citation, re.MULTILINE), (
+        "CITATION.cff no debe declarar un DOI propio: la Edición Alpina no "
+        "tiene depósito Zenodo."
+    )
+    assert "img.shields.io/badge/DOI" not in readme, (
+        "El README no debe mostrar un badge de DOI propio."
+    )
 
 
-def test_zenodo_metadata_is_release_agnostic() -> None:
+def test_base_dois_appear_only_as_attribution() -> None:
+    """If the base DOIs are mentioned, it must be as attribution, not as ours."""
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    citation = (ROOT / "CITATION.cff").read_text(encoding="utf-8")
+
+    # In CITATION they may only appear inside a comment (lines starting with #).
+    for line in citation.splitlines():
+        if BASE_CONCEPT_DOI in line or BASE_V2_CANONICAL_DOI in line:
+            assert line.lstrip().startswith("#"), (
+                f"El DOI base solo puede aparecer en comentarios de CITATION: {line!r}"
+            )
+
+    # In the README, the base DOIs must sit near an attribution/disclaimer word.
+    if BASE_CONCEPT_DOI in readme:
+        idx = readme.index(BASE_CONCEPT_DOI)
+        window = readme[max(0, idx - 400):idx + 100].lower()
+        assert any(w in window for w in ("base", "no los uses", "no aplica", "pertenec")), (
+            "El DOI base en el README debe ir acompañado de una nota de atribución."
+        )
+
+
+def test_zenodo_metadata_is_alpine_and_release_agnostic() -> None:
     metadata = json.loads((ROOT / ".zenodo.json").read_text(encoding="utf-8"))
 
-    assert metadata["title"] == "SNTO — Smart Nature Tourism Observatory"
+    assert "Alpine Edition" in metadata["title"], (
+        ".zenodo.json debe titularse como la Edición Alpina, no como el base"
+    )
     assert "version" not in metadata, (
         "La versión de Zenodo debe proceder del tag de GitHub, no quedar fija"
     )

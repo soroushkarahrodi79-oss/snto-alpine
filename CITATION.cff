@@ -19,27 +19,30 @@ authors:
     email: soroush.karahrodi79@gmail.com
     affiliation: "Universidad Complutense de Madrid (UCM)"
     # orcid: "https://orcid.org/0000-0000-0000-0000"  # añadir si dispones de ORCID
-doi: "10.5281/zenodo.20818269"
+# Sin DOI propio: la Edición Alpina aún no tiene depósito Zenodo. El DOI
+# 10.5281/zenodo.20818269 pertenece al observatorio base, no a este repositorio.
 repository-code: "https://github.com/soroushkarahrodi79-oss/snto-alpine"
 url: "https://github.com/soroushkarahrodi79-oss/snto-alpine"
 # Licencia de uso académico/no-comercial: ver fichero LICENSE (no es un identificador SPDX estándar).
-version: "2.1.0.dev0"
-date-released: "2026-07-20"
+# Versión propia 0.x: nueva línea de producto, sin releases y sin validación de
+# campo. No hereda el linaje de versiones del observatorio base.
+version: "0.1.0.dev0"
+# Sin date-released: no se ha cortado ninguna release de la Edición Alpina.
 keywords:
   - remote-sensing
   - sentinel-2
-  - NDVI
-  - NDMI
+  - NDSI
+  - snow-cover
+  - EVI
+  - alpine-ecology
   - protected-areas
   - sustainable-tourism
-  - ecotourism
   - territorial-intelligence
   - Spain
-  - Sierra-de-Guadarrama
+  - Sierra-Nevada
   - OAPN
   - streamlit
   - geospatial
-identifiers:
-  - type: doi
-    value: "10.5281/zenodo.20818269"
-    description: "DOI conceptual permanente de todas las versiones en Zenodo"
+# Sin bloque identifiers/DOI: la Edición Alpina no tiene depósito Zenodo propio.
+# El observatorio base del que deriva sí lo tiene (10.5281/zenodo.20818269);
+# ver su repositorio para citar el marco original.
