@@ -1,7 +1,15 @@
 // ============================================================================
-// SNTO — Extracción NDVI/NDMI/EVI mensual 2021–2026 · Parque Nacional de Sierra Nevada
-// GENERADO por scripts/build_gee_oapn_templates.py — pegar en
-// code.earthengine.google.com (replica el modelo validado del PNSG, v1.1.0).
+// SNTO ALPINE EDITION — NDVI/NDMI/EVI/NDSI mensual 2021–2026
+// Parque Nacional de Sierra Nevada
+// Base GENERADA por scripts/build_gee_oapn_templates.py; MODIFICADA a mano para
+// la edición alpina (no regenerar sin volver a aplicar la máscara estacional).
+// Pegar en code.earthengine.google.com.
+// ----------------------------------------------------------------------------
+// DIFERENCIA CLAVE frente a las plantillas OAPN estándar: la máscara SCL es
+// ESTACIONAL. En invierno se conserva la clase 11 (nieve) porque es la señal;
+// el resto del año se descarta. Ver maskAndIndex() más abajo.
+// El CSV resultante añade la columna `ndsi` y sustituye a
+// clean_assets/timeseries/pn_sierra_nevada_gee_timeseries.csv.
 // ----------------------------------------------------------------------------
 // 53 assets reales = itinerarios (senderismo) + rutas bici (ciclismo)
 // de la cartografía oficial OAPN (GeoServer SIGRED).
@@ -95,19 +103,50 @@ print('Assets cargados:', assets.size());
 Map.centerObject(assets, 11);
 Map.addLayer(assets, {color: 'red'}, 'Parque Nacional de Sierra Nevada assets');
 
-// ── Colección Sentinel-2 + máscara SCL + índices ────────────────────────────
+// ── Colección Sentinel-2 + máscara SCL estacional + índices ─────────────────
+//
+// ALPINE EDITION — máscara de doble temporada.
+//
+// La plantilla original excluía la clase SCL 11 (nieve/hielo) como ruido, que
+// es lo correcto para un parque de media montaña. En Sierra Nevada la nieve NO
+// es ruido en invierno: es la señal que se quiere medir. Excluirla vaciaría la
+// escena justo en los meses de interés.
+//
+// Por eso la máscara depende del mes:
+//   Invierno (ene, feb, dic) → se CONSERVA la clase 11; el NDSI la necesita.
+//   Resto del año            → se DESCARTA la clase 11; la nieve residual y los
+//                              neveros inflarían el EVI de los borreguiles.
+//
+// Se añade además la clase 6 (agua), excluida todo el año: el agua comparte la
+// firma espectral de la nieve en NDSI (verde alto, SWIR bajo) y las lagunas
+// glaciares están justo en la cota que interesa para la línea de nieve.
+// La clase 5 (suelo desnudo/roca) se conserva: por encima del límite arbóreo
+// es ubicua y excluirla borraría el macizo.
 function maskAndIndex(image) {
   var scl = image.select('SCL');
-  var mask = scl.neq(0).and(scl.neq(1)).and(scl.neq(3))
-    .and(scl.neq(8)).and(scl.neq(9)).and(scl.neq(10)).and(scl.neq(11));
-  var sr = image.select(['B2', 'B4', 'B8', 'B11']).divide(10000);
+  var month = ee.Date(image.get('system:time_start')).get('month');
+  var isWinter = ee.Number(month).eq(1)
+    .or(ee.Number(month).eq(2))
+    .or(ee.Number(month).eq(12));
+  var winterImg = ee.Image.constant(ee.Number(isWinter));
+
+  // Exclusiones comunes: sin dato, saturado, sombra, agua, nubes, cirros.
+  var base = scl.neq(0).and(scl.neq(1)).and(scl.neq(3)).and(scl.neq(6))
+    .and(scl.neq(8)).and(scl.neq(9)).and(scl.neq(10));
+
+  // Nieve (11): pasa siempre en invierno, se descarta el resto del año.
+  var mask = base.and(scl.neq(11).or(winterImg));
+
+  var sr = image.select(['B2', 'B3', 'B4', 'B8', 'B11']).divide(10000);
   var ndvi = sr.normalizedDifference(['B8', 'B4']).rename('ndvi');
   var ndmi = sr.normalizedDifference(['B8', 'B11']).rename('ndmi');
+  // NDSI = (B3 verde - B11 SWIR1) / (B3 + B11)  — Hall et al. 1995
+  var ndsi = sr.normalizedDifference(['B3', 'B11']).rename('ndsi');
   var evi = sr.expression(
     '2.5 * ((NIR - RED) / (NIR + 6 * RED - 7.5 * BLUE + 1))',
     {NIR: sr.select('B8'), RED: sr.select('B4'), BLUE: sr.select('B2')}
   ).rename('evi');
-  return sr.addBands([ndvi, ndmi, evi]).updateMask(mask)
+  return sr.addBands([ndvi, ndmi, evi, ndsi]).updateMask(mask)
            .copyProperties(image, ['system:time_start']);
 }
 
@@ -129,7 +168,7 @@ var perMonth = months.map(function(m) {
     .combine({reducer2: ee.Reducer.percentile([25, 75]), sharedInputs: true})
     .combine({reducer2: ee.Reducer.stdDev(), sharedInputs: true});
 
-  var stats = composite.select(['ndvi', 'ndmi', 'evi']).reduceRegions({
+  var stats = composite.select(['ndvi', 'ndmi', 'evi', 'ndsi']).reduceRegions({
     collection: assets,
     reducer: reducer,
     scale: SCALE_M
@@ -143,6 +182,7 @@ var perMonth = months.map(function(m) {
       ndvi: f.get('ndvi_mean'),
       ndmi: f.get('ndmi_mean'),
       evi:  f.get('evi_mean'),
+      ndsi: f.get('ndsi_mean'),
       data_source: 'GEE:S2_SR_HARMONIZED'
     });
   });
@@ -165,7 +205,7 @@ Export.table.toDrive({
   fileFormat: 'CSV',
   selectors: [
     'asset_id', 'nombre', 'category', 'year', 'month', 'date',
-    'ndvi', 'ndmi', 'evi',
+    'ndvi', 'ndmi', 'evi', 'ndsi',
     'ndvi_p25', 'ndvi_p75', 'ndvi_stdDev',
     'data_source'
   ]

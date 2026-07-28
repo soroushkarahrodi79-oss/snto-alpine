@@ -81,6 +81,7 @@ class AssetObservation(BaseModel):
     ndmi: float  # mean NDMI for the month
     nbr: Optional[float] = None
     evi: Optional[float] = None   # Enhanced Vegetation Index — None when blue band unavailable
+    ndsi: Optional[float] = None  # Normalized Difference Snow Index — None when green/SWIR absent
     cloud_cover_pct: float = 0.0
     data_source: str = "mock"
 

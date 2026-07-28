@@ -27,6 +27,7 @@ Outputs : data/clean_assets/clean_S2_B04_red.tif
 """
 from __future__ import annotations
 
+import argparse
 import io
 import os
 import sys
@@ -68,6 +69,9 @@ MAX_CLOUD_PCT = float(os.environ.get("SNTO_S2_CLOUD_PCT", "20"))
 _KEYS_B04: tuple[str, ...] = ("red",   "B04")
 _KEYS_B08: tuple[str, ...] = ("nir",   "nir08", "B08")   # catalogue-dependent
 _KEYS_B11: tuple[str, ...] = ("swir16", "B11")
+# Alpine Edition additions: green drives NDSI, SCL drives the snow-permissive mask
+_KEYS_B03: tuple[str, ...] = ("green", "B03")
+_KEYS_SCL: tuple[str, ...] = ("scl",   "SCL")
 
 # GDAL environment hints that activate HTTP range-request optimisation for COGs
 _GDAL_COG_ENV: dict[str, str] = {
@@ -221,8 +225,22 @@ def run(
     date_range: str = DATE_RANGE,
     max_cloud_pct: float = MAX_CLOUD_PCT,
     clean_dir: Path = CLEAN_DIR,
+    alpine: bool = False,
 ) -> dict[str, Path]:
-    """Full ETL run.  Returns a mapping of output name → Path for callers."""
+    """Full ETL run.  Returns a mapping of output name → Path for callers.
+
+    Args:
+        bbox: study area (W, S, E, N) in EPSG:4326.
+        date_range: STAC ``datetime`` filter, e.g. ``"2024-01-01/2024-03-31"``.
+        max_cloud_pct: maximum scene cloud cover accepted.
+        clean_dir: output directory for the GeoTIFFs.
+        alpine: when True, additionally streams B03 (green) and SCL, computes
+            NDSI and writes ``clean_S2_NDSI.tif`` / ``clean_S2_SCL.tif``.
+            Required for the Alpine Edition winter mode — NDSI needs green and
+            SWIR, and the snow-permissive mask needs the raw SCL class codes
+            (see ``src/features/alpine_spectral.py``).  Default False keeps the
+            PNSG output set unchanged.
+    """
     clean_dir.mkdir(parents=True, exist_ok=True)
 
     # Step 1 — discover scene
@@ -265,12 +283,38 @@ def run(
     print(f"  B11 resampled     : {b11_arr.shape[0]} × {b11_arr.shape[1]} px")
     print()
 
+    # Step 5b — Alpine Edition: green (10 m) + SCL (20 m) for NDSI and masking
+    b03_arr = scl_arr = None
+    if alpine:
+        href_b03 = resolve_asset_href(item, *_KEYS_B03)
+        href_scl = resolve_asset_href(item, *_KEYS_SCL)
+        print("  [alpine] Streaming B03 (Green, 10 m) …")
+        b03_arr, _, _ = read_cog_window(href_b03, bbox)
+        print(f"  B03 clipped shape : {b03_arr.shape[0]} × {b03_arr.shape[1]} px")
+
+        # SCL carries class CODES, not a continuous quantity — it must be
+        # resampled with nearest neighbour. Bilinear would invent classes that
+        # do not exist (e.g. averaging 4=vegetation and 6=water into 5=rock).
+        print("  [alpine] Streaming SCL (20 m) → nearest-neighbour to 10 m …")
+        scl_arr, _, _ = read_cog_window(
+            href_scl, bbox,
+            out_shape=(ref_h, ref_w),
+            resampling=Resampling.nearest,
+        )
+        print(f"  SCL resampled     : {scl_arr.shape[0]} × {scl_arr.shape[1]} px")
+        print()
+
     # Step 6 — spectral indices
     print("  Computing NDVI = (B08 – B04) / (B08 + B04) …")
     ndvi = compute_normalised_index(b08_arr, b04_arr)
 
     print("  Computing NDMI = (B08 – B11) / (B08 + B11) …")
     ndmi = compute_normalised_index(b08_arr, b11_arr)
+
+    ndsi = None
+    if alpine:
+        print("  [alpine] Computing NDSI = (B03 – B11) / (B03 + B11) …")
+        ndsi = compute_normalised_index(b03_arr, b11_arr)
     print()
 
     # Step 7 — write outputs
@@ -294,6 +338,16 @@ def run(
         ("clean_S2_NDVI.tif",     ndvi,                                           index_profile),
         ("clean_S2_NDMI.tif",     ndmi,                                           index_profile),
     ]
+
+    if alpine:
+        # SCL stays uint8: they are class codes, and writing them as float
+        # would invite exactly the interpolation this pipeline avoids.
+        scl_profile: dict = {**band_profile, "dtype": "uint8"}
+        outputs.extend([
+            ("clean_S2_B03_green.tif", b03_arr.astype(np.uint16), band_profile),
+            ("clean_S2_SCL.tif",       scl_arr.astype(np.uint8),  scl_profile),
+            ("clean_S2_NDSI.tif",      ndsi,                      index_profile),
+        ])
 
     result_paths: dict[str, Path] = {}
     print("  Writing GeoTIFFs:")
@@ -320,11 +374,29 @@ def run(
         f"  NDMI  min={ndmi.min():.4f}  max={ndmi.max():.4f}"
         f"  mean={valid_ndmi.mean():.4f}  (valid px: {len(valid_ndmi):,})"
     )
+    if alpine and ndsi is not None:
+        valid_ndsi = ndsi[valid_mask]
+        snow_px = int((valid_ndsi >= 0.40).sum())
+        print(
+            f"  NDSI  min={ndsi.min():.4f}  max={ndsi.max():.4f}"
+            f"  mean={valid_ndsi.mean():.4f}  (valid px: {len(valid_ndsi):,})"
+        )
+        print(
+            f"        snow candidates (NDSI ≥ 0.40): {snow_px:,} px "
+            f"({snow_px / max(len(valid_ndsi), 1):.1%})"
+        )
     print()
     print("  Note: NDVI mean ~0.30–0.45 expected for summer Mediterranean landscape.")
+    if alpine:
+        print(
+            "  Note: NDSI ≥ 0.40 marks snow CANDIDATES only. Water shares that "
+            "signature —\n"
+            "        apply the NIR floor via src.features.alpine_spectral."
+            "is_snow_pixel()."
+        )
     print()
     print(DIV)
-    print(f"  Done. 5 GeoTIFFs written to: {clean_dir}")
+    print(f"  Done. {len(outputs)} GeoTIFFs written to: {clean_dir}")
 
     return result_paths
 
@@ -334,16 +406,56 @@ def main() -> None:
     if hasattr(sys.stdout, "buffer"):
         sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
 
+    parser = argparse.ArgumentParser(
+        description="SNTO Sentinel-2 STAC/COG raster processor."
+    )
+    parser.add_argument(
+        "--territory",
+        default=None,
+        help=(
+            "Territory key from src/config/territories.py (e.g. sierra_nevada). "
+            "Overrides the default bbox."
+        ),
+    )
+    parser.add_argument(
+        "--alpine",
+        action="store_true",
+        help=(
+            "Alpine Edition mode: also stream B03 + SCL and write NDSI. "
+            "Implied by --territory sierra_nevada."
+        ),
+    )
+    parser.add_argument(
+        "--date-range",
+        default=DATE_RANGE,
+        help='STAC datetime filter, e.g. "2024-01-01/2024-03-31".',
+    )
+    args = parser.parse_args()
+
+    bbox = BBOX_4326
+    label = "Sierra del Rincón Biosphere Reserve, Madrid, Spain"
+    alpine = args.alpine
+
+    if args.territory:
+        from src.config.territories import get as get_territory
+
+        territory = get_territory(args.territory)
+        bbox = territory.bbox_wgs84
+        label = f"{territory.display_name} ({territory.region})"
+        if args.territory == "sierra_nevada":
+            alpine = True
+
     print(SEP)
     print("  SNTO ETL -- Sentinel-2 Raster Processor  [STAC / COG Edition]")
-    print("  Pilot: Sierra del Rincón Biosphere Reserve, Madrid, Spain")
-    print(f"  Bbox (WGS84) : {BBOX_4326}")
+    print(f"  Pilot: {label}")
+    print(f"  Bbox (WGS84) : {bbox}")
     print(f"  STAC URL     : {STAC_URL}")
-    print(f"  Date range   : {DATE_RANGE}  (cloud < {MAX_CLOUD_PCT} %)")
+    print(f"  Date range   : {args.date_range}  (cloud < {MAX_CLOUD_PCT} %)")
     print(f"  Output       : {CLEAN_DIR}")
+    print(f"  Mode         : {'ALPINE (NDSI + SCL)' if alpine else 'standard'}")
     print(SEP)
     print()
-    run()
+    run(bbox=bbox, date_range=args.date_range, alpine=alpine)
     print(SEP)
 
 

@@ -1,6 +1,25 @@
-# Claude Code Context: SNTO
+# Claude Code Context: SNTO — Alpine Edition
 
-SNTO means Smart Natural Tourism Observatory. The active case study is Parque Nacional de la Sierra de Guadarrama (PNSG). Sierra del Rincon is archived and is no longer the active pilot. The project is currently a Python 3.12 / Streamlit scientific-product prototype with research and SaaS ambitions.
+SNTO means Smart Natural Tourism Observatory. **This repository is the Alpine Edition**, forked with full history from `snto-smart-tourism-observatory` (kept as remote `upstream`). Its pilot is **Parque Nacional de Sierra Nevada** (Andalucía). The base PNSG pipeline is preserved intact and must keep working — Sierra Nevada is added alongside it, never in place of it. Sierra del Rincon is archived. The project is a Python 3.12 / Streamlit scientific-product prototype with research and SaaS ambitions.
+
+## Alpine Edition — what is different
+
+The edition exists because Sierra Nevada poses two spectrally opposite problems in one territory: winter snowpack retreat (snow is the *signal*) and summer borreguil erosion from MTB/hiking (snow is *noise*).
+
+- `src/features/alpine_spectral.py` — NDSI, **seasonal SCL masking** (winter KEEPS class 11, summer DROPS it), snow-vs-water NIR floor, snowline, snowpack duration, borreguil degradation index. Imports `compute_evi`/`compute_ndmi` from `spectral.py` rather than redefining them.
+- `src/geospatial/alpine_dem.py` — slope-**magnitude** scaling of the corridor (the base `asymmetric_trail_buffer` computes slope then discards it). 15 m upslope fixed; 60→80 m downslope between 20° and 30°.
+- `src/spatial_causality/alpine_causality.py` — control zone narrowed to 200–500 m **and intersected with the trail's DEM elevation band ±50 m**, removing the elevation confound. Rutting requires both excess degradation *and* a slope gate.
+- `src/risk_engine/public_roi.py` — TRAGSA €15.50/m × slope factor (1.0→1.8), plus dependent jobs/revenue. `TRAGSA_BASE_RATE_EUR_PER_M` now lives in `src/config/constants.py`; `tis_engine.py` and `run_pipeline_a_filemode.py` import it.
+- `src/platform/alpine_dashboard.py` (pure, no Streamlit) + `src/ui/tabs/tab_alpine.py` (render) + `NavigationModule("alpine", …)` in `src/ui/navigation.py` + the `app.py` dispatch branch. All four are required together or `tests/ui/test_app_shell.py` fails.
+- `etl_raster_processor.py --territory sierra_nevada` streams B03 + SCL and writes `clean_S2_NDSI.tif`. `etl_raster_intersection.py` switches on `SNTO_TERRITORY=sierra_nevada`.
+- Tests: `tests/unit/test_alpine_pipeline.py` and `tests/unit/test_alpine_dashboard.py`.
+
+Alpine-specific non-negotiables, on top of the general ones below:
+
+- **Never reuse the base SCL exclusion list for winter.** `gee_adapter._SCL_BAD_VALUES` drops class 11; for NDSI that empties the scene.
+- **NDSI alone is not a snow test.** Water shares the signature; always apply the NIR floor (`is_snow_pixel`).
+- **Do not label flat-terrain degradation as rutting.** The slope gate is what separates compaction from channelised erosion.
+- Socioeconomic jobs/revenue are proxy estimates, not INE/ALMUDENA observations. Nothing in this edition is field-validated.
 
 ## Current Status
 

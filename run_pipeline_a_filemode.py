@@ -51,6 +51,7 @@ from run_scm_operational import _sig, _classify_sig, _extract_zone_ndvi
 from src.config.constants import (
     EHS_P_BASE, EHS_P_FLOOR,
     SCM_LOCALIZED_FACTOR, SCM_MIXED_FACTOR, SCM_LANDSCAPE_FACTOR,
+    TRAGSA_BASE_RATE_EUR_PER_M,
 )
 from src.config.territories import TERRITORIES, get as get_territory
 
@@ -66,7 +67,7 @@ OUTDIR_ROOT = _ROOT / "data" / "outputs"
 BUFFER_M = 50
 CORE_M, NEAR_M, LAND_M = 50, 200, 1000
 UTM = "EPSG:25830"
-COST_PER_M = 15.50  # €/m (TRAGSA 2023, estimación de orden de magnitud)
+COST_PER_M = TRAGSA_BASE_RATE_EUR_PER_M  # €/m (TRAGSA 2023, orden de magnitud)
 
 _CAUSAL = {
     "LOCALIZED_IMPACT": SCM_LOCALIZED_FACTOR,

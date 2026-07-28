@@ -1,5 +1,5 @@
 {
-  "title": "SNTO — Smart Nature Tourism Observatory",
+  "title": "SNTO — Smart Natural Tourism Observatory · Alpine Edition (Sierra Nevada Pilot)",
   "creators": [
     {
       "name": "Karahrodi, Soroush",
@@ -9,14 +9,15 @@
   "keywords": [
     "remote-sensing",
     "sentinel-2",
-    "NDVI",
-    "NDMI",
+    "NDSI",
+    "snow-cover",
+    "EVI",
+    "alpine-ecology",
     "protected-areas",
     "sustainable-tourism",
-    "ecotourism",
     "territorial-intelligence",
     "Spain",
-    "Sierra-de-Guadarrama",
+    "Sierra-Nevada",
     "OAPN",
     "streamlit",
     "geospatial"
@@ -25,7 +26,7 @@
     {
       "scheme": "url",
       "identifier": "https://github.com/soroushkarahrodi79-oss/snto-smart-tourism-observatory",
-      "relation": "isSupplementTo",
+      "relation": "isDerivedFrom",
       "resource_type": "software"
     }
   ]

@@ -79,6 +79,69 @@ EHS_DENSE_CANOPY_NDVI_THRESHOLD: float = 0.80  # saturation onset
 EHS_W_NDVI_DENSE: float = 0.20  # NDVI weight in dense-canopy mode
 EHS_W_NDMI_DENSE: float = 0.80  # NDMI weight in dense-canopy mode
 
+# ── TRAGSA restoration unit rate ─────────────────────────────────────────────
+# Order-of-magnitude linear rate for trail-surface restoration, TRAGSA 2023
+# tariff. Previously duplicated as a literal in tis_engine.py and
+# run_pipeline_a_filemode.py; centralised here so a tariff update lands in one
+# place. Both consumers import it and keep their own module-level alias for
+# backward compatibility.
+TRAGSA_BASE_RATE_EUR_PER_M: float = 15.50
+
+# ── Alpine Edition — high-mountain intervention cost ─────────────────────────
+# Working above 2,000 m costs more than the tariff assumes: shorter weather
+# windows, helicopter or pack-animal haulage instead of vehicles, and manual
+# placement on ground no machine can reach. The multiplier ramps from 1.0 at
+# ALPINE_COST_SLOPE_MIN_DEG to ALPINE_COST_MAX_FACTOR at HP_SLOPE_MAX_DEG.
+#
+# These are planning assumptions for the Sierra Nevada pilot, NOT a published
+# TRAGSA high-mountain schedule. Any figure derived from them is a budget
+# estimate for comparison between trails, not a tendered price.
+ALPINE_COST_SLOPE_MIN_DEG: float = 10.0  # below this, the flat-terrain rate holds
+ALPINE_COST_MAX_FACTOR: float = 1.80     # cost multiplier at HP_SLOPE_MAX_DEG
+
+# ── Alpine Edition — regional tourism economy proxies ────────────────────────
+# Lifted out of src/ui/tabs/tab_socioeco.py so the public ROI model is testable
+# outside Streamlit. Both are proxy estimates, not INE/ALMUDENA observations —
+# the socioeconomic snapshot in src/socioeconomic/ carries the real municipal
+# indicators, and ROI statements must be badged accordingly.
+ALPINE_SPEND_PER_VISITOR_EUR: float = 22.50  # daily local hospitality spend
+ALPINE_VISITORS_PER_JOB: int = 2_500         # annual visitors sustaining one job
+
+# ── Alpine Edition — snow detection (NDSI) ───────────────────────────────────
+# Governs src/features/alpine_spectral.py for the Sierra Nevada pilot.
+#
+# NDSI = (B03_green − B11_swir1) / (B03_green + B11_swir1).  Snow is bright in
+# green and strongly absorbing in SWIR, so it separates cleanly from rock and
+# vegetation.  It does NOT separate cleanly from water, which is also bright in
+# green and dark in SWIR — hence the NIR floor, which exploits the fact that
+# snow stays reflective in NIR while liquid water does not (Hall et al. 1995).
+#
+# These are the standard MODIS/Landsat snow-mapping values; they are starting
+# points for the Sierra Nevada pilot and must be recalibrated against ground
+# observation before any operational snowline claim.
+NDSI_SNOW_THRESHOLD: float = 0.40    # NDSI at/above which a pixel may be snow
+NDSI_NIR_WATER_FLOOR: float = 0.11   # NIR reflectance below this → water, not snow
+
+# ── Alpine Edition — snowline & snowpack ─────────────────────────────────────
+# The snowline is reported as a low percentile of the elevation distribution of
+# snow pixels rather than the strict minimum, which would be driven by single
+# shaded outliers in ravines.  ALPINE_MIN_SNOW_PIXELS mirrors the small-sample
+# guard in src/geospatial/aggregation.py: below it, report None rather than a
+# number that looks authoritative but is noise.
+ALPINE_SNOWLINE_PERCENTILE: float = 5.0  # percentile of snow-pixel elevations
+ALPINE_MIN_SNOW_PIXELS: int = 25         # below this, snowline is not reported
+
+# ── Alpine Edition — borreguiles (high-altitude pasture) baselines ───────────
+# Borreguiles are wet alpine grasslands above the treeline.  Their EVI is
+# structurally lower than closed forest, so NDVI-era baselines overstate
+# degradation.  EVI is used instead of NDVI to avoid saturation and to stay
+# comparable with the dense-canopy guard above.
+# Unvalidated until the Sierra Nevada field campaign; do not present as truth.
+ALPINE_EVI_HEALTHY_BASELINE: float = 0.35   # healthy borreguil growing-season EVI
+ALPINE_NDMI_HEALTHY_BASELINE: float = 0.20  # healthy borreguil moisture
+ALPINE_W_EVI: float = 0.5    # weight of EVI deficit in soil degradation index
+ALPINE_W_NDMI: float = 0.5   # weight of NDMI deficit in soil degradation index
+
 # ── Decision Confidence Score — minimum quality gates for can_act ─────────────
 # Prevents issuing an actionable recommendation when foundational data quality
 # or time-series robustness falls below minimum thresholds, even if the total
