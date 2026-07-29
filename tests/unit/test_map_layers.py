@@ -61,6 +61,18 @@ _heading_from_id = _map_layers._heading_from_id
 _jitter = _map_layers._jitter
 _point_radius_m = _map_layers._point_radius_m
 _region_centroid = _map_layers._region_centroid
+
+
+def test_jitter_is_process_stable_not_python_hash_salted() -> None:
+    """The marker offset must be identical across processes.
+
+    Built-in hash() is salted per process (PYTHONHASHSEED), which moved markers
+    on every server restart and broke alignment with offline-sampled layers.
+    _jitter must use a stable hash — pin an exact value so a regression to
+    hash() (or any change to the scheme) fails loudly.
+    """
+    lat, lon = _jitter("pn_sierra_nevada_test_asset_042", 37.05, -3.31)
+    assert (round(lat, 6), round(lon, 6)) == (37.048339, -3.309986)
 _trail_endpoints = _map_layers._trail_endpoints
 assets_to_geojson = _map_layers.assets_to_geojson
 build_pydeck_deck = _map_layers.build_pydeck_deck

@@ -330,6 +330,42 @@ class TestAsymmetricTrailBuffer:
         assert abs(buf_wide_down.area - buf_wide_up.area) / max(buf_wide_down.area, 1) < 0.30
 
 
+# ── metric_slope_transform (geographic DEM slope correction) ─────────────────
+
+def test_metric_slope_transform_rescales_a_geographic_dem() -> None:
+    """A geographic DEM's degree pixel size must become metres for slope.
+
+    Without this, slope magnitude on a 4326 DEM saturates near 90°. Regression
+    guard for the bug that made the alpine slope-scaled buffer always max out.
+    """
+    from src.geospatial.geometry import compute_slope_aspect, metric_slope_transform
+
+    # 30 m ≈ 0.00027° at the equator; build a geographic ramp of exactly that
+    # pixel size rising ~tan(20°) metres per pixel eastward.
+    deg = 30.0 / 111_320.0
+    transform = Affine(deg, 0, -3.4, 0, -deg, 37.1)
+    rise = math.tan(math.radians(20.0)) * 30.0
+    dem = (np.arange(20)[None, :].repeat(20, 0).astype(np.float32)) * rise
+
+    # Raw (buggy) path saturates near vertical; corrected path recovers a
+    # realistic slope (exact value shifts with the cos(lat) longitude
+    # foreshortening, so assert a plausible band, not a pinned degree).
+    raw_slope, _ = compute_slope_aspect(dem, transform)
+    metric_tr = metric_slope_transform(transform, "EPSG:4326", mean_lat_deg=37.1)
+    fixed_slope, _ = compute_slope_aspect(dem, metric_tr)
+
+    assert float(np.median(raw_slope)) > 80.0             # the bug
+    assert 10.0 < float(np.median(fixed_slope)) < 40.0    # the fix
+    assert float(np.median(fixed_slope)) < float(np.median(raw_slope)) - 40.0
+
+
+def test_metric_slope_transform_leaves_projected_unchanged() -> None:
+    from src.geospatial.geometry import metric_slope_transform
+
+    utm = Affine(30.0, 0, 500_000.0, 0, -30.0, 4_100_000.0)
+    assert metric_slope_transform(utm, "EPSG:25830", mean_lat_deg=37.1) == utm
+
+
 # ── COG streaming environment ────────────────────────────────────────────────
 
 def test_dem_cog_env_allows_anonymous_s3() -> None:

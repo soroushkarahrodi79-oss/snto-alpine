@@ -11,6 +11,7 @@ import streamlit as st
 from streamlit_autorefresh import st_autorefresh
 
 from src._version import __version__
+from src.platform.alpine_asset_layers import load_alpine_asset_layers
 from src.platform.map_layers import LEGEND_ITEMS
 from src.platform.telemetry import record_view, telemetry_enabled
 from src.platform.views import ViewMode, get_view, view_modes
@@ -291,11 +292,16 @@ for _layer, _layer_container in zip(_layer_order, _layer_tabs, strict=True):
                         base_comps,
                     )
                 elif _module.key == "alpine":
+                    _ndsi_by_asset, _slope_by_asset = load_alpine_asset_layers(
+                        selected_key
+                    )
                     render_tab_alpine(
                         ranked_assets,
                         base_comps,
                         assets_by_id,
                         _view,
+                        slope_by_asset=_slope_by_asset,
+                        ndsi_by_asset=_ndsi_by_asset,
                     )
                 elif _module.key == "assets":
                     render_tab_assets(calibration, ranked_assets, _view)

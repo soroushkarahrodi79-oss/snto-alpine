@@ -33,6 +33,7 @@ Dependencies: pydeck>=0.9  (pip install pydeck)
 """
 from __future__ import annotations
 
+import hashlib
 import math
 from typing import Any
 
@@ -169,11 +170,14 @@ def _region_centroid(region: str) -> tuple[float, float]:
 def _jitter(asset_id: str, lat: float, lon: float, spread: float = 0.007) -> tuple[float, float]:
     """Apply a deterministic, asset-specific offset within a region.
 
-    Uses the asset_id hash so the same asset always appears at the same
-    location across page reloads, while different assets in the same
+    Uses a STABLE hash of the asset_id so the same asset always appears at the
+    same location — across page reloads AND across processes. (Python's built-in
+    hash() is salted per process via PYTHONHASHSEED, so it would move the marker
+    on every server restart and would not match positions sampled by offline
+    tooling; hashlib is process-invariant.) Different assets in the same
     municipality are spread out (spread ≈ 700 m at 41 °N).
     """
-    h = hash(asset_id) & 0xFFFF
+    h = int(hashlib.sha1(asset_id.encode("utf-8")).hexdigest()[:8], 16) & 0xFFFF
     dlat = (((h >> 8) & 0xFF) / 255.0 - 0.5) * spread
     dlon = (((h      ) & 0xFF) / 255.0 - 0.5) * spread
     return lat + dlat, lon + dlon

@@ -218,6 +218,43 @@ def fetch_dem_window(
 
 # ── Slope and aspect ──────────────────────────────────────────────────────────
 
+_M_PER_DEG = _M_PER_DEG_LAT  # 111_320.0
+
+
+def metric_slope_transform(transform: object, crs: object, mean_lat_deg: float):
+    """Return a transform whose pixel size is in METRES, for slope magnitude.
+
+    ``compute_slope_aspect`` reads pixel size straight from the transform. When
+    the DEM is geographic (EPSG:4326) that size is in DEGREES, so rise/run
+    explodes and every slope saturates near 90°. *Aspect* is an angle and stays
+    correct (scale-invariant), which is why the asymmetric buffer — which only
+    uses aspect — never hit this; *slope magnitude* does not.
+
+    For a geographic transform this returns a copy with the ``a``/``e`` pixel
+    steps rescaled to metres (longitude scaled by ``cos(lat)``). For an already
+    projected transform it is returned unchanged.
+
+    Args:
+        transform: affine transform of the DEM window.
+        crs: CRS of the DEM.
+        mean_lat_deg: representative latitude, for the longitude metre-scaling.
+
+    Returns:
+        An ``affine.Affine`` suitable as the ``transform`` arg of
+        :func:`compute_slope_aspect` for correct slope magnitudes.
+    """
+    import math
+
+    from affine import Affine
+    from pyproj import CRS as ProjCRS
+
+    t: Affine = transform  # type: ignore[assignment]
+    if not ProjCRS.from_user_input(crs).is_geographic:
+        return t
+    m_per_deg_lon = _M_PER_DEG * math.cos(math.radians(mean_lat_deg))
+    return Affine(t.a * m_per_deg_lon, t.b, t.c, t.d, t.e * _M_PER_DEG, t.f)
+
+
 def compute_slope_aspect(
     dem_array: np.ndarray,
     transform: object,
@@ -228,8 +265,10 @@ def compute_slope_aspect(
     converts to slope (degrees, 0=flat, 90=vertical cliff) and aspect
     (degrees, 0/360=North, 90=East, 180=South, 270=West — clockwise from N).
 
-    Cell size in metres is derived from the affine transform so the function
-    works for both geographic (EPSG:4326) and projected (UTM) DEMs.
+    Pixel size is read from the affine ``transform`` and assumed to be in
+    METRES. Aspect is scale-invariant, but for correct **slope magnitude** on a
+    geographic (EPSG:4326) DEM, first convert the transform with
+    :func:`metric_slope_transform`.
 
     Args:
         dem_array:  2-D float32 elevation array [H, W].
