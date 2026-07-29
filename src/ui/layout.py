@@ -14,6 +14,7 @@ from src._version import __version__
 from src.intervention import allocate_tis_budget, compare_scenarios
 from src.platform import compute_executive_dashboard
 from src.platform.enrichment import enrich_assets_with_satellite
+from src.territorial.alpine_fixtures import build_sierra_nevada_territory
 from src.territorial.fixtures import build_pnsg_territory, build_territory
 from src.territorial.tpi import rank_assets
 
@@ -322,18 +323,29 @@ _TERRITORY_CONFIG: dict[str, dict] = {
         "report_date": REPORT_DATE,
         "map_center": (40.820, -3.960, 10),
     },
+    # Alpine Edition — Sierra Nevada. EHS y tendencia derivados de la serie
+    # Sentinel-2 real (GEE); atributos socioeconómicos y SCM son proxy (ver
+    # src.territorial.alpine_fixtures). Presupuesto regional de mayor escala.
+    "sn": {
+        "name":       "Parque Nacional de Sierra Nevada",
+        "short":      "PN Sierra Nevada",
+        "budget":     400_000,
+        "report_date": REPORT_DATE,
+        "map_center": (37.055, -3.310, 10),
+    },
 }
 
 _BUILD_FN = {
     "snr":  build_territory,
     "pnsg": build_pnsg_territory,
+    "sn":   build_sierra_nevada_territory,
 }
 
 # Territorios VISIBLES en el selector de la UI. El PNSG es el territorio
 # principal del observatorio; Sierra del Rincón se conserva en el código, los
 # datos y los scripts del pipeline (raíz del proyecto), pero ya no se ofrece en
 # la vista. Para volver a mostrarlo, añade "snr" a esta lista.
-_VISIBLE_TERRITORIES = ["pnsg"]
+_VISIBLE_TERRITORIES = ["pnsg", "sn"]
 
 
 # ── Pipeline con caché ────────────────────────────────────────────────────────

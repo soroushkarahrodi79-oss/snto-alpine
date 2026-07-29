@@ -87,12 +87,24 @@ _BANNER_CFG: dict[str, dict] = {
         "text_color":  "#E6F1FB",
         "sub_color":   "#85B7EB",
     },
+    "sn": {
+        "bg":          "#0d1e3a",
+        "main_badge":  (
+            "🏔", "Parque Nacional · Alta montaña mediterránea", "#185FA5", "#B5D4F4"
+        ),
+        "extra_badge": (
+            "❄️", "Doble estacionalidad · nieve y borreguiles", "#5DA9E8", "#08243E"
+        ),
+        "text_color":  "#E6F1FB",
+        "sub_color":   "#85B7EB",
+    },
 }
 
 # Simulated cycle-over-cycle deltas — directionally realistic for demo data
 _EXEC_DELTAS: dict[str, dict] = {
     "snr":  {"ehs": -3.1, "tis": -1.8, "deuda": 12_000,  "jobs": 0.6},
     "pnsg": {"ehs": -5.3, "tis": -4.1, "deuda": 68_000,  "jobs": 2.1},
+    "sn":   {"ehs": -4.4, "tis": -3.0, "deuda": 45_000,  "jobs": 1.4},
 }
 
 
