@@ -41,6 +41,7 @@ from src.geospatial.geometry import (
     _N_ASPECT_SAMPLES,
     asymmetric_trail_buffer,
     compute_slope_aspect,
+    metric_slope_transform,
 )
 
 logger = logging.getLogger(__name__)
@@ -234,7 +235,14 @@ def alpine_trail_buffer(
         return _symmetric_buffer(trail_geom_4326, symmetric_fallback_m, target_crs)
 
     try:
-        slope_deg, _ = compute_slope_aspect(dem_array, dem_transform)
+        # The Copernicus DEM is geographic (EPSG:4326); its pixel size is in
+        # degrees, so slope magnitude must be computed on a metre-scaled
+        # transform or every slope saturates to ~90° (and the corridor always
+        # maxes out). Aspect is unaffected. See geometry.metric_slope_transform.
+        mean_lat = trail_geom_4326.centroid.y
+        slope_deg, _ = compute_slope_aspect(
+            dem_array, metric_slope_transform(dem_transform, dem_crs, mean_lat)
+        )
         trail_metric = _to_metric(trail_geom_4326, target_crs)
         mean_slope = sample_slope_along_trail(
             trail_metric,
