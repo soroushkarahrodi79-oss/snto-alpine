@@ -37,15 +37,19 @@ reproducible, sin aumentar las afirmaciones científicas.
 
 ### Trabajo
 
-- [ ] Mantener el despliegue heredado deshabilitado y manual hasta que exista
-  infraestructura Alpine independiente.
-- [ ] Sincronizar README, contexto de agentes, estado de CI y limitaciones.
-- [ ] Publicar este roadmap como autoridad de planificación Alpine.
-- [ ] Crear un milestone `Alpine 0.1.0` y convertir las tareas posteriores en
-  issues trazables.
+- [x] Mantener el despliegue heredado deshabilitado y manual hasta que exista
+  infraestructura Alpine independiente ([PR #5](https://github.com/soroushkarahrodi79-oss/snto-alpine/pull/5)).
+- [x] Sincronizar README, contexto de agentes, estado de CI y limitaciones
+  ([PR #5](https://github.com/soroushkarahrodi79-oss/snto-alpine/pull/5)).
+- [x] Publicar este roadmap como autoridad de planificación Alpine
+  ([PR #5](https://github.com/soroushkarahrodi79-oss/snto-alpine/pull/5)).
+- [x] Crear el milestone
+  [`Alpine 0.1.0`](https://github.com/soroushkarahrodi79-oss/snto-alpine/milestone/1)
+  y convertir las tareas posteriores en issues trazables.
 - [ ] Ejecutar revisión visual del dashboard en Sierra Nevada para Invierno y
-  Verano.
-- [ ] Cortar la release `0.1.0` como **prototipo sin validación de campo**.
+  Verano ([#12](https://github.com/soroushkarahrodi79-oss/snto-alpine/issues/12)).
+- [ ] Cortar la release `0.1.0` como **prototipo sin validación de campo**
+  ([#12](https://github.com/soroushkarahrodi79-oss/snto-alpine/issues/12)).
 
 ### Puerta de salida
 
@@ -60,13 +64,15 @@ geometría real y completar el macizo.
 ### Trabajo
 
 - [ ] Ingerir las trazas reales OAPN/OSM con identificador y licencia
-  verificables.
+  verificables ([#6](https://github.com/soroushkarahrodi79-oss/snto-alpine/issues/6)).
 - [ ] Muestrear NDSI y pendiente sobre la traza o corredor del activo, no sobre
   centroide municipal + *jitter*.
 - [ ] Componer las teselas Sentinel-2 necesarias para alcanzar cobertura NDSI
-  53/53 o documentar explícitamente cualquier ausencia residual.
+  53/53 o documentar explícitamente cualquier ausencia residual
+  ([#7](https://github.com/soroushkarahrodi79-oss/snto-alpine/issues/7)).
 - [ ] Incorporar varias fechas invernales y producir duración de manto, cota de
-  nieve e incertidumbre, no solo una escena de febrero de 2024.
+  nieve e incertidumbre, no solo una escena de febrero de 2024
+  ([#8](https://github.com/soroushkarahrodi79-oss/snto-alpine/issues/8)).
 - [ ] Versionar un manifiesto de procedencia por escena, tesela, fecha y método
   de agregación.
 
@@ -83,9 +89,9 @@ condicionan la decisión.
 ### Trabajo
 
 - [ ] Ejecutar zonas SCM reales, emparejadas por altitud, para los activos que
-  dispongan de geometría y cobertura suficientes.
+  dispongan de geometría y cobertura suficientes ([#9](https://github.com/soroushkarahrodi79-oss/snto-alpine/issues/9)).
 - [ ] Sustituir la capa socioeconómica heredada de Madrid por INE/IECA/REDIAM y
-  fuentes andaluzas con fecha y licencia.
+  fuentes andaluzas con fecha y licencia ([#10](https://github.com/soroushkarahrodi79-oss/snto-alpine/issues/10)).
 - [ ] Incorporar al menos una fuente real de presión/aforo de visitantes.
 - [ ] Recalibrar capacidad, importancia económica y accesibilidad; mantener como
   `SIMULATED` cualquier componente que siga siendo un escenario.
@@ -105,7 +111,7 @@ degradación/nieve observadas en Sierra Nevada.
 ### Trabajo
 
 - [ ] Adaptar el protocolo de campo a borreguiles, senderos BTT y gradiente
-  altitudinal de Sierra Nevada.
+  altitudinal de Sierra Nevada ([#11](https://github.com/soroushkarahrodi79-oss/snto-alpine/issues/11)).
 - [ ] Definir parcelas co-localizadas, controles, época, instrumentos y tamaño
   mínimo de muestra antes de recoger datos.
 - [ ] Registrar cobertura, compactación/erosión y evidencia fotográfica con
@@ -130,17 +136,17 @@ Este hito solo se plantea tras la puerta de validación:
 - release y depósito propios, sin reutilizar el DOI del observatorio base;
 - plan de mantenimiento, responsables y costes operativos.
 
-## Backlog inicial recomendado
+## Backlog trazable
 
-1. `ops: keep Alpine deployment manual and isolated from the base app`
-2. `docs: align Alpine status, roadmap and test counts`
-3. `data: ingest real Sierra Nevada trail geometries`
-4. `data: complete multi-tile winter NDSI coverage for 53 assets`
-5. `science: build multi-date snowpack and snowline series`
-6. `science: execute altitude-matched observed SCM zones`
-7. `data: replace Madrid socioeconomic fallback with Andalusian sources`
-8. `validation: design and execute the Sierra Nevada field campaign`
-9. `release: visual QA and cut Alpine 0.1.0`
+1. ✅ Aislamiento del despliegue Alpine — [PR #5](https://github.com/soroushkarahrodi79-oss/snto-alpine/pull/5).
+2. ✅ Estado, roadmap y recuento de tests — [PR #5](https://github.com/soroushkarahrodi79-oss/snto-alpine/pull/5).
+3. [Geometrías reales de senderos](https://github.com/soroushkarahrodi79-oss/snto-alpine/issues/6).
+4. [Cobertura NDSI multitesela 53/53](https://github.com/soroushkarahrodi79-oss/snto-alpine/issues/7).
+5. [Serie multifecha de manto y cota de nieve](https://github.com/soroushkarahrodi79-oss/snto-alpine/issues/8).
+6. [Zonas SCM observadas y emparejadas por altitud](https://github.com/soroushkarahrodi79-oss/snto-alpine/issues/9).
+7. [Fuentes socioeconómicas andaluzas](https://github.com/soroushkarahrodi79-oss/snto-alpine/issues/10).
+8. [Campaña de campo de Sierra Nevada](https://github.com/soroushkarahrodi79-oss/snto-alpine/issues/11).
+9. [QA visual y release Alpine 0.1.0](https://github.com/soroushkarahrodi79-oss/snto-alpine/issues/12).
 
 ## Relación con la documentación heredada
 
