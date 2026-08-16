@@ -33,14 +33,28 @@ def _get_version() -> str:
 
 
 def _get_test_count() -> int | None:
+    """Return the number of tests that actually passed, not merely collected.
+
+    The Alpine suite has an intentional skip, so using ``--collect-only`` made
+    the README overstate the passing count by one. CI uses ``--check-version``
+    and never enters this path; the full run is only paid when a maintainer asks
+    the script to refresh the README metadata.
+    """
     result = subprocess.run(
-        [sys.executable, "-m", "pytest", "--collect-only", "-q", "--no-header"],
+        [
+            sys.executable,
+            "-m",
+            "pytest",
+            "-q",
+            "--no-header",
+            "--disable-warnings",
+        ],
         capture_output=True,
         text=True,
         cwd=ROOT,
     )
     for line in reversed(result.stdout.splitlines()):
-        m = re.search(r"(\d+) tests? collected", line)
+        m = re.search(r"(\d+) passed", line)
         if m:
             return int(m.group(1))
     return None
