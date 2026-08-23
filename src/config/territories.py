@@ -39,6 +39,11 @@ class TerritoryConfig:
     notes: str = ""
     # Optional external data sources available for this territory
     external_sources: list[str] = field(default_factory=list)
+    # Sentinel-2 MGRS tiles whose union covers the territory. Empty means
+    # "just s2_tile" (single-tile territories keep the old single-item ETL
+    # path); >1 entries routes etl_raster_processor.py through the
+    # multi-tile mosaic (issue #7 — Sierra Nevada spans 4 tiles).
+    mgrs_tiles: tuple[str, ...] = ()
 
 
 # ── Registered territories ─────────────────────────────────────────────────────
@@ -92,7 +97,12 @@ TERRITORIES: dict[str, TerritoryConfig] = {
         # Macizo completo: vertiente norte (Granada / estación de esquí) y
         # vertiente sur (Alpujarra). Cubre Veleta (3.396 m) y Mulhacén (3.479 m),
         # el punto más alto de la península ibérica.
-        bbox_wgs84=(-3.60, 36.90, -2.85, 37.20),
+        # Widened past the original (-3.60, 36.90, -2.85, 37.20) after issue #7:
+        # the real OAPN trail geometries (issue #6) extend to lon -2.7568 /
+        # lat 37.2713, past the old E/N edges — those assets got silently
+        # dropped from every STAC search. Bounds now cover the real traces
+        # with a small margin.
+        bbox_wgs84=(-3.61, 36.90, -2.74, 37.28),
         # Cuatro tiles MGRS cubren el macizo; 30SVF es el de la zona alta y el
         # que usan por defecto los scripts de descarga.
         s2_tile="T30SVF",
@@ -101,11 +111,13 @@ TERRITORIES: dict[str, TerritoryConfig] = {
         trails_geojson="sierra_nevada_oapn_trails.geojson",
         dashboard_key="sn",
         region="Andalucía",
+        mgrs_tiles=("30SVF", "30SWF", "30SVG", "30SWG"),
         notes="Alpine Edition pilot. Doble estacionalidad: innivación invernal "
               "(NDSI, cota de nieve, duración del manto) y erosión estival de "
               "borreguiles por BTT y senderismo. Municipios: Monachil, "
               "Güéjar Sierra, Capileira, Trevélez, Bubión, Pampaneira. "
-              "Tiles adicionales: 30SWF, 30SVG, 30SWG. "
+              "El macizo cae en 4 teselas MGRS (ver mgrs_tiles); el mosaico "
+              "invernal multi-tesela vive en etl_raster_processor.py (#7). "
               "NO validado en campo — ver campaña de validación pendiente.",
         external_sources=[
             "OAPN MITECO — límite del parque y senderos oficiales: "
