@@ -41,6 +41,7 @@ def render_tab_alpine(
     _view,
     slope_by_asset: dict[str, float] | None = None,
     ndsi_by_asset: dict[str, float] | None = None,
+    real_geoms: dict[str, list[dict]] | None = None,
 ) -> None:
     """Renderiza el observatorio alpino de Sierra Nevada.
 
@@ -51,6 +52,8 @@ def render_tab_alpine(
         _view: perfil de audiencia activo (divulgación por capas).
         slope_by_asset: pendiente media por activo (°), colorea el mapa estival.
         ndsi_by_asset: NDSI medio por activo, colorea el mapa invernal.
+        real_geoms: trazas cartográficas reales OAPN por activo; el mapa las
+            dibuja en lugar de la posición aproximada por centroide.
     """
     st.subheader("Observatorio Alpino — Sierra Nevada")
 
@@ -73,6 +76,7 @@ def render_tab_alpine(
         deck = build_alpine_deck(
             ranked_assets,
             season,
+            real_geoms=real_geoms,
             slope_by_asset=slope_by_asset,
             ndsi_by_asset=ndsi_by_asset,
         )

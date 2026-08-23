@@ -35,7 +35,8 @@ from src.geospatial.geometry import (
     fetch_dem_window,
     metric_slope_transform,
 )
-from src.platform.map_layers import _jitter, _region_centroid
+from src.platform.alpine_trail_geoms import load_sierra_nevada_trail_geoms
+from src.platform.map_layers import _flatten_coords, _jitter, _region_centroid
 from src.territorial.alpine_fixtures import build_sierra_nevada_territory
 
 _ROOT = Path(__file__).resolve().parents[1]
@@ -45,12 +46,26 @@ _OUT = _ROOT / "clean_assets" / "sierra_nevada_asset_layers.csv"
 
 _WIN = 3          # sampling half-window (pixels) → 7×7 patch at 10 m
 _MIN_VALID = 4    # minimum valid pixels to accept a sample
+_MAX_TRACE_PTS = 24  # cap the vertices sampled along a real trace
 
 
-def _mapped_point(asset) -> tuple[float, float]:
-    """The (lat, lon) the map plots this asset at — centroid + deterministic jitter."""
+def _sample_points(asset, geoms: dict[str, list[dict]]) -> list[tuple[float, float]]:
+    """Points (lat, lon) to sample for this asset.
+
+    Along the REAL OAPN trace when available (evenly subsampled vertices), so
+    NDSI/slope are the trail's own values; otherwise a single centroid+jitter
+    point — the same approximation the map falls back to, kept in lock-step.
+    """
+    trace = geoms.get(asset.asset_id)
+    if trace:
+        verts: list[list[float]] = []
+        for g in trace:
+            verts.extend(_flatten_coords(g))
+        if verts:
+            step = max(1, len(verts) // _MAX_TRACE_PTS)
+            return [(v[1], v[0]) for v in verts[::step]]  # geojson is (lon, lat)
     lat, lon = _region_centroid(asset.region)
-    return _jitter(asset.asset_id, lat, lon)
+    return [_jitter(asset.asset_id, lat, lon)]
 
 
 def _sample_raster_mean(ds, arr, x, y, *, mask=None) -> float | None:
@@ -72,9 +87,23 @@ def _sample_raster_mean(ds, arr, x, y, *, mask=None) -> float | None:
     return float(patch[valid].mean())
 
 
+def _mean_over_points(ds, arr, transformer, pts, *, mask=None) -> float | None:
+    """Average raster value over all sample points that fall on valid pixels."""
+    vals: list[float] = []
+    for lat, lon in pts:
+        x, y = transformer.transform(lon, lat)
+        v = _sample_raster_mean(ds, arr, x, y, mask=mask)
+        if v is not None:
+            vals.append(v)
+    return sum(vals) / len(vals) if vals else None
+
+
 def main() -> None:
     assets = build_sierra_nevada_territory()
-    points = {a.asset_id: _mapped_point(a) for a in assets}
+    geoms = load_sierra_nevada_trail_geoms("sn")
+    n_real = sum(1 for a in assets if a.asset_id in geoms)
+    print(f"Real OAPN traces available for {n_real}/{len(assets)} assets.")
+    sample_pts = {a.asset_id: _sample_points(a, geoms) for a in assets}
 
     ndsi_by_asset: dict[str, float] = {}
     if _NDSI_TIF.exists():
@@ -88,9 +117,8 @@ def main() -> None:
                 with rasterio.open(_NIR_TIF) as nir_ds:
                     nir = nir_ds.read(1).astype(np.float32) / 10000.0
                 water_ok = nir > NDSI_NIR_WATER_FLOOR
-            for asset_id, (lat, lon) in points.items():
-                x, y = to_ndsi.transform(lon, lat)
-                val = _sample_raster_mean(nds, ndsi, x, y, mask=water_ok)
+            for asset_id, pts in sample_pts.items():
+                val = _mean_over_points(nds, ndsi, to_ndsi, pts, mask=water_ok)
                 if val is not None:
                     ndsi_by_asset[asset_id] = round(val, 4)
         print(f"NDSI sampled for {len(ndsi_by_asset)}/{len(assets)} assets "
@@ -98,9 +126,10 @@ def main() -> None:
     else:
         print(f"NDSI raster not found at {_NDSI_TIF}; skipping NDSI column.")
 
-    # Slope from the Copernicus DEM over the bounding box of the mapped points.
-    lats = [p[0] for p in points.values()]
-    lons = [p[1] for p in points.values()]
+    # Slope from the Copernicus DEM over the bounding box of the sample points.
+    all_pts = [p for pts in sample_pts.values() for p in pts]
+    lats = [p[0] for p in all_pts]
+    lons = [p[1] for p in all_pts]
     pad = 0.02
     bbox = (min(lons) - pad, min(lats) - pad, max(lons) + pad, max(lats) + pad)
     slope_by_asset: dict[str, float] = {}
@@ -121,9 +150,8 @@ def main() -> None:
                 t: Affine = dem_tr  # type: ignore[assignment]
                 return int(round((y - t.f) / t.e)), int(round((x - t.c) / t.a))
 
-        for asset_id, (lat, lon) in points.items():
-            x, y = to_dem.transform(lon, lat)
-            val = _sample_raster_mean(_DemDS, slope_deg, x, y)
+        for asset_id, pts in sample_pts.items():
+            val = _mean_over_points(_DemDS, slope_deg, to_dem, pts)
             if val is not None:
                 slope_by_asset[asset_id] = round(val, 2)
         print(f"Slope sampled for {len(slope_by_asset)}/{len(assets)} assets.")
