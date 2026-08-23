@@ -135,25 +135,36 @@ distintas de Sentinel-2/NDSI:
 
 **Actualización (issue #21):**
 
-1. **AEMET** — `src/validation/aemet_snow.py` (8 tests) ya conecta de verdad:
-   `fetch_nivological_info()` / `fetch_mountain_forecast()` implementan el
-   patrón de dos pasos de AEMET OpenData (llamada autenticada → URL de
-   datos → segunda llamada sin autenticar) contra los dos endpoints reales
-   verificados en la documentación Swagger de AEMET
-   (`/api/prediccion/especifica/nivologica/{area}` y
-   `/api/prediccion/especifica/montaña/pasada/area/{area}/dia/{dia}`, área
-   `nev1`). Requiere `AEMET_API_KEY` (clave gratuita en
+1. **AEMET** — `src/validation/aemet_snow.py` (15 tests) conecta de verdad y
+   fue **probado en vivo contra la API real** con una clave de usuario:
+   `fetch_mountain_forecast()` implementa el patrón de dos pasos de AEMET
+   OpenData (llamada autenticada → URL de datos → segunda llamada sin
+   autenticar) contra `/api/prediccion/especifica/montaña/pasada/area/nev1/
+   dia/{dia}`, que **sí cubre Sierra Nevada** y devuelve un pronóstico real
+   (nubosidad, precipitación, viento, y — lo más útil para el contraste —
+   la altitud de la isoterma 0°C/-10°C en atmósfera libre y las
+   temperaturas previstas en Pradollano (2.165 m) y Borreguiles (2.665 m)).
+   `parse_mountain_forecast()` extrae estos campos de verdad, verificado
+   contra la respuesta real capturada (fijada como fixture en los tests, no
+   inventada). Requiere `AEMET_API_KEY` (clave gratuita en
    opendata.aemet.es/centrodedescargas/altaUsuario) — sin ella,
    `has_credentials()` es `False` y cualquier llamada lanza
    `AemetCredentialsMissing` explícito, nunca un dato inventado.
-   **Deliberadamente no parsea** el contenido nivológico a campos
-   estructurados (espesor, cota) — el esquema JSON exacto de esos dos
-   endpoints no se pudo verificar sin una clave real activa; devuelve el
-   payload crudo en vez de adivinar un formato. Tampoco hay endpoint de
-   archivo histórico en esta familia de API (solo hoy+0..+3 y un resumen de
-   las últimas 24-36h), así que el contraste retroactivo contra la serie ya
-   cerrada de #8 (dic-2023–mar-2024) no es posible por esta vía; sirve de
-   forma prospectiva, junto a una futura ejecución invernal.
+   **Hallazgo real, no esperado**: el otro endpoint candidato,
+   `/api/prediccion/especifica/nivologica/{area}` (boletín de peligro de
+   aludes), **solo acepta `area="0"` (Pirineo Catalán) o `"1"` (Pirineo
+   Navarro y Aragonés)** — probado en vivo, `nev1` devuelve 404. La red de
+   boletines de aludes de AEMET no cubre Sierra Nevada; `fetch_nivological_info()`
+   se mantiene (documenta fielmente la forma real de la API) pero sin valor
+   por defecto, precisamente para que nadie asuma por error una cobertura
+   que no existe. No hay tampoco endpoint de archivo histórico en esta
+   familia de API (solo hoy+0..+3 y un resumen de las últimas 24-36h), así
+   que el contraste retroactivo contra la serie ya cerrada de #8
+   (dic-2023–mar-2024) no es posible por esta vía; sirve de forma
+   prospectiva, junto a una futura ejecución invernal. La isoterma y las
+   temperaturas por altitud son **contexto meteorológico**, no una medida
+   de espesor de nieve — preséntense junto a la cota de nieve satelital,
+   nunca como sustituto suyo.
 2. **Cetursa** — la página real (`sierranevada.es/es/invierno/la-estacion/
    en-directo/parte-nieve/`) se localizó y se comprobó accesible (HTTP 200),
    pero es una SPA renderizada en cliente: el HTML servido no contiene el
