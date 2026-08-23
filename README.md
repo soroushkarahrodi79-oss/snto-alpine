@@ -384,5 +384,5 @@ Fichero de cita: [`CITATION.cff`](CITATION.cff) · Contribuciones: [`CONTRIBUTIN
 ---
 
 <div align="center">
-<sub>SNTO Alpine Edition v0.1.0 · Python ≥ 3.12 · 1150+ tests passing · agosto 2026</sub>
+<sub>SNTO v0.1.0 · Python ≥ 3.12 · 1150 tests passing · agosto 2026</sub>
 </div>
