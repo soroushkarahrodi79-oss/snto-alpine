@@ -32,7 +32,7 @@ summary. See ``clean_assets/sierra_nevada_municipios_ine.csv``.
 from __future__ import annotations
 
 import csv
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
 from typing import Optional
