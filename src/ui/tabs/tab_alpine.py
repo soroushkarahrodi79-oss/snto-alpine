@@ -10,6 +10,8 @@ Estructura:
   2. Mapa PyDeck WebGL con gradiente estacional.
   3. Simulador presupuestario What-If (50.000 € – 1.000.000 €).
   4. Matriz de cartera TPI con TIER I–IV y distintivos de alerta.
+  5. Contexto municipal (INE andaluz real, issue #10) + presión de
+     visitantes real (OAPN).
 """
 from __future__ import annotations
 
@@ -24,6 +26,7 @@ from src.platform.alpine_dashboard import (
     build_alpine_matrix,
     season_view,
 )
+from src.socioeconomic.alpine_mapping import build_municipal_context
 
 # El presupuesto regional anual se mueve en un rango mucho mayor que el del
 # simulador PNSG (20K–300K): Sierra Nevada combina parque nacional y estación
@@ -110,6 +113,11 @@ def render_tab_alpine(
 
     # ── 4. Matriz de cartera TPI ──────────────────────────────────────────────
     _render_portfolio_matrix(ranked_assets)
+
+    st.divider()
+
+    # ── 5. Contexto municipal ─────────────────────────────────────────────────
+    _render_municipal_context(ranked_assets)
 
 
 def _season_switcher(_view) -> AlpineSeason:
@@ -211,4 +219,62 @@ def _render_portfolio_matrix(ranked_assets) -> None:
         "Eje X: presión turística (volumen anual normalizado). "
         "Eje Y: riesgo ecológico (100 − EHS). "
         "El TIER es prioridad de inversión, no gravedad táctica."
+    )
+
+
+def _render_municipal_context(ranked_assets) -> None:
+    """Cobertura municipal andaluza real + presión de visitantes real (OAPN)."""
+    st.markdown("##### Contexto municipal")
+    st.caption(
+        "Sierra Nevada no tiene datos ALMUDENA (solo cubre la Comunidad de "
+        "Madrid). Esta sección usa únicamente fuentes propias de Andalucía: "
+        "el callejero municipal oficial del INE y la encuesta de visitantes "
+        "de OAPN — nunca cifras del PNSG/Madrid."
+    )
+
+    ctx = build_municipal_context(ranked_assets)
+
+    m_col1, m_col2, m_col3 = st.columns(3)
+    with m_col1:
+        st.metric(
+            "Activos con municipio andaluz real (INE)",
+            f"{ctx.n_resolved}/{ctx.n_assets}",
+        )
+    with m_col2:
+        st.metric(
+            "Municipios reales representados",
+            f"{ctx.n_municipios}",
+            help=f"Provincias: {', '.join(ctx.provinces) or '—'}",
+        )
+    with m_col3:
+        st.metric(
+            f"Visitantes P.N. Sierra Nevada · {ctx.oapn_report_year} (real, OAPN)",
+            f"{ctx.oapn_sierra_nevada_visitors_estimate:,.0f}".replace(",", "."),
+            help=(
+                f"{ctx.oapn_sierra_nevada_share_pct:.2f}% de los "
+                f"{ctx.oapn_red_total_visitors:,.0f}".replace(",", ".")
+                + " visitantes de toda la Red de Parques Nacionales en "
+                f"{ctx.oapn_report_year} (Encuesta SIR, OAPN). Cifra del "
+                "parque completo — no desagregable por sendero ni municipio."
+            ),
+        )
+
+    if ctx.unresolved_regions:
+        with st.expander(
+            f"ℹ️ {len(ctx.unresolved_regions)} región(es) sin municipio real "
+            "vinculado",
+            expanded=False,
+        ):
+            st.markdown(
+                "No son municipios andaluces (el macizo por defecto, refugios "
+                "o parajes) o su topónimo aún no está en el callejero:\n\n"
+                + "\n".join(f"- {r}" for r in ctx.unresolved_regions)
+            )
+
+    st.caption(
+        "Fuentes: INE — Relación de municipios y sus códigos (Granada/Almería). "
+        "OAPN — *Visitantes en la Red de Parques Nacionales, Anualidad "
+        f"{ctx.oapn_report_year}* (Mayo 2024). Población y economía municipal "
+        "(IECA/REDIAM) **aún no incorporadas** para este piloto — no se "
+        "muestra ninguna cifra de Madrid/PNSG en su lugar."
     )

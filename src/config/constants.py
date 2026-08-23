@@ -142,6 +142,25 @@ ALPINE_NDMI_HEALTHY_BASELINE: float = 0.20  # healthy borreguil moisture
 ALPINE_W_EVI: float = 0.5    # weight of EVI deficit in soil degradation index
 ALPINE_W_NDMI: float = 0.5   # weight of NDMI deficit in soil degradation index
 
+# ── Alpine Edition — real visitor pressure (issue #10) ───────────────────────
+# The only real (non-proxy) visitor-pressure figure available for this pilot:
+# the Sierra Nevada NP's share of the Red de Parques Nacionales' 2023 total,
+# from OAPN's own annual survey (SIR — Sistema de Información de la Red).
+# Source: Organismo Autónomo Parques Nacionales, "Visitantes en la Red de
+# Parques Nacionales — Anualidad 2023" (Mayo 2024), p.8 table "Porcentaje de
+# visitas por parque nacional y estación" — Sierra Nevada row, "% de visitas
+# totales en 2023" column: 4.89%.
+# https://www.miteco.gob.es/content/dam/miteco/es/parques-nacionales-oapn/
+#   red-parques-nacionales/desarrollo-socioeconomico/informes/
+#   Visitantes%20a%20los%20Parques%20Nacionales%20Espa%C3%B1oles.%20A%C3%B1o%202023.pdf
+# This is a PARK-WIDE total (all access points, all uses), not a per-asset or
+# per-municipality figure — it cannot be disaggregated to individual trails
+# without double-counting or fabricating a split. Use it as regional context,
+# never as an asset-level visitor count.
+ALPINE_OAPN_REPORT_YEAR: int = 2023
+ALPINE_OAPN_RED_TOTAL_VISITORS: int = 15_016_249   # all 16 national parks, 2023
+ALPINE_OAPN_SIERRA_NEVADA_SHARE_PCT: float = 4.89  # Sierra Nevada's share of the above
+
 # ── Decision Confidence Score — minimum quality gates for can_act ─────────────
 # Prevents issuing an actionable recommendation when foundational data quality
 # or time-series robustness falls below minimum thresholds, even if the total
