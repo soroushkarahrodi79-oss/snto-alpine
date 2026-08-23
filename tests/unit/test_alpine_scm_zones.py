@@ -15,9 +15,13 @@ from src.spatial_causality.alpine_scm_zones import (
 )
 
 
-def _months(evi_values: list[float | None], ndmi: float = 0.20) -> list[MonthlyZoneSignal]:
+def _months(
+    evi_values: list[float | None], ndmi: float = 0.20
+) -> list[MonthlyZoneSignal]:
     return [
-        MonthlyZoneSignal(year=2024, month=6 + i, evi=v, ndmi=ndmi if v is not None else None)
+        MonthlyZoneSignal(
+            year=2024, month=6 + i, evi=v, ndmi=ndmi if v is not None else None
+        )
         for i, v in enumerate(evi_values)
     ]
 

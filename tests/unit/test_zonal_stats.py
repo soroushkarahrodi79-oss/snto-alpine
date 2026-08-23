@@ -46,7 +46,9 @@ def test_zonal_mean_honours_an_extra_valid_mask() -> None:
     poly = box(0, 100, 200, 200)
     valid = np.zeros(arr.shape, dtype=bool)
     valid[:5, :5] = True  # only a small corner is "valid" (e.g. cloud-free)
-    mean, n = zonal_mean(arr, _TRANSFORM, poly, _CRS, _CRS, valid_mask=valid, min_pixels=1)
+    mean, n = zonal_mean(
+        arr, _TRANSFORM, poly, _CRS, _CRS, valid_mask=valid, min_pixels=1
+    )
     assert mean == pytest.approx(3.0)
     assert n == 25
 

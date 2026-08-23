@@ -24,7 +24,10 @@ from typing import Optional
 
 from src.assets.models import AssetObservation
 from src.features.alpine_spectral import AlpineSeason, extract_alpine_features
-from src.spatial_causality.alpine_causality import AlpineAttribution, compute_mtb_attribution
+from src.spatial_causality.alpine_causality import (
+    AlpineAttribution,
+    compute_mtb_attribution,
+)
 
 __all__ = [
     "MIN_SUMMER_OBSERVATIONS",
@@ -133,7 +136,9 @@ def execute_scm_attribution(
         :class:`ScmZoneOutcome`.
     """
     local_source = (
-        "scm_real:alpine" if control_altitude_matched else "scm_real:alpine_unmatched_control"
+        "scm_real:alpine"
+        if control_altitude_matched
+        else "scm_real:alpine_unmatched_control"
     )
     local_obs = build_summer_observations(asset_id, local_monthly, local_source)
     control_obs = build_summer_observations(asset_id, control_monthly, local_source)

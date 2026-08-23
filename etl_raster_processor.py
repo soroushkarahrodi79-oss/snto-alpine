@@ -280,7 +280,9 @@ def compute_evi_array(
     blue = blue_dn.astype(np.float32) / 10000.0
     denom = nir + C1 * red - C2 * blue + L
     with np.errstate(divide="ignore", invalid="ignore"):
-        evi = np.where(denom == 0.0, 0.0, G * (nir - red) / np.where(denom == 0.0, 1.0, denom))
+        evi = np.where(
+            denom == 0.0, 0.0, G * (nir - red) / np.where(denom == 0.0, 1.0, denom)
+        )
     return evi.astype(np.float32)
 
 
