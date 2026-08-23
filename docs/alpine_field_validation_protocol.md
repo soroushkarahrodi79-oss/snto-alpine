@@ -165,14 +165,40 @@ distintas de Sentinel-2/NDSI:
    temperaturas por altitud son **contexto meteorológico**, no una medida
    de espesor de nieve — preséntense junto a la cota de nieve satelital,
    nunca como sustituto suyo.
-2. **Cetursa** — la página real (`sierranevada.es/es/invierno/la-estacion/
-   en-directo/parte-nieve/`) se localizó y se comprobó accesible (HTTP 200),
-   pero es una SPA renderizada en cliente: el HTML servido no contiene el
-   dato de nieve (se carga vía JS después de cargar la página), así que un
-   `curl`/fetch simple no sirve. Wiring real requeriría o bien un endpoint
-   interno no documentado de Cetursa, o renderizado headless — **queda
-   pendiente**, documentado aquí en vez de construir un scraper fragil que
-   se rompería en silencio.
+2. **Cetursa** — `src/validation/cetursa_snow.py` (12 tests) conecta de verdad
+   y fue **probado en vivo contra el backend real**. La página pública
+   (`sierranevada.es/.../parte-nieve/`) es una SPA (Next.js) renderizada en
+   cliente, así que un `curl`/fetch de *esa URL* devuelve HTML sin el dato de
+   nieve — que es lo que observó la investigación anterior. Pero la SPA no
+   calcula el parte: lo pide al backend Umbraco de la propia Cetursa,
+   `GET https://umb.sierranevada.es/umbraco/api/parte/previsiones?culture=es`,
+   que devuelve **JSON limpio y sin autenticación** (verificado en vivo, HTTP
+   200, desde un `urllib` pelado — sin navegador, sin renderizado headless, sin
+   cookies ni API key). El hallazgo honesto es el contrario de "necesita
+   headless": la API interna es directamente consumible; no hacía falta un
+   scraper frágil.
+   `fetch_snow_report()` hace un único GET; `parse_snow_report()` extrae el
+   parte "Hoy" (o "Previsión"): estado de estación, espesores por sector del
+   dominio esquiable (Veleta, Borreguiles, Laguna de las Yeguas, Loma de Dílar,
+   Parador, Río), calidad de nieve, temperaturas por estación (Pradollano,
+   Borreguiles, Veleta) y riesgo de aludes. **Convención de ausencia honesta**:
+   fuera de temporada la estación está `Cerrada` y Cetursa rellena los
+   espesores con centinelas (`espesorminimo == "9999"`, campos vacíos, par
+   `min 9999 / max 0`) — todos se colapsan a `None`, nunca un 0 cm inventado;
+   `has_snow_data()` degrada a `False` (verificado en vivo el 2026-08-23, con la
+   estación cerrada). Fijado como fixture real (`tests/unit/fixtures/
+   cetursa_parte_2026-08-23.json`, secciones de nieve verbatim), más una forma
+   de temporada abierta sintética-pero-fiel-al-esquema para ejercitar el parseo
+   numérico (no se puede capturar dato invernal real en agosto, y el backend no
+   sirve archivo histórico).
+   **Cautela de alcance**: `superficieinnivada` (p. ej. "1143 km2.") aparece
+   todo el año, incluso con la estación cerrada — es un descriptor del dominio,
+   **no** una medida de superficie innivada en vivo, y no debe contrastarse
+   contra el área de nieve satelital. El contraste satélite↔terreno real son los
+   espesores por sector (cm), solo en temporada abierta y solo en la franja del
+   dominio esquiable (vertiente norte, ~2.100–3.300 m). Igual que AEMET, no hay
+   endpoint histórico, así que el contraste retroactivo contra la serie ya
+   cerrada de #8 no es posible por esta vía; sirve de forma prospectiva.
 
 ## 5. Métricas de concordancia (`src/validation/agreement.py`)
 
