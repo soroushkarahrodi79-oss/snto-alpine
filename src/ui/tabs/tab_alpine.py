@@ -312,6 +312,11 @@ def _render_municipal_indicators_table(municipios) -> None:
             "Paro (%)": ind.unemployment_rate_pct if ind else None,
             "Establ. hostelería": ind.hosteleria_establishments if ind else None,
             "Plazas hoteleras": ind.hotel_beds if ind else None,
+            # issue #27 — richer real IECA/SIMA fields (24/24 coverage)
+            "Establecimientos": ind.total_establishments if ind else None,
+            "Transacc. 2ª mano": ind.real_estate_tx_used if ind else None,
+            "Consumo eléctr. (MWh)": ind.elec_consumption_mwh if ind else None,
+            "Ingresos/hab (€)": ind.income_per_capita_eur if ind else None,
         })
     df = pd.DataFrame(rows)
 
@@ -325,7 +330,18 @@ def _render_municipal_indicators_table(municipios) -> None:
             "Paro (%)": st.column_config.NumberColumn(format="%.1f"),
             "Establ. hostelería": st.column_config.NumberColumn(format="%d"),
             "Plazas hoteleras": st.column_config.NumberColumn(format="%d"),
+            "Establecimientos": st.column_config.NumberColumn(format="%d"),
+            "Transacc. 2ª mano": st.column_config.NumberColumn(format="%d"),
+            "Consumo eléctr. (MWh)": st.column_config.NumberColumn(format="%.0f"),
+            "Ingresos/hab (€)": st.column_config.NumberColumn(format="%.0f"),
         },
+    )
+    st.caption(
+        "El snapshot IECA/SIMA guarda además otros indicadores reales no "
+        "mostrados aquí (superficie agrícola herbácea/leñosa, consumo eléctrico "
+        "residencial, gastos por habitante, hostales y pensiones — a menudo con "
+        "secreto estadístico en municipios pequeños). Cada campo conserva su "
+        "propia añada de origen."
     )
     n_missing = sum(1 for m in municipios if m.ine_code not in indicators)
     if n_missing:

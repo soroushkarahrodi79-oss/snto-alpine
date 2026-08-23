@@ -65,6 +65,13 @@ SOURCE_NAME = "IECA/SIMA — Andalucía pueblo a pueblo"
 # label substring (accent/case-insensitive) -> output field name.
 # Matched against the ROW LABEL with its trailing ". <year>" stripped, so the
 # substring never needs to include the vintage itself.
+#
+# ORDER MATTERS: for each row the first needle that is a substring of the label
+# wins, so a more specific needle must precede a shorter one it contains
+# ("plazas en hostales" before "hostales y pensiones"; the residential-energy
+# needle before the total-energy one it is a superstring of). All needles below
+# were checked against a real ficha (mun=18010, fetched 2026-08-23) to confirm
+# they are unique and hit the intended row.
 _LABEL_FIELD_MAP: tuple[tuple[str, str], ...] = (
     ("poblacion total", "population"),
     ("porcentaje de poblacion mayor de 65 anos", "pct_over_65"),
@@ -75,6 +82,25 @@ _LABEL_FIELD_MAP: tuple[tuple[str, str], ...] = (
     ("hoteles", "hotels"),
     ("renta bruta media", "gross_income_mean_eur"),
     ("renta disponible media", "disposable_income_mean_eur"),
+    # ── issue #27: richer real fields, same source (the SIMA ficha) ──────────
+    # Lodging beyond hotels (completes accommodation capacity).
+    ("plazas en hostales y pensiones", "hostal_pension_beds"),
+    ("hostales y pensiones", "hostales_pensiones"),
+    # Real-estate market pressure (second-home / tourism proxy).
+    ("transacciones inmobiliarias. vivienda nueva", "real_estate_tx_new"),
+    ("transacciones inmobiliarias. vivienda segunda mano", "real_estate_tx_used"),
+    # Economic density.
+    ("total establecimientos", "total_establishments"),
+    # Land use (plural "cultivos ..." is the surface row, not the singular
+    # "principal cultivo ..." rows).
+    ("superficie dedicada a cultivos herbaceos", "ag_area_herbaceous_ha"),
+    ("superficie dedicada a cultivos lenosos", "ag_area_woody_ha"),
+    # Electricity consumption (residential needle MUST precede the total one).
+    ("consumo de energia electrica residencial", "elec_consumption_residential_mwh"),
+    ("consumo de energia electrica", "elec_consumption_mwh"),
+    # Municipal fiscal capacity (public-investment / TRAGSA co-financing angle).
+    ("ingresos por habitante", "income_per_capita_eur"),
+    ("gastos por habitante", "expense_per_capita_eur"),
 )
 
 _ROW_RE = re.compile(r"<tr[^>]*>(.*?)</tr>", re.S)
@@ -131,46 +157,68 @@ class AndalusianMunicipalIndicators:
     hotel_beds: Optional[int] = None
     gross_income_mean_eur: Optional[float] = None
     disposable_income_mean_eur: Optional[float] = None
+    # ── issue #27: richer real fields from the same SIMA ficha ──────────────
+    hostales_pensiones: Optional[int] = None
+    hostal_pension_beds: Optional[int] = None
+    real_estate_tx_new: Optional[int] = None
+    real_estate_tx_used: Optional[int] = None
+    total_establishments: Optional[int] = None
+    ag_area_herbaceous_ha: Optional[float] = None
+    ag_area_woody_ha: Optional[float] = None
+    elec_consumption_mwh: Optional[float] = None
+    elec_consumption_residential_mwh: Optional[float] = None
+    income_per_capita_eur: Optional[float] = None
+    expense_per_capita_eur: Optional[float] = None
     source: str = SOURCE_NAME
     source_url: str = ""
     provenance: dict[str, str] = field(default_factory=dict)
     caveats: list[str] = field(default_factory=list)
 
+    # Fields serialised in insertion order below; kept as a single list so
+    # to_dict / from_dict can't drift out of sync with each other.
+    _SERIALISED_FIELDS = (
+        "population",
+        "pct_over_65",
+        "pop_change_10y_pct",
+        "unemployment_rate_pct",
+        "hosteleria_establishments",
+        "hotels",
+        "hotel_beds",
+        "gross_income_mean_eur",
+        "disposable_income_mean_eur",
+        "hostales_pensiones",
+        "hostal_pension_beds",
+        "real_estate_tx_new",
+        "real_estate_tx_used",
+        "total_establishments",
+        "ag_area_herbaceous_ha",
+        "ag_area_woody_ha",
+        "elec_consumption_mwh",
+        "elec_consumption_residential_mwh",
+        "income_per_capita_eur",
+        "expense_per_capita_eur",
+    )
+
     def to_dict(self) -> dict:
-        return {
-            "ine_code": self.ine_code,
-            "population": self.population,
-            "pct_over_65": self.pct_over_65,
-            "pop_change_10y_pct": self.pop_change_10y_pct,
-            "unemployment_rate_pct": self.unemployment_rate_pct,
-            "hosteleria_establishments": self.hosteleria_establishments,
-            "hotels": self.hotels,
-            "hotel_beds": self.hotel_beds,
-            "gross_income_mean_eur": self.gross_income_mean_eur,
-            "disposable_income_mean_eur": self.disposable_income_mean_eur,
-            "source": self.source,
-            "source_url": self.source_url,
-            "provenance": self.provenance,
-            "caveats": self.caveats,
-        }
+        d: dict = {"ine_code": self.ine_code}
+        for name in self._SERIALISED_FIELDS:
+            d[name] = getattr(self, name)
+        d["source"] = self.source
+        d["source_url"] = self.source_url
+        d["provenance"] = self.provenance
+        d["caveats"] = self.caveats
+        return d
 
     @classmethod
     def from_dict(cls, d: dict) -> "AndalusianMunicipalIndicators":
+        kwargs = {name: d.get(name) for name in cls._SERIALISED_FIELDS}
         return cls(
             ine_code=d["ine_code"],
-            population=d.get("population"),
-            pct_over_65=d.get("pct_over_65"),
-            pop_change_10y_pct=d.get("pop_change_10y_pct"),
-            unemployment_rate_pct=d.get("unemployment_rate_pct"),
-            hosteleria_establishments=d.get("hosteleria_establishments"),
-            hotels=d.get("hotels"),
-            hotel_beds=d.get("hotel_beds"),
-            gross_income_mean_eur=d.get("gross_income_mean_eur"),
-            disposable_income_mean_eur=d.get("disposable_income_mean_eur"),
             source=d.get("source", SOURCE_NAME),
             source_url=d.get("source_url", ""),
             provenance=d.get("provenance", {}),
             caveats=d.get("caveats", []),
+            **kwargs,
         )
 
 
@@ -240,6 +288,19 @@ def parse_sima_ficha_html(
         hotel_beds=_as_int(values.get("hotel_beds")),
         gross_income_mean_eur=values.get("gross_income_mean_eur"),
         disposable_income_mean_eur=values.get("disposable_income_mean_eur"),
+        hostales_pensiones=_as_int(values.get("hostales_pensiones")),
+        hostal_pension_beds=_as_int(values.get("hostal_pension_beds")),
+        real_estate_tx_new=_as_int(values.get("real_estate_tx_new")),
+        real_estate_tx_used=_as_int(values.get("real_estate_tx_used")),
+        total_establishments=_as_int(values.get("total_establishments")),
+        ag_area_herbaceous_ha=values.get("ag_area_herbaceous_ha"),
+        ag_area_woody_ha=values.get("ag_area_woody_ha"),
+        elec_consumption_mwh=values.get("elec_consumption_mwh"),
+        elec_consumption_residential_mwh=values.get(
+            "elec_consumption_residential_mwh"
+        ),
+        income_per_capita_eur=values.get("income_per_capita_eur"),
+        expense_per_capita_eur=values.get("expense_per_capita_eur"),
         source_url=SIMA_FICHA_URL.format(ine_code=ine_code),
         provenance=provenance,
         caveats=caveats,
