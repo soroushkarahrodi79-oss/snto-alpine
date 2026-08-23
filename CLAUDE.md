@@ -42,8 +42,12 @@ Alpine-specific non-negotiables, on top of the general ones below:
 
 ## Current work-in-progress (this environment, as of 2026-08-23)
 
-- Branch `feat/oapn-trail-geometries`, commit `dfd7b24` (local, not pushed): closes out issue #6. Extraction script + loader module + 7 unit tests + wiring through `app.py`/`tab_alpine.py`/`build_alpine_asset_layers.py`. Code-reviewed and looks complete against the issue's acceptance criteria; pending a local test run (Python wasn't installed in this environment until now — see below) before pushing and opening a PR.
-- A scratch script `scripts/_cap.py` (Playwright screenshot capture, undeclared dependency) exists locally, untracked, deliberately excluded from the #6 commit — useful later for issue #12's visual QA, but not part of #6's deliverable.
+- Branch `feat/oapn-trail-geometries`, local commits (not pushed yet): closes out issue #6 and does most of issue #7.
+  - **#6** (`dfd7b24`): real OAPN trail geometries. 7 unit tests, verified green (`pytest tests/unit/test_alpine_trail_geoms.py`).
+  - **CLAUDE.md fix** (`2d45256`): this file, corrected to describe the real Alpine backlog instead of inherited upstream status.
+  - **#7** (multi-tile winter NDSI mosaic): `src/geospatial/raster_mosaic.py` (pure merge/manifest helpers, 8 tests) + `etl_raster_processor.py::run_alpine_multitile` (searches all 4 MGRS tiles — 30SVF/30SWF/30SVG/30SWG — independently, mosaics B03/B08/B11/SCL, writes `clean_assets/sierra_nevada_ndsi_manifest.csv`). Also **widened `sierra_nevada`'s `bbox_wgs84`** in `territories.py` — the old bbox clipped 3 of the 53 real trail geometries (issue #6 exposed this). Ran against the live STAC API: **52/53 assets now have real NDSI** (up from 43/53). The 1 residual (`pn_sierra_nevada_senderismo_rio_bermejo_030`) is inside the bbox but outside every candidate scene's actual swath footprint for tile 30SVF in Jan-Mar 2024 (confirmed by retrying with a wider date window — same least-cloud scene won both times); documented as a justified residual per the issue's own acceptance criteria, not chased further.
+- Full suite green: 862 passed, 1 skipped (`pytest tests/unit tests/ui`).
+- A scratch script `scripts/_cap.py` (Playwright screenshot capture, undeclared dependency) exists locally, untracked, deliberately excluded from commits — useful later for issue #12's visual QA, but not part of #6/#7's deliverables.
 - Local dev environment now has a real Python at `C:\Users\Dell\AppData\Local\Python\bin\python.exe` (3.14) with a project `.venv`; the previous blocker (only the Microsoft Store execution-alias stub was on PATH) is resolved.
 
 ## Product Direction
