@@ -1,0 +1,152 @@
+{
+    "Partes": [
+        {
+            "Name": "Hoy",
+            "Parte": {
+                "partenieve": {
+                    "general": {
+                        "fecha": "23/08/2026",
+                        "hora": "18:31:25",
+                        "textoprevisionapertura": "Temporada de verano finalizada. Les esperamos en la próxima temporada de esquí 2026-2027."
+                    },
+                    "estadoestacion": "Cerrada",
+                    "nieve": {
+                        "espesorminimo": "9999",
+                        "espesormaximo": "0",
+                        "calidadnieve": "CERRADA   ",
+                        "desnivel": "0 m",
+                        "longitud": "0 m",
+                        "superficie": "0 ha",
+                        "superficieinnivada": "1143 km2.",
+                        "espesorveleta": "",
+                        "calidadveleta": "CERRADA   ",
+                        "espesorlaguna": "",
+                        "calidadlaguna": "CERRADA   ",
+                        "espesorborreguiles": "",
+                        "calidadborreguiles": "CERRADA   ",
+                        "espesorlomadilar": "",
+                        "calidadlomadilar": "CERRADA   ",
+                        "espesorrio": "",
+                        "calidadrio": "CERRADA   ",
+                        "espesorparador": "",
+                        "calidadparador": "CERRADA   ",
+                        "indiceuv": "2"
+                    },
+                    "meteorologia": {
+                        "paginas": {
+                            "pagina": [
+                                {
+                                    "estadocieloveleta": "Despejado                ",
+                                    "visibilidadveleta": "Total     ",
+                                    "temperaturaveleta": "8",
+                                    "vientoveleta": "40     ",
+                                    "estadocieloborreguiles": "Despejado                ",
+                                    "visibilidadborreguiles": "Total     ",
+                                    "temperaturaborreguiles": "12",
+                                    "vientoborreguiles": "35     ",
+                                    "estadocielopradollano": "Despejado                ",
+                                    "visibilidadpradollano": "Total     ",
+                                    "temperaturapradollano": "16",
+                                    "vientopradollano": "20     ",
+                                    "maxtemperaturaprevistaborreguiles": "13",
+                                    "mintemperaturaprevistaborreguiles": "10",
+                                    "maxtemperaturaprevistapradollano": "17",
+                                    "mintemperaturaprevistapradollano": "14",
+                                    "textoprevision0dia": "Estado del cielo: Poco nuboso o despejado. \nPrecipitaciones: No se esperan. \nTormentas: No se esperan. \nTemperaturas: Con pocos cambios. \nViento: Fuerte del suroeste en cotas altas, con probables rachas muy fuertes en la segunda mitad del día. Moderado de componente sur en el resto. ",
+                                    "estadocieloprevision0dia": "Despejado                "
+                                },
+                                {
+                                    "textoprevision1dia": "Estado del cielo: Poco nuboso o despejado. \nPrecipitaciones: No se esperan. \nTormentas: No se esperan. \nTemperaturas: Mínimas con pocos cambios. Máximas en descenso. \nViento: Fuerte o muy fuerte en cotas altas, y moderado con intervalos fuertes en el resto, del oeste y suroeste. ",
+                                    "estadocieloprevision1dia": "Despejado                ",
+                                    "textoprevision2dia": "Estado del cielo: Poco nuboso o despejado, con velos de nubes altas. \nPrecipitaciones: No se esperan. \nTormentas: No se esperan. \nTemperaturas: Mínimas sin cambios o en ligero descenso. Máximas en ascenso. \nViento: Moderado del oeste y sudoeste, fuerte con rachas muy fuertes en cotas altas. ",
+                                    "estadocieloprevision2dia": "Despejado                ",
+                                    "textoprevision3dia": "Estado del cielo: Predominio de poco nuboso o despejado, salvo algunos intervalos de madrugada. \nPrecipitaciones: No se descarta algún chubasco ocasional de madrugada. \nTormentas: No se esperan. \nTemperaturas: Mínimas en ascenso. Máximas sin cambios o en ligero descenso. \nViento: Moderado del sur y suroeste. En cotas altas fuerte del suroeste, con probables rachas muy fuertes. ",
+                                    "estadocieloprevision3dia": "Despejado                "
+                                },
+                                {
+                                    "direccionborreguiles": "N  ",
+                                    "riesgoavalancha": "0",
+                                    "direccionpradollano": "N  "
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "Name": "Previsión",
+            "Parte": {
+                "partenieve": {
+                    "general": {
+                        "fecha": "23/08/2026",
+                        "hora": "18:31:36",
+                        "textoprevisionapertura": "Temporada de verano finalizada. Les esperamos en la próxima temporada de esquí 2026-2027."
+                    },
+                    "estadoestacion": "Cerrada",
+                    "nieve": {
+                        "espesorminimo": "9999",
+                        "espesormaximo": "0",
+                        "calidadnieve": "CERRADA   ",
+                        "desnivel": "0 m",
+                        "longitud": "0 m",
+                        "superficie": "0 ha",
+                        "superficieinnivada": "1143 km2.",
+                        "espesorveleta": "",
+                        "calidadveleta": "CERRADA   ",
+                        "espesorlaguna": "",
+                        "calidadlaguna": "CERRADA   ",
+                        "espesorborreguiles": "",
+                        "calidadborreguiles": "CERRADA   ",
+                        "espesorlomadilar": "",
+                        "calidadlomadilar": "CERRADA   ",
+                        "espesorrio": "",
+                        "calidadrio": "CERRADA   ",
+                        "espesorparador": "",
+                        "calidadparador": "CERRADA   ",
+                        "indiceuv": "2"
+                    },
+                    "meteorologia": {
+                        "paginas": {
+                            "pagina": [
+                                {
+                                    "estadocieloveleta": "Despejado                ",
+                                    "visibilidadveleta": "Total     ",
+                                    "temperaturaveleta": "8",
+                                    "vientoveleta": "40     ",
+                                    "estadocieloborreguiles": "Despejado                ",
+                                    "visibilidadborreguiles": "Total     ",
+                                    "temperaturaborreguiles": "12",
+                                    "vientoborreguiles": "35     ",
+                                    "estadocielopradollano": "Despejado                ",
+                                    "visibilidadpradollano": "Total     ",
+                                    "temperaturapradollano": "16",
+                                    "vientopradollano": "20     ",
+                                    "maxtemperaturaprevistaborreguiles": "13",
+                                    "mintemperaturaprevistaborreguiles": "10",
+                                    "maxtemperaturaprevistapradollano": "17",
+                                    "mintemperaturaprevistapradollano": "14",
+                                    "textoprevision0dia": "Estado del cielo: Poco nuboso o despejado. \nPrecipitaciones: No se esperan. \nTormentas: No se esperan. \nTemperaturas: Con pocos cambios. \nViento: Fuerte del suroeste en cotas altas, con probables rachas muy fuertes en la segunda mitad del día. Moderado de componente sur en el resto. ",
+                                    "estadocieloprevision0dia": "Despejado                "
+                                },
+                                {
+                                    "textoprevision1dia": "Estado del cielo: Poco nuboso o despejado. \nPrecipitaciones: No se esperan. \nTormentas: No se esperan. \nTemperaturas: Mínimas con pocos cambios. Máximas en descenso. \nViento: Fuerte o muy fuerte en cotas altas, y moderado con intervalos fuertes en el resto, del oeste y suroeste. ",
+                                    "estadocieloprevision1dia": "Despejado                ",
+                                    "textoprevision2dia": "Estado del cielo: Poco nuboso o despejado, con velos de nubes altas. \nPrecipitaciones: No se esperan. \nTormentas: No se esperan. \nTemperaturas: Mínimas sin cambios o en ligero descenso. Máximas en ascenso. \nViento: Moderado del oeste y sudoeste, fuerte con rachas muy fuertes en cotas altas. ",
+                                    "estadocieloprevision2dia": "Despejado                ",
+                                    "textoprevision3dia": "Estado del cielo: Predominio de poco nuboso o despejado, salvo algunos intervalos de madrugada. \nPrecipitaciones: No se descarta algún chubasco ocasional de madrugada. \nTormentas: No se esperan. \nTemperaturas: Mínimas en ascenso. Máximas sin cambios o en ligero descenso. \nViento: Moderado del sur y suroeste. En cotas altas fuerte del suroeste, con probables rachas muy fuertes. ",
+                                    "estadocieloprevision3dia": "Despejado                "
+                                },
+                                {
+                                    "direccionborreguiles": "N  ",
+                                    "riesgoavalancha": "0",
+                                    "direccionpradollano": "N  "
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    ]
+}
