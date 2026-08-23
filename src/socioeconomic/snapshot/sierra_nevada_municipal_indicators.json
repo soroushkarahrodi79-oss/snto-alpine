@@ -1,0 +1,652 @@
+{
+  "source": "IECA/SIMA — Andalucía pueblo a pueblo",
+  "source_url_template": "https://www.juntadeandalucia.es/institutodeestadisticaycartografia/sima/ficha.htm?mun={ine_code}",
+  "n_municipalities": 24,
+  "municipalities": {
+    "18010": {
+      "ine_code": "18010",
+      "population": 598,
+      "pct_over_65": 25.9,
+      "pop_change_10y_pct": -8.1,
+      "unemployment_rate_pct": 19.0,
+      "hosteleria_establishments": null,
+      "hotels": null,
+      "hotel_beds": null,
+      "gross_income_mean_eur": null,
+      "disposable_income_mean_eur": null,
+      "source": "IECA/SIMA — Andalucía pueblo a pueblo",
+      "source_url": "https://www.juntadeandalucia.es/institutodeestadisticaycartografia/sima/ficha.htm?mun=18010",
+      "provenance": {
+        "population": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "pct_over_65": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "pop_change_10y_pct": "IECA/SIMA — Andalucía pueblo a pueblo 2014-2024",
+        "unemployment_rate_pct": "IECA/SIMA — Andalucía pueblo a pueblo 2025"
+      },
+      "caveats": [
+        "hotels: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2025)",
+        "hotel_beds: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2025)",
+        "gross_income_mean_eur: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2023)",
+        "disposable_income_mean_eur: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2023)"
+      ]
+    },
+    "18030": {
+      "ine_code": "18030",
+      "population": 693,
+      "pct_over_65": 25.3,
+      "pop_change_10y_pct": -8.8,
+      "unemployment_rate_pct": 16.0,
+      "hosteleria_establishments": 11,
+      "hotels": null,
+      "hotel_beds": null,
+      "gross_income_mean_eur": null,
+      "disposable_income_mean_eur": null,
+      "source": "IECA/SIMA — Andalucía pueblo a pueblo",
+      "source_url": "https://www.juntadeandalucia.es/institutodeestadisticaycartografia/sima/ficha.htm?mun=18030",
+      "provenance": {
+        "population": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "pct_over_65": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "pop_change_10y_pct": "IECA/SIMA — Andalucía pueblo a pueblo 2014-2024",
+        "hosteleria_establishments": "IECA/SIMA — Andalucía pueblo a pueblo",
+        "unemployment_rate_pct": "IECA/SIMA — Andalucía pueblo a pueblo 2025"
+      },
+      "caveats": [
+        "hotels: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2025)",
+        "hotel_beds: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2025)",
+        "gross_income_mean_eur: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2023)",
+        "disposable_income_mean_eur: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2023)"
+      ]
+    },
+    "18032": {
+      "ine_code": "18032",
+      "population": 308,
+      "pct_over_65": 29.5,
+      "pop_change_10y_pct": -1.3,
+      "unemployment_rate_pct": 13.1,
+      "hosteleria_establishments": 17,
+      "hotels": null,
+      "hotel_beds": null,
+      "gross_income_mean_eur": null,
+      "disposable_income_mean_eur": null,
+      "source": "IECA/SIMA — Andalucía pueblo a pueblo",
+      "source_url": "https://www.juntadeandalucia.es/institutodeestadisticaycartografia/sima/ficha.htm?mun=18032",
+      "provenance": {
+        "population": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "pct_over_65": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "pop_change_10y_pct": "IECA/SIMA — Andalucía pueblo a pueblo 2014-2024",
+        "hosteleria_establishments": "IECA/SIMA — Andalucía pueblo a pueblo",
+        "unemployment_rate_pct": "IECA/SIMA — Andalucía pueblo a pueblo 2025"
+      },
+      "caveats": [
+        "hotels: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2025)",
+        "hotel_beds: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2025)",
+        "gross_income_mean_eur: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2023)",
+        "disposable_income_mean_eur: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2023)"
+      ]
+    },
+    "18033": {
+      "ine_code": "18033",
+      "population": 320,
+      "pct_over_65": 20.6,
+      "pop_change_10y_pct": 4.1,
+      "unemployment_rate_pct": 23.3,
+      "hosteleria_establishments": 4,
+      "hotels": null,
+      "hotel_beds": null,
+      "gross_income_mean_eur": null,
+      "disposable_income_mean_eur": null,
+      "source": "IECA/SIMA — Andalucía pueblo a pueblo",
+      "source_url": "https://www.juntadeandalucia.es/institutodeestadisticaycartografia/sima/ficha.htm?mun=18033",
+      "provenance": {
+        "population": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "pct_over_65": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "pop_change_10y_pct": "IECA/SIMA — Andalucía pueblo a pueblo 2014-2024",
+        "hosteleria_establishments": "IECA/SIMA — Andalucía pueblo a pueblo",
+        "unemployment_rate_pct": "IECA/SIMA — Andalucía pueblo a pueblo 2025"
+      },
+      "caveats": [
+        "hotels: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2025)",
+        "hotel_beds: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2025)",
+        "gross_income_mean_eur: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2023)",
+        "disposable_income_mean_eur: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2023)"
+      ]
+    },
+    "18035": {
+      "ine_code": "18035",
+      "population": 1521,
+      "pct_over_65": 27.4,
+      "pop_change_10y_pct": -1.8,
+      "unemployment_rate_pct": 21.6,
+      "hosteleria_establishments": 13,
+      "hotels": null,
+      "hotel_beds": null,
+      "gross_income_mean_eur": 19111.0,
+      "disposable_income_mean_eur": 16451.0,
+      "source": "IECA/SIMA — Andalucía pueblo a pueblo",
+      "source_url": "https://www.juntadeandalucia.es/institutodeestadisticaycartografia/sima/ficha.htm?mun=18035",
+      "provenance": {
+        "population": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "pct_over_65": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "pop_change_10y_pct": "IECA/SIMA — Andalucía pueblo a pueblo 2014-2024",
+        "hosteleria_establishments": "IECA/SIMA — Andalucía pueblo a pueblo",
+        "unemployment_rate_pct": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "gross_income_mean_eur": "IECA/SIMA — Andalucía pueblo a pueblo 2023",
+        "disposable_income_mean_eur": "IECA/SIMA — Andalucía pueblo a pueblo 2023"
+      },
+      "caveats": [
+        "hotels: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2025)",
+        "hotel_beds: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2025)"
+      ]
+    },
+    "18114": {
+      "ine_code": "18114",
+      "population": 685,
+      "pct_over_65": 29.6,
+      "pop_change_10y_pct": -9.0,
+      "unemployment_rate_pct": 18.4,
+      "hosteleria_establishments": 6,
+      "hotels": null,
+      "hotel_beds": null,
+      "gross_income_mean_eur": null,
+      "disposable_income_mean_eur": null,
+      "source": "IECA/SIMA — Andalucía pueblo a pueblo",
+      "source_url": "https://www.juntadeandalucia.es/institutodeestadisticaycartografia/sima/ficha.htm?mun=18114",
+      "provenance": {
+        "population": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "pct_over_65": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "pop_change_10y_pct": "IECA/SIMA — Andalucía pueblo a pueblo 2014-2024",
+        "hosteleria_establishments": "IECA/SIMA — Andalucía pueblo a pueblo",
+        "unemployment_rate_pct": "IECA/SIMA — Andalucía pueblo a pueblo 2025"
+      },
+      "caveats": [
+        "hotels: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2025)",
+        "hotel_beds: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2025)",
+        "gross_income_mean_eur: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2023)",
+        "disposable_income_mean_eur: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2023)"
+      ]
+    },
+    "18040": {
+      "ine_code": "18040",
+      "population": 423,
+      "pct_over_65": 21.0,
+      "pop_change_10y_pct": -4.7,
+      "unemployment_rate_pct": 37.3,
+      "hosteleria_establishments": 3,
+      "hotels": null,
+      "hotel_beds": null,
+      "gross_income_mean_eur": null,
+      "disposable_income_mean_eur": null,
+      "source": "IECA/SIMA — Andalucía pueblo a pueblo",
+      "source_url": "https://www.juntadeandalucia.es/institutodeestadisticaycartografia/sima/ficha.htm?mun=18040",
+      "provenance": {
+        "population": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "pct_over_65": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "pop_change_10y_pct": "IECA/SIMA — Andalucía pueblo a pueblo 2014-2024",
+        "hosteleria_establishments": "IECA/SIMA — Andalucía pueblo a pueblo",
+        "unemployment_rate_pct": "IECA/SIMA — Andalucía pueblo a pueblo 2025"
+      },
+      "caveats": [
+        "hotels: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2025)",
+        "hotel_beds: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2025)",
+        "gross_income_mean_eur: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2023)",
+        "disposable_income_mean_eur: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2023)"
+      ]
+    },
+    "18042": {
+      "ine_code": "18042",
+      "population": 589,
+      "pct_over_65": 19.5,
+      "pop_change_10y_pct": 16.1,
+      "unemployment_rate_pct": 14.6,
+      "hosteleria_establishments": 33,
+      "hotels": 5,
+      "hotel_beds": 205,
+      "gross_income_mean_eur": null,
+      "disposable_income_mean_eur": null,
+      "source": "IECA/SIMA — Andalucía pueblo a pueblo",
+      "source_url": "https://www.juntadeandalucia.es/institutodeestadisticaycartografia/sima/ficha.htm?mun=18042",
+      "provenance": {
+        "population": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "pct_over_65": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "pop_change_10y_pct": "IECA/SIMA — Andalucía pueblo a pueblo 2014-2024",
+        "hosteleria_establishments": "IECA/SIMA — Andalucía pueblo a pueblo",
+        "hotels": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "hotel_beds": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "unemployment_rate_pct": "IECA/SIMA — Andalucía pueblo a pueblo 2025"
+      },
+      "caveats": [
+        "gross_income_mean_eur: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2023)",
+        "disposable_income_mean_eur: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2023)"
+      ]
+    },
+    "18068": {
+      "ine_code": "18068",
+      "population": 2382,
+      "pct_over_65": 17.7,
+      "pop_change_10y_pct": 27.1,
+      "unemployment_rate_pct": 13.3,
+      "hosteleria_establishments": 11,
+      "hotels": null,
+      "hotel_beds": null,
+      "gross_income_mean_eur": 29585.0,
+      "disposable_income_mean_eur": 24171.0,
+      "source": "IECA/SIMA — Andalucía pueblo a pueblo",
+      "source_url": "https://www.juntadeandalucia.es/institutodeestadisticaycartografia/sima/ficha.htm?mun=18068",
+      "provenance": {
+        "population": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "pct_over_65": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "pop_change_10y_pct": "IECA/SIMA — Andalucía pueblo a pueblo 2014-2024",
+        "hosteleria_establishments": "IECA/SIMA — Andalucía pueblo a pueblo",
+        "unemployment_rate_pct": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "gross_income_mean_eur": "IECA/SIMA — Andalucía pueblo a pueblo 2023",
+        "disposable_income_mean_eur": "IECA/SIMA — Andalucía pueblo a pueblo 2023"
+      },
+      "caveats": [
+        "hotels: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2025)",
+        "hotel_beds: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2025)"
+      ]
+    },
+    "18094": {
+      "ine_code": "18094",
+      "population": 2932,
+      "pct_over_65": 18.8,
+      "pop_change_10y_pct": -0.7,
+      "unemployment_rate_pct": 15.4,
+      "hosteleria_establishments": 43,
+      "hotels": null,
+      "hotel_beds": null,
+      "gross_income_mean_eur": 21683.0,
+      "disposable_income_mean_eur": 18422.0,
+      "source": "IECA/SIMA — Andalucía pueblo a pueblo",
+      "source_url": "https://www.juntadeandalucia.es/institutodeestadisticaycartografia/sima/ficha.htm?mun=18094",
+      "provenance": {
+        "population": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "pct_over_65": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "pop_change_10y_pct": "IECA/SIMA — Andalucía pueblo a pueblo 2014-2024",
+        "hosteleria_establishments": "IECA/SIMA — Andalucía pueblo a pueblo",
+        "unemployment_rate_pct": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "gross_income_mean_eur": "IECA/SIMA — Andalucía pueblo a pueblo 2023",
+        "disposable_income_mean_eur": "IECA/SIMA — Andalucía pueblo a pueblo 2023"
+      },
+      "caveats": [
+        "hotels: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2025)",
+        "hotel_beds: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2025)"
+      ]
+    },
+    "18108": {
+      "ine_code": "18108",
+      "population": 955,
+      "pct_over_65": 31.7,
+      "pop_change_10y_pct": -3.6,
+      "unemployment_rate_pct": 23.3,
+      "hosteleria_establishments": 8,
+      "hotels": null,
+      "hotel_beds": null,
+      "gross_income_mean_eur": null,
+      "disposable_income_mean_eur": null,
+      "source": "IECA/SIMA — Andalucía pueblo a pueblo",
+      "source_url": "https://www.juntadeandalucia.es/institutodeestadisticaycartografia/sima/ficha.htm?mun=18108",
+      "provenance": {
+        "population": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "pct_over_65": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "pop_change_10y_pct": "IECA/SIMA — Andalucía pueblo a pueblo 2014-2024",
+        "hosteleria_establishments": "IECA/SIMA — Andalucía pueblo a pueblo",
+        "unemployment_rate_pct": "IECA/SIMA — Andalucía pueblo a pueblo 2025"
+      },
+      "caveats": [
+        "hotels: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2025)",
+        "hotel_beds: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2025)",
+        "gross_income_mean_eur: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2023)",
+        "disposable_income_mean_eur: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2023)"
+      ]
+    },
+    "18116": {
+      "ine_code": "18116",
+      "population": 3713,
+      "pct_over_65": 24.1,
+      "pop_change_10y_pct": -1.5,
+      "unemployment_rate_pct": 19.6,
+      "hosteleria_establishments": 44,
+      "hotels": 12,
+      "hotel_beds": 1130,
+      "gross_income_mean_eur": 20846.0,
+      "disposable_income_mean_eur": 17940.0,
+      "source": "IECA/SIMA — Andalucía pueblo a pueblo",
+      "source_url": "https://www.juntadeandalucia.es/institutodeestadisticaycartografia/sima/ficha.htm?mun=18116",
+      "provenance": {
+        "population": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "pct_over_65": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "pop_change_10y_pct": "IECA/SIMA — Andalucía pueblo a pueblo 2014-2024",
+        "hosteleria_establishments": "IECA/SIMA — Andalucía pueblo a pueblo",
+        "hotels": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "hotel_beds": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "unemployment_rate_pct": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "gross_income_mean_eur": "IECA/SIMA — Andalucía pueblo a pueblo 2023",
+        "disposable_income_mean_eur": "IECA/SIMA — Andalucía pueblo a pueblo 2023"
+      },
+      "caveats": []
+    },
+    "18117": {
+      "ine_code": "18117",
+      "population": 533,
+      "pct_over_65": 30.4,
+      "pop_change_10y_pct": 3.2,
+      "unemployment_rate_pct": 19.0,
+      "hosteleria_establishments": 5,
+      "hotels": null,
+      "hotel_beds": null,
+      "gross_income_mean_eur": null,
+      "disposable_income_mean_eur": null,
+      "source": "IECA/SIMA — Andalucía pueblo a pueblo",
+      "source_url": "https://www.juntadeandalucia.es/institutodeestadisticaycartografia/sima/ficha.htm?mun=18117",
+      "provenance": {
+        "population": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "pct_over_65": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "pop_change_10y_pct": "IECA/SIMA — Andalucía pueblo a pueblo 2014-2024",
+        "hosteleria_establishments": "IECA/SIMA — Andalucía pueblo a pueblo",
+        "unemployment_rate_pct": "IECA/SIMA — Andalucía pueblo a pueblo 2025"
+      },
+      "caveats": [
+        "hotels: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2025)",
+        "hotel_beds: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2025)",
+        "gross_income_mean_eur: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2023)",
+        "disposable_income_mean_eur: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2023)"
+      ]
+    },
+    "18134": {
+      "ine_code": "18134",
+      "population": 8676,
+      "pct_over_65": 15.6,
+      "pop_change_10y_pct": 16.4,
+      "unemployment_rate_pct": 16.1,
+      "hosteleria_establishments": 181,
+      "hotels": 18,
+      "hotel_beds": 2651,
+      "gross_income_mean_eur": 28004.0,
+      "disposable_income_mean_eur": 22919.0,
+      "source": "IECA/SIMA — Andalucía pueblo a pueblo",
+      "source_url": "https://www.juntadeandalucia.es/institutodeestadisticaycartografia/sima/ficha.htm?mun=18134",
+      "provenance": {
+        "population": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "pct_over_65": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "pop_change_10y_pct": "IECA/SIMA — Andalucía pueblo a pueblo 2014-2024",
+        "hosteleria_establishments": "IECA/SIMA — Andalucía pueblo a pueblo",
+        "hotels": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "hotel_beds": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "unemployment_rate_pct": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "gross_income_mean_eur": "IECA/SIMA — Andalucía pueblo a pueblo 2023",
+        "disposable_income_mean_eur": "IECA/SIMA — Andalucía pueblo a pueblo 2023"
+      },
+      "caveats": []
+    },
+    "18143": {
+      "ine_code": "18143",
+      "population": 1228,
+      "pct_over_65": 23.0,
+      "pop_change_10y_pct": 1.6,
+      "unemployment_rate_pct": 16.1,
+      "hosteleria_establishments": 10,
+      "hotels": null,
+      "hotel_beds": null,
+      "gross_income_mean_eur": 23400.0,
+      "disposable_income_mean_eur": 19695.0,
+      "source": "IECA/SIMA — Andalucía pueblo a pueblo",
+      "source_url": "https://www.juntadeandalucia.es/institutodeestadisticaycartografia/sima/ficha.htm?mun=18143",
+      "provenance": {
+        "population": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "pct_over_65": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "pop_change_10y_pct": "IECA/SIMA — Andalucía pueblo a pueblo 2014-2024",
+        "hosteleria_establishments": "IECA/SIMA — Andalucía pueblo a pueblo",
+        "unemployment_rate_pct": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "gross_income_mean_eur": "IECA/SIMA — Andalucía pueblo a pueblo 2023",
+        "disposable_income_mean_eur": "IECA/SIMA — Andalucía pueblo a pueblo 2023"
+      },
+      "caveats": [
+        "hotels: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2025)",
+        "hotel_beds: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2025)"
+      ]
+    },
+    "18151": {
+      "ine_code": "18151",
+      "population": 312,
+      "pct_over_65": 20.8,
+      "pop_change_10y_pct": -2.8,
+      "unemployment_rate_pct": 14.6,
+      "hosteleria_establishments": 11,
+      "hotels": null,
+      "hotel_beds": null,
+      "gross_income_mean_eur": null,
+      "disposable_income_mean_eur": null,
+      "source": "IECA/SIMA — Andalucía pueblo a pueblo",
+      "source_url": "https://www.juntadeandalucia.es/institutodeestadisticaycartografia/sima/ficha.htm?mun=18151",
+      "provenance": {
+        "population": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "pct_over_65": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "pop_change_10y_pct": "IECA/SIMA — Andalucía pueblo a pueblo 2014-2024",
+        "hosteleria_establishments": "IECA/SIMA — Andalucía pueblo a pueblo",
+        "unemployment_rate_pct": "IECA/SIMA — Andalucía pueblo a pueblo 2025"
+      },
+      "caveats": [
+        "hotels: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2025)",
+        "hotel_beds: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2025)",
+        "gross_income_mean_eur: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2023)",
+        "disposable_income_mean_eur: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2023)"
+      ]
+    },
+    "18163": {
+      "ine_code": "18163",
+      "population": 378,
+      "pct_over_65": 25.7,
+      "pop_change_10y_pct": 0.8,
+      "unemployment_rate_pct": 14.9,
+      "hosteleria_establishments": 2,
+      "hotels": null,
+      "hotel_beds": null,
+      "gross_income_mean_eur": null,
+      "disposable_income_mean_eur": null,
+      "source": "IECA/SIMA — Andalucía pueblo a pueblo",
+      "source_url": "https://www.juntadeandalucia.es/institutodeestadisticaycartografia/sima/ficha.htm?mun=18163",
+      "provenance": {
+        "population": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "pct_over_65": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "pop_change_10y_pct": "IECA/SIMA — Andalucía pueblo a pueblo 2014-2024",
+        "hosteleria_establishments": "IECA/SIMA — Andalucía pueblo a pueblo",
+        "unemployment_rate_pct": "IECA/SIMA — Andalucía pueblo a pueblo 2025"
+      },
+      "caveats": [
+        "hotels: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2025)",
+        "hotel_beds: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2025)",
+        "gross_income_mean_eur: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2023)",
+        "disposable_income_mean_eur: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2023)"
+      ]
+    },
+    "18176": {
+      "ine_code": "18176",
+      "population": 259,
+      "pct_over_65": 26.3,
+      "pop_change_10y_pct": -13.1,
+      "unemployment_rate_pct": 12.5,
+      "hosteleria_establishments": 9,
+      "hotels": null,
+      "hotel_beds": null,
+      "gross_income_mean_eur": null,
+      "disposable_income_mean_eur": null,
+      "source": "IECA/SIMA — Andalucía pueblo a pueblo",
+      "source_url": "https://www.juntadeandalucia.es/institutodeestadisticaycartografia/sima/ficha.htm?mun=18176",
+      "provenance": {
+        "population": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "pct_over_65": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "pop_change_10y_pct": "IECA/SIMA — Andalucía pueblo a pueblo 2014-2024",
+        "hosteleria_establishments": "IECA/SIMA — Andalucía pueblo a pueblo",
+        "unemployment_rate_pct": "IECA/SIMA — Andalucía pueblo a pueblo 2025"
+      },
+      "caveats": [
+        "hotels: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2025)",
+        "hotel_beds: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2025)",
+        "gross_income_mean_eur: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2023)",
+        "disposable_income_mean_eur: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2023)"
+      ]
+    },
+    "18180": {
+      "ine_code": "18180",
+      "population": 696,
+      "pct_over_65": 26.0,
+      "pop_change_10y_pct": -11.2,
+      "unemployment_rate_pct": 14.6,
+      "hosteleria_establishments": 19,
+      "hotels": null,
+      "hotel_beds": null,
+      "gross_income_mean_eur": null,
+      "disposable_income_mean_eur": null,
+      "source": "IECA/SIMA — Andalucía pueblo a pueblo",
+      "source_url": "https://www.juntadeandalucia.es/institutodeestadisticaycartografia/sima/ficha.htm?mun=18180",
+      "provenance": {
+        "population": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "pct_over_65": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "pop_change_10y_pct": "IECA/SIMA — Andalucía pueblo a pueblo 2014-2024",
+        "hosteleria_establishments": "IECA/SIMA — Andalucía pueblo a pueblo",
+        "unemployment_rate_pct": "IECA/SIMA — Andalucía pueblo a pueblo 2025"
+      },
+      "caveats": [
+        "hotels: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2025)",
+        "hotel_beds: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2025)",
+        "gross_income_mean_eur: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2023)",
+        "disposable_income_mean_eur: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2023)"
+      ]
+    },
+    "18183": {
+      "ine_code": "18183",
+      "population": 668,
+      "pct_over_65": 32.0,
+      "pop_change_10y_pct": 5.9,
+      "unemployment_rate_pct": 22.6,
+      "hosteleria_establishments": 5,
+      "hotels": null,
+      "hotel_beds": null,
+      "gross_income_mean_eur": null,
+      "disposable_income_mean_eur": null,
+      "source": "IECA/SIMA — Andalucía pueblo a pueblo",
+      "source_url": "https://www.juntadeandalucia.es/institutodeestadisticaycartografia/sima/ficha.htm?mun=18183",
+      "provenance": {
+        "population": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "pct_over_65": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "pop_change_10y_pct": "IECA/SIMA — Andalucía pueblo a pueblo 2014-2024",
+        "hosteleria_establishments": "IECA/SIMA — Andalucía pueblo a pueblo",
+        "unemployment_rate_pct": "IECA/SIMA — Andalucía pueblo a pueblo 2025"
+      },
+      "caveats": [
+        "hotels: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2025)",
+        "hotel_beds: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2025)",
+        "gross_income_mean_eur: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2023)",
+        "disposable_income_mean_eur: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2023)"
+      ]
+    },
+    "18904": {
+      "ine_code": "18904",
+      "population": 966,
+      "pct_over_65": 28.9,
+      "pop_change_10y_pct": -12.6,
+      "unemployment_rate_pct": 14.8,
+      "hosteleria_establishments": 11,
+      "hotels": null,
+      "hotel_beds": null,
+      "gross_income_mean_eur": null,
+      "disposable_income_mean_eur": null,
+      "source": "IECA/SIMA — Andalucía pueblo a pueblo",
+      "source_url": "https://www.juntadeandalucia.es/institutodeestadisticaycartografia/sima/ficha.htm?mun=18904",
+      "provenance": {
+        "population": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "pct_over_65": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "pop_change_10y_pct": "IECA/SIMA — Andalucía pueblo a pueblo 2014-2024",
+        "hosteleria_establishments": "IECA/SIMA — Andalucía pueblo a pueblo",
+        "unemployment_rate_pct": "IECA/SIMA — Andalucía pueblo a pueblo 2025"
+      },
+      "caveats": [
+        "hotels: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2025)",
+        "hotel_beds: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2025)",
+        "gross_income_mean_eur: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2023)",
+        "disposable_income_mean_eur: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2023)"
+      ]
+    },
+    "04002": {
+      "ine_code": "04002",
+      "population": 1235,
+      "pct_over_65": 30.6,
+      "pop_change_10y_pct": -2.1,
+      "unemployment_rate_pct": 17.2,
+      "hosteleria_establishments": 10,
+      "hotels": null,
+      "hotel_beds": null,
+      "gross_income_mean_eur": 18012.0,
+      "disposable_income_mean_eur": 15949.0,
+      "source": "IECA/SIMA — Andalucía pueblo a pueblo",
+      "source_url": "https://www.juntadeandalucia.es/institutodeestadisticaycartografia/sima/ficha.htm?mun=04002",
+      "provenance": {
+        "population": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "pct_over_65": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "pop_change_10y_pct": "IECA/SIMA — Andalucía pueblo a pueblo 2014-2024",
+        "hosteleria_establishments": "IECA/SIMA — Andalucía pueblo a pueblo",
+        "unemployment_rate_pct": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "gross_income_mean_eur": "IECA/SIMA — Andalucía pueblo a pueblo 2023",
+        "disposable_income_mean_eur": "IECA/SIMA — Andalucía pueblo a pueblo 2023"
+      },
+      "caveats": [
+        "hotels: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2025)",
+        "hotel_beds: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2025)"
+      ]
+    },
+    "04020": {
+      "ine_code": "04020",
+      "population": 294,
+      "pct_over_65": 29.3,
+      "pop_change_10y_pct": -12.9,
+      "unemployment_rate_pct": 13.9,
+      "hosteleria_establishments": 3,
+      "hotels": null,
+      "hotel_beds": null,
+      "gross_income_mean_eur": null,
+      "disposable_income_mean_eur": null,
+      "source": "IECA/SIMA — Andalucía pueblo a pueblo",
+      "source_url": "https://www.juntadeandalucia.es/institutodeestadisticaycartografia/sima/ficha.htm?mun=04020",
+      "provenance": {
+        "population": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "pct_over_65": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "pop_change_10y_pct": "IECA/SIMA — Andalucía pueblo a pueblo 2014-2024",
+        "hosteleria_establishments": "IECA/SIMA — Andalucía pueblo a pueblo",
+        "unemployment_rate_pct": "IECA/SIMA — Andalucía pueblo a pueblo 2025"
+      },
+      "caveats": [
+        "hotels: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2025)",
+        "hotel_beds: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2025)",
+        "gross_income_mean_eur: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2023)",
+        "disposable_income_mean_eur: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2023)"
+      ]
+    },
+    "04057": {
+      "ine_code": "04057",
+      "population": 1670,
+      "pct_over_65": 24.1,
+      "pop_change_10y_pct": 1.5,
+      "unemployment_rate_pct": 12.8,
+      "hosteleria_establishments": 21,
+      "hotels": null,
+      "hotel_beds": null,
+      "gross_income_mean_eur": 17557.0,
+      "disposable_income_mean_eur": 15291.0,
+      "source": "IECA/SIMA — Andalucía pueblo a pueblo",
+      "source_url": "https://www.juntadeandalucia.es/institutodeestadisticaycartografia/sima/ficha.htm?mun=04057",
+      "provenance": {
+        "population": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "pct_over_65": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "pop_change_10y_pct": "IECA/SIMA — Andalucía pueblo a pueblo 2014-2024",
+        "hosteleria_establishments": "IECA/SIMA — Andalucía pueblo a pueblo",
+        "unemployment_rate_pct": "IECA/SIMA — Andalucía pueblo a pueblo 2025",
+        "gross_income_mean_eur": "IECA/SIMA — Andalucía pueblo a pueblo 2023",
+        "disposable_income_mean_eur": "IECA/SIMA — Andalucía pueblo a pueblo 2023"
+      },
+      "caveats": [
+        "hotels: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2025)",
+        "hotel_beds: dato no publicado por IECA/SIMA (secreto estadístico o no disponible, 2025)"
+      ]
+    }
+  }
+}

@@ -26,6 +26,7 @@ from src.platform.alpine_dashboard import (
     build_alpine_matrix,
     season_view,
 )
+from src.socioeconomic.alpine_indicators import load_sierra_nevada_indicators
 from src.socioeconomic.alpine_mapping import build_municipal_context
 
 # El presupuesto regional anual se mueve en un rango mucho mayor que el del
@@ -271,10 +272,77 @@ def _render_municipal_context(ranked_assets) -> None:
                 + "\n".join(f"- {r}" for r in ctx.unresolved_regions)
             )
 
+    _render_municipal_indicators_table(ctx.municipios)
+
     st.caption(
         "Fuentes: INE — Relación de municipios y sus códigos (Granada/Almería). "
         "OAPN — *Visitantes en la Red de Parques Nacionales, Anualidad "
-        f"{ctx.oapn_report_year}* (Mayo 2024). Población y economía municipal "
-        "(IECA/REDIAM) **aún no incorporadas** para este piloto — no se "
-        "muestra ninguna cifra de Madrid/PNSG en su lugar."
+        f"{ctx.oapn_report_year}* (Mayo 2024). IECA — *Andalucía pueblo a "
+        "pueblo* (SIMA), población y economía municipal, fecha por indicador "
+        "en la tabla anterior. Nunca se muestra ninguna cifra de Madrid/PNSG "
+        "en su lugar."
     )
+
+
+def _render_municipal_indicators_table(municipios) -> None:
+    """Real IECA/SIMA population + economy indicators (issue #22)."""
+    if not municipios:
+        return
+
+    indicators = load_sierra_nevada_indicators()
+    if not indicators:
+        st.caption(
+            "⚠️ Snapshot IECA/SIMA no generado todavía — ejecuta "
+            "`scripts/build_alpine_municipal_indicators.py` para poblar "
+            "población y economía municipal real."
+        )
+        return
+
+    import pandas as pd
+
+    rows = []
+    for m in municipios:
+        ind = indicators.get(m.ine_code)
+        rows.append({
+            "Municipio": m.name,
+            "Provincia": m.province,
+            "Población": ind.population if ind else None,
+            "% ≥65 años": ind.pct_over_65 if ind else None,
+            "Var. población 10a (%)": ind.pop_change_10y_pct if ind else None,
+            "Paro (%)": ind.unemployment_rate_pct if ind else None,
+            "Establ. hostelería": ind.hosteleria_establishments if ind else None,
+            "Plazas hoteleras": ind.hotel_beds if ind else None,
+        })
+    df = pd.DataFrame(rows)
+
+    st.markdown("**Población y economía municipal real (IECA/SIMA)**")
+    st.dataframe(
+        df, use_container_width=True, hide_index=True,
+        column_config={
+            "Población": st.column_config.NumberColumn(format="%d"),
+            "% ≥65 años": st.column_config.NumberColumn(format="%.1f"),
+            "Var. población 10a (%)": st.column_config.NumberColumn(format="%+.1f"),
+            "Paro (%)": st.column_config.NumberColumn(format="%.1f"),
+            "Establ. hostelería": st.column_config.NumberColumn(format="%d"),
+            "Plazas hoteleras": st.column_config.NumberColumn(format="%d"),
+        },
+    )
+    n_missing = sum(1 for m in municipios if m.ine_code not in indicators)
+    if n_missing:
+        st.caption(
+            f"⚠️ {n_missing} municipio(s) sin ficha IECA/SIMA descargada — "
+            "casillas vacías, no ceros."
+        )
+    all_caveats = [
+        (m.name, c)
+        for m in municipios
+        if (ind := indicators.get(m.ine_code)) is not None
+        for c in ind.caveats
+    ]
+    if all_caveats:
+        with st.expander(
+            f"ℹ️ {len(all_caveats)} dato(s) no publicado(s) por IECA (secreto "
+            "estadístico / no disponible)",
+            expanded=False,
+        ):
+            st.markdown("\n".join(f"- *{nm}*: {c}" for nm, c in all_caveats))

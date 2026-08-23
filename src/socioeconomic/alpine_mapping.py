@@ -121,6 +121,7 @@ class MunicipalContext:
     n_resolved: int
     n_municipios: int
     provinces: tuple[str, ...]
+    municipios: tuple[SierraNevadaMunicipio, ...]
     unresolved_regions: tuple[str, ...]
     oapn_report_year: int
     oapn_sierra_nevada_visitors_estimate: int
@@ -182,6 +183,7 @@ def build_municipal_context(assets: list) -> MunicipalContext:
         ),
         n_municipios=len(resolved),
         provinces=tuple(sorted({m.province for m in resolved.values()})),
+        municipios=tuple(sorted(resolved.values(), key=lambda m: m.name)),
         unresolved_regions=tuple(sorted(unresolved)),
         oapn_report_year=year,
         oapn_sierra_nevada_visitors_estimate=estimate,
