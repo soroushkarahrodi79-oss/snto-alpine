@@ -7,6 +7,7 @@ EHS tracks degradation observed on the ground.
 from src.validation.agreement import (
     AgreementReport,
     ContrastResult,
+    bootstrap_spearman_ci,
     cliffs_delta,
     control_impact_contrast,
     spearman_correlation,
@@ -33,6 +34,7 @@ from src.validation.io import (
 __all__ = [
     "AgreementReport",
     "ContrastResult",
+    "bootstrap_spearman_ci",
     "cliffs_delta",
     "control_impact_contrast",
     "spearman_correlation",

@@ -21,6 +21,8 @@ import statistics
 from dataclasses import dataclass
 from typing import Sequence
 
+from src.time_series.confidence import BootstrapCI, block_bootstrap_ci
+
 
 def _rank(values: Sequence[float]) -> list[float]:
     """Average (fractional) ranks, handling ties."""
@@ -102,6 +104,36 @@ def validate_satellite_vs_field(
         verdict = "sin concordancia / dirección inesperada — revisar"
     return AgreementReport(
         n=len(pairs), spearman=rho, direction_ok=rho > 0, verdict=verdict,
+    )
+
+
+def bootstrap_spearman_ci(
+    pairs: Sequence[tuple[float, float]],
+    alpha: float = 0.05,
+    n_boot: int = 1000,
+    seed: int = 0,
+) -> BootstrapCI:
+    """Percentile CI for the satellite↔field Spearman ρ (issue #11's "con
+    intervalos e incertidumbre" requirement).
+
+    Field-validation plots are a cross-sectional sample, not a time series, so
+    this reuses :func:`src.time_series.confidence.block_bootstrap_ci` with
+    ``block_len=1`` — which degenerates the moving-block bootstrap to an
+    ordinary i.i.d. resample-with-replacement, the correct bootstrap for
+    independent plots, without introducing a second bootstrap implementation.
+
+    Below 4 plots the underlying function returns a degenerate point interval
+    (lower == upper == point) rather than fabricating a spread from too few
+    resamples — consistent with :func:`validate_satellite_vs_field`'s own
+    "insuficiente" floor at 3 plots.
+    """
+    return block_bootstrap_ci(
+        list(pairs),
+        statistic=lambda s: spearman_correlation([p[0] for p in s], [p[1] for p in s]),
+        n_boot=n_boot,
+        block_len=1,
+        alpha=alpha,
+        seed=seed,
     )
 
 
