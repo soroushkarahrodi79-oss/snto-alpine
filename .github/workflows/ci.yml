@@ -2,8 +2,8 @@ name: CI
 
 # Code-health gate, fully independent of Azure/deploy. Runs on every push and
 # PR to main: lint (maintained modules), import smoke, and the test suite.
-# Deploy (deploy-azure-container-apps.yml) only runs after this workflow
-# concludes successfully on main.
+# Alpine deployment is manual-only and disabled by default; see
+# deploy-azure-container-apps.yml and docs/roadmap/alpine-v0.1.md.
 
 on:
   push:
@@ -82,7 +82,7 @@ jobs:
       - name: Syntax smoke (entry points)
         run: python -m py_compile app.py run_pipeline_a_timeseries.py calculate_delta_ehs.py
       - name: Run test suite (coverage gate)
-        # Gate de cobertura (v2.1, plan_v3_roadmap.md): el total actual es ~83%;
+        # Gate de cobertura heredado por Alpine: el total actual es ~83%;
         # el umbral 80 bloquea regresiones grandes sin volver frágil el CI.
         run: python -m pytest -q --cov=src --cov-report=term --cov-fail-under=80
       - name: Check README version in sync with pyproject.toml
@@ -91,7 +91,7 @@ jobs:
   typecheck:
     # Report-only (misma filosofía que el ruff full-repo): el núcleo tipado
     # tiene ~110 errores mypy --strict pendientes; se promociona a bloqueante
-    # cuando se salden (ítem "CI hardening" de v2.1, plan_v3_roadmap.md).
+    # cuando se salden (deuda heredada, fuera del hito Alpine v0.1).
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

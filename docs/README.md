@@ -1,19 +1,26 @@
-# SNTO Strategic Documentation
+# SNTO Alpine — documentación estratégica
 
 ## Purpose
-This folder contains the permanent strategic knowledge base for SNTO.
+This folder contains the strategic knowledge base inherited from SNTO plus the
+planning authority of the Alpine Edition.
 
 ## Background
 The documentation transforms approved multi-perspective reviews into durable project knowledge for future contributors, reviewers, and decision makers.
 
 ## Current State
-SNTO is framed as a potential decision-intelligence platform for protected natural tourism destinations, not as a generic GIS, dashboard, or academic observatory.
 
-The latest stable documentation baseline is `v2.0.0` (the v2.0 milestone: modular architecture, the Fase 5 persistent-backend foundations running on Azure PostgreSQL in production since 2026-07-18, and the Fase 6 role-based UI evolution — four decision layers, per-audience homes, asset-as-a-page). The repository `main` branch may carry a later development marker between releases.
+SNTO Alpine is `0.1.0.dev0`, a Sierra Nevada prototype without its own release,
+deployment, DOI or field validation. The current plan is
+[`roadmap/alpine-v0.1.md`](roadmap/alpine-v0.1.md).
 
-## Versioned publications
+Most architecture, product, UX, review and decision documents in this folder
+were inherited from the base observatory. They explain the reused engine, but
+their v1.x–v3.x versions and production statements do not transfer to Alpine.
 
-- `WHITEPAPER_SNTO_Architecture_Blueprint.md` and its generated HTML track the latest stable methodological baseline (`v2.0.0`; the methodology itself is unchanged since the v1.3.0 statistical-rigor work).
+## Inherited publications
+
+- `WHITEPAPER_SNTO_Architecture_Blueprint.md` and its generated HTML describe
+  the methodological baseline of the base observatory, not an Alpine release.
 - `SNTO_Preprint_2026_Karahrodi.html` remains the archived preprint revision `v1.1.0`; update it only as a deliberate new scholarly revision accompanied by updated archival/DOI metadata.
 - `SNTO_Architecture_Infographic.html` remains the historical `v1.0.0` infographic rather than being presented as current platform status.
 

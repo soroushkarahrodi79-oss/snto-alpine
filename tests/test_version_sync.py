@@ -71,7 +71,8 @@ def test_base_dois_appear_only_as_attribution() -> None:
     if BASE_CONCEPT_DOI in readme:
         idx = readme.index(BASE_CONCEPT_DOI)
         window = readme[max(0, idx - 400):idx + 100].lower()
-        assert any(w in window for w in ("base", "no los uses", "no aplica", "pertenec")), (
+        disclaimer_words = ("base", "no los uses", "no aplica", "pertenec")
+        assert any(w in window for w in disclaimer_words), (
             "El DOI base en el README debe ir acompañado de una nota de atribución."
         )
 
@@ -85,6 +86,33 @@ def test_zenodo_metadata_is_alpine_and_release_agnostic() -> None:
     assert "version" not in metadata, (
         "La versión de Zenodo debe proceder del tag de GitHub, no quedar fija"
     )
+
+
+def test_alpine_deploy_is_manual_disabled_and_isolated() -> None:
+    """A normal merge must never deploy Alpine over the base application."""
+    workflow = (
+        ROOT / ".github" / "workflows" / "deploy-azure-container-apps.yml"
+    ).read_text(encoding="utf-8")
+
+    assert "workflow_run:" not in workflow
+    assert "workflow_dispatch:" in workflow
+    assert "github.ref == 'refs/heads/main'" in workflow
+    assert "SNTO_ALPINE_DEPLOY_ENABLED" in workflow
+    assert "inputs.confirm_target == 'alpine-production'" in workflow
+    assert "RESOURCE_GROUP: rg-snto-alpine-app" in workflow
+    assert "APP_NAME: snto-alpine" in workflow
+    assert "IMAGE_REPO: snto-alpine" in workflow
+
+
+def test_alpine_roadmap_is_the_documented_authority() -> None:
+    roadmap_index = (ROOT / "docs" / "roadmap" / "README.md").read_text(
+        encoding="utf-8"
+    )
+    alpine_roadmap = ROOT / "docs" / "roadmap" / "alpine-v0.1.md"
+
+    assert alpine_roadmap.is_file()
+    assert "alpine-v0.1.md" in roadmap_index
+    assert "No representan las versiones" in roadmap_index
 
 
 def test_readme_sync_preserves_count_when_pytest_is_unavailable() -> None:

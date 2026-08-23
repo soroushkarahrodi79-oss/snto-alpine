@@ -1,7 +1,10 @@
-name: Deploy to Azure Container Apps
+name: Deploy Alpine to Azure Container Apps
 
-# CI/CD: after CI passes on main, build the image, push it to ACR, and roll the
-# Container App to it.
+# Alpine has no production deployment yet. This workflow is deliberately
+# manual-only and double-gated so a merge can never deploy this fork over the
+# base observatory. Before enabling it, provision dedicated Alpine resources,
+# set the repository variable SNTO_ALPINE_DEPLOY_ENABLED=true, and type the
+# explicit confirmation value requested by workflow_dispatch.
 #
 # AUTENTICACIÓN: OIDC + user-assigned managed identity (UAMI).
 # El tenant de la UCM bloquea `az ad sp create-for-rbac` (app-registration), así
@@ -18,16 +21,16 @@ name: Deploy to Azure Container Apps
 #   AZURE_SUBSCRIPTION_ID  -> id de la suscripción           (nuevo, OIDC)
 #
 # Provisión Azure (UNA sola vez, en Azure Cloud Shell con identidad owner):
-#   RG=rg-snto-observatory-app
-#   az identity create -g $RG -n id-snto-gha-deployer
-#   CID=$(az identity show -g $RG -n id-snto-gha-deployer --query clientId -o tsv)
-#   OID=$(az identity show -g $RG -n id-snto-gha-deployer --query principalId -o tsv)
+#   RG=rg-snto-alpine-app
+#   az identity create -g $RG -n id-snto-alpine-gha-deployer
+#   CID=$(az identity show -g $RG -n id-snto-alpine-gha-deployer --query clientId -o tsv)
+#   OID=$(az identity show -g $RG -n id-snto-alpine-gha-deployer --query principalId -o tsv)
 #   SUB=$(az account show --query id -o tsv)
-#   # Federated credential: rama main de este repo (cubre push y workflow_dispatch)
-#   az identity federated-credential create -g $RG --identity-name id-snto-gha-deployer \
+#   # Federated credential: ejecuciones manuales de la rama main de Alpine.
+#   az identity federated-credential create -g $RG --identity-name id-snto-alpine-gha-deployer \
 #     --name gha-main \
 #     --issuer https://token.actions.githubusercontent.com \
-#     --subject repo:soroushkarahrodi79-oss/snto-smart-tourism-observatory:ref:refs/heads/main \
+#     --subject repo:soroushkarahrodi79-oss/snto-alpine:ref:refs/heads/main \
 #     --audiences api://AzureADTokenExchange
 #   # Rol mínimo: Contributor sobre el RG (suficiente para containerapp update)
 #   az role assignment create --assignee-object-id $OID --assignee-principal-type ServicePrincipal \
@@ -36,44 +39,36 @@ name: Deploy to Azure Container Apps
 # Copia esos 3 valores como secrets del repo.
 
 on:
-  # Gobernanza ADR-009: el deploy SOLO corre cuando CI concluye en verde sobre
-  # main (encadenado workflow_run). El intento anterior de encadenado fallaba
-  # porque no filtraba las ejecuciones de CI disparadas por pull_request y hacía
-  # checkout del HEAD por defecto en vez del SHA del run de CI; ambos se
-  # corrigen aquí (branches: [main] + condición de conclusión + DEPLOY_SHA).
-  # workflow_dispatch queda como vía manual de emergencia/rollback.
-  workflow_run:
-    workflows: [CI]
-    types: [completed]
-    branches: [main]
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      confirm_target:
+        description: "Escribe alpine-production para confirmar el destino"
+        required: true
+        default: "disabled"
 
 permissions:
   contents: read
   id-token: write   # necesario para que azure/login obtenga el token OIDC
 
 env:
-  RESOURCE_GROUP: rg-snto-observatory-app
-  APP_NAME: snto-observatory
-  IMAGE_REPO: snto
-  # SHA que se construye/despliega: el del run de CI que disparó el encadenado
-  # (en workflow_run, github.sha apunta al HEAD de main en el momento del
-  # trigger, que puede no ser el commit validado por CI). En dispatch manual,
-  # el HEAD de la rama elegida.
-  DEPLOY_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
+  RESOURCE_GROUP: rg-snto-alpine-app
+  APP_NAME: snto-alpine
+  IMAGE_REPO: snto-alpine
+  DEPLOY_SHA: ${{ github.sha }}
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    # Gate ADR-009: solo si CI concluyó en verde (o dispatch manual explícito).
+    # Double gate: an explicit repository variable plus a typed confirmation.
+    # It can only run from main. With the default repository state this job is
+    # skipped, not failed.
     if: >-
-      github.event_name == 'workflow_dispatch' ||
-      github.event.workflow_run.conclusion == 'success'
+      github.ref == 'refs/heads/main' &&
+      vars.SNTO_ALPINE_DEPLOY_ENABLED == 'true' &&
+      inputs.confirm_target == 'alpine-production'
     steps:
-      - name: Checkout (commit validado por CI)
+      - name: Checkout Alpine ref
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
 
       # ── Build & push usando las credenciales admin de ACR (ya existentes) ────
       - name: Log in to ACR
