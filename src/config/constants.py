@@ -142,6 +142,12 @@ ALPINE_NDMI_HEALTHY_BASELINE: float = 0.20  # healthy borreguil moisture
 ALPINE_W_EVI: float = 0.5    # weight of EVI deficit in soil degradation index
 ALPINE_W_NDMI: float = 0.5   # weight of NDMI deficit in soil degradation index
 
+# ── Alpine Edition — observed SCM zones (issue #9) ───────────────────────────
+# A zonal mean over too few pixels is dominated by rasterisation edge noise
+# rather than the zone's actual condition — mirrors the ALPINE_MIN_SNOW_PIXELS
+# small-sample guard above, at 10 m resolution over a 200-500 m annulus.
+ALPINE_MIN_ZONE_PIXELS: int = 8
+
 # ── Alpine Edition — real visitor pressure (issue #10) ───────────────────────
 # The only real (non-proxy) visitor-pressure figure available for this pilot:
 # the Sierra Nevada NP's share of the Red de Parques Nacionales' 2023 total,

@@ -41,6 +41,13 @@ from rasterio.transform import from_bounds as transform_from_bounds
 from rasterio.windows import bounds as window_bounds
 from rasterio.windows import from_bounds as window_from_bounds
 
+from src.geospatial.raster_mosaic import (
+    TileManifestEntry,
+    coverage_fraction,
+    merge_first_valid,
+    write_manifest_csv,
+)
+
 # pystac-client is a runtime dependency only needed when actually calling the
 # STAC API.  The lazy import lets the module be imported in test environments
 # where the package may not be installed, while still failing explicitly at
@@ -72,6 +79,8 @@ _KEYS_B11: tuple[str, ...] = ("swir16", "B11")
 # Alpine Edition additions: green drives NDSI, SCL drives the snow-permissive mask
 _KEYS_B03: tuple[str, ...] = ("green", "B03")
 _KEYS_SCL: tuple[str, ...] = ("scl",   "SCL")
+# Alpine Edition summer additions (issue #9): blue drives EVI's aerosol term
+_KEYS_B02: tuple[str, ...] = ("blue",  "B02")
 
 # GDAL environment hints that activate HTTP range-request optimisation for COGs
 _GDAL_COG_ENV: dict[str, str] = {
@@ -85,17 +94,43 @@ _GDAL_COG_ENV: dict[str, str] = {
 
 # ── STAC helpers ──────────────────────────────────────────────────────────────
 
+def _item_mgrs_tile(item: object) -> str | None:
+    """Best-effort MGRS tile code for a STAC item (e.g. ``"30SVF"``).
+
+    AWS Earth Search's ``sentinel-2-l2a`` items carry it as ``grid:code``
+    (``"MGRS-30SVF"``), not the ``s2:mgrs_tile`` property some other
+    catalogues use; fall back to parsing the item id (``S2B_30SVF_...``).
+    """
+    props = item.properties  # type: ignore[attr-defined]
+    tile = props.get("s2:mgrs_tile")
+    if tile:
+        return tile
+    grid_code = props.get("grid:code", "")
+    if grid_code.startswith("MGRS-"):
+        return grid_code[len("MGRS-"):]
+    parts = str(item.id).split("_")  # type: ignore[attr-defined]
+    if len(parts) > 1 and len(parts[1]) == 5:
+        return parts[1]
+    return None
+
+
 def search_best_item(
     bbox: tuple[float, float, float, float],
     date_range: str,
     max_cloud_pct: float,
     stac_url: str = STAC_URL,
     collection: str = COLLECTION,
+    mgrs_tile: str | None = None,
 ) -> object:
     """Return the least-cloudy S2 L2A STAC item intersecting *bbox*.
 
     Items are filtered server-side by cloud cover then sorted client-side to
     avoid catalogue-specific *sortby* syntax differences.
+
+    Args:
+        mgrs_tile: when set (e.g. ``"30SVF"``), restrict to items from that
+            single MGRS tile — needed when *bbox* spans several tiles and
+            each one must be searched/mosaicked separately (issue #7).
     """
     if Client is None:  # pragma: no cover
         raise ImportError("pystac-client is required: pip install pystac-client")
@@ -108,10 +143,13 @@ def search_best_item(
         max_items=50,
     )
     items = list(search.items())
+    if mgrs_tile is not None:
+        items = [it for it in items if _item_mgrs_tile(it) == mgrs_tile]
     if not items:
+        scope = f", tile={mgrs_tile}" if mgrs_tile else ""
         raise RuntimeError(
             f"No S2 L2A scene found for bbox={bbox}, dates={date_range}, "
-            f"cloud < {max_cloud_pct}%. "
+            f"cloud < {max_cloud_pct}%{scope}. "
             "Widen DATE_RANGE or raise SNTO_S2_CLOUD_PCT."
         )
     items.sort(key=lambda it: float(it.properties.get("eo:cloud_cover", 100)))
@@ -152,6 +190,7 @@ def read_cog_window(
     bbox_4326: tuple[float, float, float, float],
     out_shape: tuple[int, int] | None = None,
     resampling: Resampling = Resampling.bilinear,
+    boundless: bool = False,
 ) -> tuple[np.ndarray, object, object]:
     """Stream a windowed read from a COG without downloading the full file.
 
@@ -164,6 +203,10 @@ def read_cog_window(
         out_shape:  (H, W) target; rasterio resamples on-the-fly when set.
                     Pass the reference (H, W) to coerce a 20 m band to 10 m.
         resampling: Algorithm used when *out_shape* differs from native size.
+        boundless:  when True, *bbox_4326* may extend beyond this dataset's
+            own extent — the out-of-tile area reads as 0 (nodata) instead of
+            raising/clipping. Needed to read one MGRS tile against the
+            territory's full multi-tile bbox before mosaicking (issue #7).
 
     Returns:
         Tuple of (array[H, W] uint16, affine_transform, rasterio.CRS).
@@ -177,6 +220,9 @@ def read_cog_window(
             if out_shape is not None:
                 read_kwargs["out_shape"]   = (1, out_shape[0], out_shape[1])
                 read_kwargs["resampling"]  = resampling
+            if boundless:
+                read_kwargs["boundless"]  = True
+                read_kwargs["fill_value"] = 0
 
             data = ds.read(1, **read_kwargs)
 
@@ -208,6 +254,36 @@ def compute_normalised_index(
     with np.errstate(divide="ignore", invalid="ignore"):
         result = np.where(denom == 0.0, 0.0, (a - b) / denom)
     return result.astype(np.float32)
+
+
+def compute_evi_array(
+    nir_dn: np.ndarray,
+    red_dn: np.ndarray,
+    blue_dn: np.ndarray,
+    G: float = 2.5,
+    C1: float = 6.0,
+    C2: float = 7.5,
+    L: float = 1.0,
+) -> np.ndarray:
+    """Array counterpart of :func:`src.features.spectral.compute_evi`.
+
+    Unlike :func:`compute_normalised_index`, EVI is not a pure ratio — the
+    ``+L`` canopy term does not cancel a shared scale factor — so, unlike the
+    NDVI/NDMI/NDSI calls elsewhere in this module, the raw Sentinel-2 digital
+    numbers must be converted to surface reflectance (``/10000``) before the
+    formula applies. Re-implements the scalar formula vectorised rather than
+    calling ``compute_evi`` per-pixel, which would be too slow over a
+    multi-megapixel scene window.
+    """
+    nir = nir_dn.astype(np.float32) / 10000.0
+    red = red_dn.astype(np.float32) / 10000.0
+    blue = blue_dn.astype(np.float32) / 10000.0
+    denom = nir + C1 * red - C2 * blue + L
+    with np.errstate(divide="ignore", invalid="ignore"):
+        evi = np.where(
+            denom == 0.0, 0.0, G * (nir - red) / np.where(denom == 0.0, 1.0, denom)
+        )
+    return evi.astype(np.float32)
 
 
 # ── Writer ────────────────────────────────────────────────────────────────────
@@ -401,6 +477,306 @@ def run(
     return result_paths
 
 
+# ── Alpine Edition: multi-tile winter mosaic (issue #7) ───────────────────────
+
+def run_alpine_multitile(
+    bbox: tuple[float, float, float, float],
+    mgrs_tiles: tuple[str, ...],
+    date_range: str = DATE_RANGE,
+    max_cloud_pct: float = MAX_CLOUD_PCT,
+    clean_dir: Path = CLEAN_DIR,
+    manifest_path: Path | None = None,
+) -> dict[str, Path]:
+    """Winter NDSI mosaic across every MGRS tile in *mgrs_tiles*.
+
+    A single STAC item only covers part of a multi-tile territory (Sierra
+    Nevada's massif spans 30SVF/30SWF/30SVG/30SWG), which left 10/53 assets
+    without real NDSI. This searches each tile independently for its own
+    least-cloud winter scene, reads B03/B08/B11/SCL for every tile against
+    the *shared* full-bbox grid (``boundless=True`` fills the out-of-tile
+    area with 0/nodata), then mosaics tile-by-tile with
+    :func:`src.geospatial.raster_mosaic.merge_first_valid` — tiles are
+    merged in ascending cloud-cover order so a clearer scene wins any overlap
+    at tile boundaries. Writes the same GeoTIFF set as :func:`run` (alpine
+    mode) plus the tile/scene/date/coverage manifest issue #7 asks for.
+
+    Args:
+        bbox: full territory bbox (W, S, E, N) in EPSG:4326 — spans all tiles.
+        mgrs_tiles: MGRS tile codes to search and mosaic, e.g.
+            ``("30SVF", "30SWF", "30SVG", "30SWG")``.
+        manifest_path: override for the committed manifest CSV; defaults to
+            ``clean_assets/sierra_nevada_ndsi_manifest.csv`` at the repo root
+            (sibling of the other committed Alpine Edition data files, not
+            the gitignored raster output directory).
+    """
+    clean_dir.mkdir(parents=True, exist_ok=True)
+
+    ref_h = ref_w = None
+    ref_transform = ref_crs = None
+    b03_tiles: list[np.ndarray] = []
+    b08_tiles: list[np.ndarray] = []
+    b11_tiles: list[np.ndarray] = []
+    scl_tiles: list[np.ndarray] = []
+    manifest: list[TileManifestEntry] = []
+
+    print(f"  Searching {len(mgrs_tiles)} MGRS tiles: {', '.join(mgrs_tiles)}")
+    for tile in mgrs_tiles:
+        print(f"  [{tile}] searching STAC …")
+        item = search_best_item(bbox, date_range, max_cloud_pct, mgrs_tile=tile)
+        cloud_pct = float(item.properties.get("eo:cloud_cover", 100))
+        print(f"  [{tile}] {item.id}  date={item.datetime}  cloud={cloud_pct:.1f}%")
+
+        href_b03 = resolve_asset_href(item, *_KEYS_B03)
+        href_b08 = resolve_asset_href(item, *_KEYS_B08)
+        href_b11 = resolve_asset_href(item, *_KEYS_B11)
+        href_scl = resolve_asset_href(item, *_KEYS_SCL)
+
+        b03, tr, crs = read_cog_window(href_b03, bbox, boundless=True)
+        if ref_h is None:
+            ref_h, ref_w = b03.shape
+            ref_transform, ref_crs = tr, crs
+        elif b03.shape != (ref_h, ref_w):
+            # Tiles can land on slightly different 10 m grids; snap this
+            # tile's read onto the reference grid established by the first.
+            b03, _, _ = read_cog_window(
+                href_b03, bbox, out_shape=(ref_h, ref_w), boundless=True
+            )
+
+        b08, _, _ = read_cog_window(
+            href_b08, bbox, out_shape=(ref_h, ref_w), boundless=True
+        )
+        b11, _, _ = read_cog_window(
+            href_b11, bbox, out_shape=(ref_h, ref_w),
+            resampling=Resampling.bilinear, boundless=True,
+        )
+        scl, _, _ = read_cog_window(
+            href_scl, bbox, out_shape=(ref_h, ref_w),
+            resampling=Resampling.nearest, boundless=True,
+        )
+
+        cov = coverage_fraction(b03, nodata=0)
+        print(f"  [{tile}] valid coverage of the full bbox grid: {cov:.1%}")
+        manifest.append(TileManifestEntry(
+            tile=tile,
+            scene_id=str(item.id),
+            date=str(item.datetime)[:10],
+            cloud_pct=cloud_pct,
+            coverage_pct=cov * 100,
+        ))
+
+        b03_tiles.append(b03.astype(np.uint16))
+        b08_tiles.append(b08.astype(np.uint16))
+        b11_tiles.append(np.clip(b11, 0, 65535).astype(np.uint16))
+        scl_tiles.append(scl.astype(np.uint8))
+        print()
+
+    # Merge in ascending cloud-cover order: a clearer scene wins any pixel two
+    # tiles both claim (edge overlap), everything else fills honest gaps.
+    order = sorted(range(len(mgrs_tiles)), key=lambda i: manifest[i].cloud_pct)
+    b03_mosaic = merge_first_valid([b03_tiles[i] for i in order], nodata=0)
+    b08_mosaic = merge_first_valid([b08_tiles[i] for i in order], nodata=0)
+    b11_mosaic = merge_first_valid([b11_tiles[i] for i in order], nodata=0)
+    scl_mosaic = merge_first_valid([scl_tiles[i] for i in order], nodata=0)
+    mosaic_cov = coverage_fraction(b03_mosaic, nodata=0)
+    print(f"  Combined mosaic coverage of the full bbox: {mosaic_cov:.1%}")
+
+    print("  Computing NDSI = (B03 – B11) / (B03 + B11) over the mosaic …")
+    ndsi = compute_normalised_index(b03_mosaic, b11_mosaic)
+    # A pixel no tile covers is not a real 0.0 NDSI value — mark it nodata
+    # explicitly rather than let it read as a (wrong) valid measurement.
+    uncovered = b03_mosaic == 0
+    ndsi[uncovered] = -9999.0
+    print()
+
+    band_profile: dict = {
+        "driver": "GTiff", "dtype": "uint16", "width": ref_w, "height": ref_h,
+        "count": 1, "crs": ref_crs, "transform": ref_transform, "compress": "lzw",
+    }
+    scl_profile: dict = {**band_profile, "dtype": "uint8"}
+    index_profile: dict = {**band_profile, "dtype": "float32", "nodata": -9999.0}
+
+    outputs: list[tuple[str, np.ndarray, dict]] = [
+        ("clean_S2_B03_green.tif", b03_mosaic, band_profile),
+        ("clean_S2_B08_nir.tif",   b08_mosaic, band_profile),
+        ("clean_S2_B11_swir.tif",  b11_mosaic, band_profile),
+        ("clean_S2_SCL.tif",       scl_mosaic, scl_profile),
+        ("clean_S2_NDSI.tif",      ndsi,       index_profile),
+    ]
+    result_paths: dict[str, Path] = {}
+    print("  Writing mosaicked GeoTIFFs:")
+    for fname, data, profile in outputs:
+        out_path = clean_dir / fname
+        write_tif(out_path, data, profile)
+        size_mb = out_path.stat().st_size / 1_048_576
+        print(f"    {fname:<30}  {size_mb:5.1f} MB")
+        result_paths[fname] = out_path
+    print()
+
+    manifest_out = manifest_path or (
+        PROJECT_ROOT / "clean_assets" / "sierra_nevada_ndsi_manifest.csv"
+    )
+    write_manifest_csv(manifest, manifest_out)
+    print(f"  Manifest written to {manifest_out}")
+    result_paths["manifest"] = manifest_out
+
+    print(DIV)
+    print(f"  Done. {len(outputs)} GeoTIFFs + manifest written.")
+
+    return result_paths
+
+
+# ── Alpine Edition: multi-tile summer EVI/NDMI mosaic (issue #9) ──────────────
+
+def run_alpine_multitile_summer(
+    bbox: tuple[float, float, float, float],
+    mgrs_tiles: tuple[str, ...],
+    date_range: str,
+    max_cloud_pct: float = MAX_CLOUD_PCT,
+    clean_dir: Path = CLEAN_DIR,
+    manifest_path: Path | None = None,
+) -> dict[str, Path]:
+    """Summer EVI/NDMI/NDVI mosaic across every MGRS tile in *mgrs_tiles*.
+
+    The summer counterpart of :func:`run_alpine_multitile`: same per-tile
+    search / boundless-read / cloud-ordered mosaic strategy, but reading
+    B02/B04/B08/B11/SCL (blue/red/nir/swir/scene-class) instead of
+    B03/B08/B11/SCL, because the summer product needs EVI and NDMI rather than
+    NDSI. Writes ``clean_S2_EVI.tif`` (via :func:`compute_evi_array`) and
+    ``clean_S2_NDMI.tif``/``clean_S2_NDVI.tif`` (via
+    :func:`compute_normalised_index`, reused unchanged since both are pure
+    ratios) alongside the raw bands and the SCL mosaic, plus the same
+    tile/scene/date/coverage manifest as the winter path.
+
+    Args:
+        bbox: full territory bbox (W, S, E, N) in EPSG:4326.
+        mgrs_tiles: MGRS tile codes to search and mosaic independently.
+        date_range: STAC ``datetime`` filter, e.g. ``"2024-07-01/2024-07-31"``.
+        manifest_path: override for the committed manifest CSV.
+    """
+    clean_dir.mkdir(parents=True, exist_ok=True)
+
+    ref_h = ref_w = None
+    ref_transform = ref_crs = None
+    b02_tiles: list[np.ndarray] = []
+    b04_tiles: list[np.ndarray] = []
+    b08_tiles: list[np.ndarray] = []
+    b11_tiles: list[np.ndarray] = []
+    scl_tiles: list[np.ndarray] = []
+    manifest: list[TileManifestEntry] = []
+
+    print(f"  Searching {len(mgrs_tiles)} MGRS tiles: {', '.join(mgrs_tiles)}")
+    for tile in mgrs_tiles:
+        print(f"  [{tile}] searching STAC …")
+        item = search_best_item(bbox, date_range, max_cloud_pct, mgrs_tile=tile)
+        cloud_pct = float(item.properties.get("eo:cloud_cover", 100))
+        print(f"  [{tile}] {item.id}  date={item.datetime}  cloud={cloud_pct:.1f}%")
+
+        href_b02 = resolve_asset_href(item, *_KEYS_B02)
+        href_b04 = resolve_asset_href(item, *_KEYS_B04)
+        href_b08 = resolve_asset_href(item, *_KEYS_B08)
+        href_b11 = resolve_asset_href(item, *_KEYS_B11)
+        href_scl = resolve_asset_href(item, *_KEYS_SCL)
+
+        b02, tr, crs = read_cog_window(href_b02, bbox, boundless=True)
+        if ref_h is None:
+            ref_h, ref_w = b02.shape
+            ref_transform, ref_crs = tr, crs
+        elif b02.shape != (ref_h, ref_w):
+            b02, _, _ = read_cog_window(
+                href_b02, bbox, out_shape=(ref_h, ref_w), boundless=True
+            )
+
+        b04, _, _ = read_cog_window(
+            href_b04, bbox, out_shape=(ref_h, ref_w), boundless=True
+        )
+        b08, _, _ = read_cog_window(
+            href_b08, bbox, out_shape=(ref_h, ref_w), boundless=True
+        )
+        b11, _, _ = read_cog_window(
+            href_b11, bbox, out_shape=(ref_h, ref_w),
+            resampling=Resampling.bilinear, boundless=True,
+        )
+        scl, _, _ = read_cog_window(
+            href_scl, bbox, out_shape=(ref_h, ref_w),
+            resampling=Resampling.nearest, boundless=True,
+        )
+
+        cov = coverage_fraction(b02, nodata=0)
+        print(f"  [{tile}] valid coverage of the full bbox grid: {cov:.1%}")
+        manifest.append(TileManifestEntry(
+            tile=tile,
+            scene_id=str(item.id),
+            date=str(item.datetime)[:10],
+            cloud_pct=cloud_pct,
+            coverage_pct=cov * 100,
+        ))
+
+        b02_tiles.append(b02.astype(np.uint16))
+        b04_tiles.append(b04.astype(np.uint16))
+        b08_tiles.append(b08.astype(np.uint16))
+        b11_tiles.append(np.clip(b11, 0, 65535).astype(np.uint16))
+        scl_tiles.append(scl.astype(np.uint8))
+        print()
+
+    order = sorted(range(len(mgrs_tiles)), key=lambda i: manifest[i].cloud_pct)
+    b02_mosaic = merge_first_valid([b02_tiles[i] for i in order], nodata=0)
+    b04_mosaic = merge_first_valid([b04_tiles[i] for i in order], nodata=0)
+    b08_mosaic = merge_first_valid([b08_tiles[i] for i in order], nodata=0)
+    b11_mosaic = merge_first_valid([b11_tiles[i] for i in order], nodata=0)
+    scl_mosaic = merge_first_valid([scl_tiles[i] for i in order], nodata=0)
+    mosaic_cov = coverage_fraction(b02_mosaic, nodata=0)
+    print(f"  Combined mosaic coverage of the full bbox: {mosaic_cov:.1%}")
+
+    print("  Computing EVI, NDMI, NDVI over the mosaic …")
+    evi = compute_evi_array(b08_mosaic, b04_mosaic, b02_mosaic)
+    ndmi = compute_normalised_index(b08_mosaic, b11_mosaic)
+    ndvi = compute_normalised_index(b08_mosaic, b04_mosaic)
+    uncovered = b02_mosaic == 0
+    evi[uncovered] = -9999.0
+    ndmi[uncovered] = -9999.0
+    ndvi[uncovered] = -9999.0
+    print()
+
+    band_profile: dict = {
+        "driver": "GTiff", "dtype": "uint16", "width": ref_w, "height": ref_h,
+        "count": 1, "crs": ref_crs, "transform": ref_transform, "compress": "lzw",
+    }
+    scl_profile: dict = {**band_profile, "dtype": "uint8"}
+    index_profile: dict = {**band_profile, "dtype": "float32", "nodata": -9999.0}
+
+    outputs: list[tuple[str, np.ndarray, dict]] = [
+        ("clean_S2_B02_blue.tif", b02_mosaic, band_profile),
+        ("clean_S2_B04_red.tif",  b04_mosaic, band_profile),
+        ("clean_S2_B08_nir.tif",  b08_mosaic, band_profile),
+        ("clean_S2_B11_swir.tif", b11_mosaic, band_profile),
+        ("clean_S2_SCL.tif",      scl_mosaic, scl_profile),
+        ("clean_S2_EVI.tif",      evi,        index_profile),
+        ("clean_S2_NDMI.tif",     ndmi,       index_profile),
+        ("clean_S2_NDVI.tif",     ndvi,       index_profile),
+    ]
+    result_paths: dict[str, Path] = {}
+    print("  Writing mosaicked GeoTIFFs:")
+    for fname, data, profile in outputs:
+        out_path = clean_dir / fname
+        write_tif(out_path, data, profile)
+        size_mb = out_path.stat().st_size / 1_048_576
+        print(f"    {fname:<30}  {size_mb:5.1f} MB")
+        result_paths[fname] = out_path
+    print()
+
+    manifest_out = manifest_path or (
+        PROJECT_ROOT / "clean_assets" / "sierra_nevada_scm_manifest.csv"
+    )
+    write_manifest_csv(manifest, manifest_out)
+    print(f"  Manifest written to {manifest_out}")
+    result_paths["manifest"] = manifest_out
+
+    print(DIV)
+    print(f"  Done. {len(outputs)} GeoTIFFs + manifest written.")
+
+    return result_paths
+
+
 def main() -> None:
     # UTF-8 output for Windows terminals with non-Unicode code pages
     if hasattr(sys.stdout, "buffer"):
@@ -435,6 +811,7 @@ def main() -> None:
     bbox = BBOX_4326
     label = "Sierra del Rincón Biosphere Reserve, Madrid, Spain"
     alpine = args.alpine
+    mgrs_tiles: tuple[str, ...] = ()
 
     if args.territory:
         from src.config.territories import get as get_territory
@@ -444,6 +821,7 @@ def main() -> None:
         label = f"{territory.display_name} ({territory.region})"
         if args.territory == "sierra_nevada":
             alpine = True
+        mgrs_tiles = territory.mgrs_tiles
 
     print(SEP)
     print("  SNTO ETL -- Sentinel-2 Raster Processor  [STAC / COG Edition]")
@@ -452,10 +830,16 @@ def main() -> None:
     print(f"  STAC URL     : {STAC_URL}")
     print(f"  Date range   : {args.date_range}  (cloud < {MAX_CLOUD_PCT} %)")
     print(f"  Output       : {CLEAN_DIR}")
-    print(f"  Mode         : {'ALPINE (NDSI + SCL)' if alpine else 'standard'}")
-    print(SEP)
-    print()
-    run(bbox=bbox, date_range=args.date_range, alpine=alpine)
+    if len(mgrs_tiles) > 1:
+        print(f"  Mode         : ALPINE multi-tile mosaic ({', '.join(mgrs_tiles)})")
+        print(SEP)
+        print()
+        run_alpine_multitile(bbox=bbox, mgrs_tiles=mgrs_tiles, date_range=args.date_range)
+    else:
+        print(f"  Mode         : {'ALPINE (NDSI + SCL)' if alpine else 'standard'}")
+        print(SEP)
+        print()
+        run(bbox=bbox, date_range=args.date_range, alpine=alpine)
     print(SEP)
 
 

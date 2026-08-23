@@ -12,6 +12,7 @@ from src.validation import (
     split_impact_control,
     validate_satellite_vs_field,
 )
+from src.validation.agreement import bootstrap_spearman_ci
 
 
 def _obs(plot_id, is_control, **kw):
@@ -94,3 +95,33 @@ def test_control_impact_contrast_no_gradient():
 def test_control_impact_requires_both_groups():
     with pytest.raises(ValueError):
         control_impact_contrast([1, 2], [])
+
+
+# ── Bootstrap CI for the Spearman agreement (issue #11) ──────────────────────
+
+
+def test_bootstrap_spearman_ci_brackets_the_point_estimate():
+    pairs = [(10, 12), (20, 22), (30, 28), (40, 45), (50, 48), (60, 65)]
+    ci = bootstrap_spearman_ci(pairs, seed=0)
+    assert ci.lower <= ci.point <= ci.upper
+
+
+def test_bootstrap_spearman_ci_matches_the_point_spearman():
+    pairs = [(10, 12), (20, 22), (30, 28), (40, 45), (50, 48), (60, 65)]
+    ci = bootstrap_spearman_ci(pairs, seed=0)
+    sat = [p[0] for p in pairs]
+    field = [p[1] for p in pairs]
+    assert ci.point == spearman_correlation(sat, field)
+
+
+def test_bootstrap_spearman_ci_is_reproducible_for_a_fixed_seed():
+    pairs = [(10, 12), (20, 22), (30, 28), (40, 45), (50, 48), (60, 65)]
+    a = bootstrap_spearman_ci(pairs, seed=42)
+    b = bootstrap_spearman_ci(pairs, seed=42)
+    assert (a.lower, a.upper) == (b.lower, b.upper)
+
+
+def test_bootstrap_spearman_ci_degenerates_below_four_plots():
+    pairs = [(10, 12), (20, 22), (30, 28)]
+    ci = bootstrap_spearman_ci(pairs)
+    assert ci.lower == ci.upper == ci.point

@@ -1,0 +1,141 @@
+{
+  "n_expected": 4,
+  "n_present": 3,
+  "gaps": [
+    "2024-03"
+  ],
+  "snowline_mean_m": 1286.5874837239583,
+  "snowline_ci_low_m": 1286.5874837239583,
+  "snowline_ci_high_m": 1286.5874837239583,
+  "snowline_ci_alpha": 0.05,
+  "min_valid_pixel_pct": 30.0,
+  "periods": [
+    {
+      "period_key": "2023-12",
+      "present": true,
+      "data_status": "real",
+      "date_range": "2023-12-01/2023-12-31",
+      "mosaic_coverage_pct": 100.0,
+      "snowline_elevation_m": 1370.899658203125,
+      "n_snow_pixels": 504040,
+      "tiles": [
+        {
+          "tile": "30SVF",
+          "scene_id": "S2B_30SVF_20231219_0_L2A",
+          "date": "2023-12-19",
+          "cloud_pct": 0.01,
+          "coverage_pct": 31.73
+        },
+        {
+          "tile": "30SWF",
+          "scene_id": "S2B_30SWF_20231219_0_L2A",
+          "date": "2023-12-19",
+          "cloud_pct": 0.02,
+          "coverage_pct": 11.42
+        },
+        {
+          "tile": "30SVG",
+          "scene_id": "S2A_30SVG_20231224_0_L2A",
+          "date": "2023-12-24",
+          "cloud_pct": 0.0,
+          "coverage_pct": 70.54
+        },
+        {
+          "tile": "30SWG",
+          "scene_id": "S2A_30SWG_20231224_0_L2A",
+          "date": "2023-12-24",
+          "cloud_pct": 0.01,
+          "coverage_pct": 25.39
+        }
+      ]
+    },
+    {
+      "period_key": "2024-01",
+      "present": true,
+      "data_status": "real",
+      "date_range": "2024-01-01/2024-01-31",
+      "mosaic_coverage_pct": 100.0,
+      "snowline_elevation_m": 1150.831787109375,
+      "n_snow_pixels": 3395244,
+      "tiles": [
+        {
+          "tile": "30SVF",
+          "scene_id": "S2B_30SVF_20240108_0_L2A",
+          "date": "2024-01-08",
+          "cloud_pct": 0.12,
+          "coverage_pct": 31.73
+        },
+        {
+          "tile": "30SWF",
+          "scene_id": "S2B_30SWF_20240108_0_L2A",
+          "date": "2024-01-08",
+          "cloud_pct": 2.75,
+          "coverage_pct": 11.42
+        },
+        {
+          "tile": "30SVG",
+          "scene_id": "S2B_30SVG_20240108_0_L2A",
+          "date": "2024-01-08",
+          "cloud_pct": 0.18,
+          "coverage_pct": 70.54
+        },
+        {
+          "tile": "30SWG",
+          "scene_id": "S2B_30SWG_20240108_0_L2A",
+          "date": "2024-01-08",
+          "cloud_pct": 0.98,
+          "coverage_pct": 25.39
+        }
+      ]
+    },
+    {
+      "period_key": "2024-02",
+      "present": true,
+      "data_status": "real",
+      "date_range": "2024-02-01/2024-02-29",
+      "mosaic_coverage_pct": 88.63,
+      "snowline_elevation_m": 1338.031005859375,
+      "n_snow_pixels": 1147100,
+      "tiles": [
+        {
+          "tile": "30SVF",
+          "scene_id": "S2A_30SVF_20240229_0_L2A",
+          "date": "2024-02-29",
+          "cloud_pct": 0.07,
+          "coverage_pct": 1.85
+        },
+        {
+          "tile": "30SWF",
+          "scene_id": "S2A_30SWF_20240219_0_L2A",
+          "date": "2024-02-19",
+          "cloud_pct": 0.11,
+          "coverage_pct": 7.96
+        },
+        {
+          "tile": "30SVG",
+          "scene_id": "S2A_30SVG_20240202_0_L2A",
+          "date": "2024-02-02",
+          "cloud_pct": 0.0,
+          "coverage_pct": 70.54
+        },
+        {
+          "tile": "30SWG",
+          "scene_id": "S2A_30SWG_20240202_0_L2A",
+          "date": "2024-02-02",
+          "cloud_pct": 0.02,
+          "coverage_pct": 25.39
+        }
+      ]
+    },
+    {
+      "period_key": "2024-03",
+      "present": false,
+      "data_status": "missing",
+      "date_range": "2024-03-01/2024-03-31",
+      "mosaic_coverage_pct": 0.0,
+      "snowline_elevation_m": null,
+      "n_snow_pixels": 0,
+      "tiles": []
+    }
+  ]
+}
