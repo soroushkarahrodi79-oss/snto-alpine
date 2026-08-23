@@ -6,7 +6,7 @@ SNTO means Smart Natural Tourism Observatory. **This repository (`snto-alpine`, 
 
 ## Where the real backlog lives
 
-GitHub milestone **`Alpine 0.1.0`** (`soroushkarahrodi79-oss/snto-alpine`, milestone #1): *"Prototipo reproducible: aislamiento operativo, backlog trazable, QA visual y release honesta sin validación de campo."* As of 2026-08-23: 2 open issues, 5 closed.
+GitHub milestone **`Alpine 0.1.0`** (`soroushkarahrodi79-oss/snto-alpine`, milestone #1): *"Prototipo reproducible: aislamiento operativo, backlog trazable, QA visual y release honesta sin validación de campo."* As of 2026-08-23: 3 open issues, 7 closed.
 
 | Issue | Title | Status |
 |---|---|---|
@@ -17,8 +17,10 @@ GitHub milestone **`Alpine 0.1.0`** (`soroushkarahrodi79-oss/snto-alpine`, miles
 | #10 | Replace Madrid socioeconomic fallback with Andalusian sources | Closed — real INE crosswalk + real OAPN visitor figure |
 | #11 | Design and execute the Sierra Nevada field validation campaign | **Open — design done, campaign NOT executed** |
 | #12 | Release: visual QA and cut Alpine 0.1.0 | Open — finish line, blocked on #11's campaign actually running |
+| #21 | Wire real independent snow-verification sources (AEMET + Cetursa) | **Open — AEMET wired and live-verified; Cetursa is a verified dead end (client-rendered SPA)** |
+| #22 | Source real IECA/REDIAM municipal population and economy figures | Closed — real IECA/SIMA data for all 24 municipalities, cross-verified against IECA's own bulk export |
 
-`snto-alpine`'s own PR history is separate from upstream's numbering: #1–#19 so far (edition bootstrap, DEM anonymous-S3 fix, dashboard wiring, season colouring, roadmap/backlog docs, then the #6–#11 stack above), all merged. Don't confuse these with the PR numbers referenced inside inherited `docs/` content (those are upstream PRs, e.g. #61–#92, and don't exist in this repo).
+`snto-alpine`'s own PR history is separate from upstream's numbering: #1–#24 so far (edition bootstrap, DEM anonymous-S3 fix, dashboard wiring, season colouring, roadmap/backlog docs, then the #6–#11 stack, then #21/#22), all merged. Don't confuse these with the PR numbers referenced inside inherited `docs/` content (those are upstream PRs, e.g. #61–#92, and don't exist in this repo).
 
 **Stacked-PR workflow note**: #6–#11 were built as a stack of branches (each based on the previous one's branch, not on `main`) so each issue got its own reviewable PR. Merging a PR whose base is a feature branch (not `main`) lands the commits on that base branch, **not on `main`** — the top-of-stack branch still needs its own PR against `main` to actually land the work. Verify with `git log origin/main..origin/<top-of-stack-branch>` before assuming a stack is fully landed.
 
@@ -27,8 +29,8 @@ GitHub milestone **`Alpine 0.1.0`** (`soroushkarahrodi79-oss/snto-alpine`, miles
 - Dashboard: Sierra Nevada is selectable and exposes 53 OAPN assets, all with real trail geometry.
 - Winter: real multi-tile NDSI mosaic (52/53 assets) and a real Dec 2023–Mar 2024 monthly snow series with bootstrap-CI snowline uncertainty.
 - Summer: real altitude-matched SCM zone attribution (52/53 assets, `evidence_class=REAL`) — corridor vs. control, elevation-band matched, slope gate preserved.
-- Socioeconomic: real Granada/Almería INE municipal crosswalk (25 municipalities) and one real (non-proxy) visitor-pressure figure (OAPN 2023 Sierra Nevada share, ≈734,295 visitors). Municipal population/economy (IECA/REDIAM) is explicitly **not yet sourced** — the dashboard says so rather than substituting a Madrid figure.
-- Field validation: protocol **designed** (`docs/alpine_field_validation_protocol.md`) — dual-season BACI plan reusing the real SCM zones, candidate-plot generator, bootstrap CI for satellite↔field agreement. The campaign itself has **not run**; no field data exists yet.
+- Socioeconomic: real Granada/Almería INE municipal crosswalk (25 municipalities), real IECA/SIMA population + economy figures for all 24 real municipalities (population, % over 65, 10-year population change, unemployment, hostelería establishments, hotel capacity — each with its own sourced vintage), and one real (non-proxy) visitor-pressure figure (OAPN 2023 Sierra Nevada share, ≈734,295 visitors). IECA figures were cross-verified against IECA's own official bulk export ("Andalucía pueblo a pueblo" full dataset) — 24/24 exact match.
+- Field validation: protocol **designed** (`docs/alpine_field_validation_protocol.md`) — dual-season BACI plan reusing the real SCM zones, candidate-plot generator, bootstrap CI for satellite↔field agreement. One of the two independent snow-verification sources is wired and live-verified (AEMET OpenData mountain forecast for `nev1`); the other (Cetursa's ski-resort bulletin) is a verified dead end via plain HTTP (client-rendered SPA) — see issue #21. The campaign itself has **not run**; no field data exists yet.
 - Evidence caveat: nothing in this edition is field-validated. Any "piloto validado" claim is premature until issue #11's campaign actually executes and its results (positive or negative) are published.
 - Deployment: there is no Alpine production deployment. The Azure workflow is manual-only, disabled by default and targets dedicated Alpine resource names.
 
@@ -43,10 +45,12 @@ GitHub milestone **`Alpine 0.1.0`** (`soroushkarahrodi79-oss/snto-alpine`, miles
 - `src/platform/alpine_dashboard.py` (pure, no Streamlit) + `src/ui/tabs/tab_alpine.py` (render) + `NavigationModule("alpine", …)` in `src/ui/navigation.py` + the `app.py` dispatch branch. All four are required together or `tests/ui/test_app_shell.py` fails.
 - `src/platform/alpine_trail_geoms.py` (issue #6) — loads the 53 real OAPN trail traces from `clean_assets/sierra_nevada_trails.geojson` (extracted once by `scripts/extract_oapn_trail_geoms.py` from the GEE template) into the `real_geoms` shape `map_layers.assets_to_geojson` expects, replacing the centroid+jitter approximation on the map.
 - `src/socioeconomic/alpine_mapping.py` (issue #10) — real Granada/Almería INE crosswalk (`clean_assets/sierra_nevada_municipios_ine.csv`), separate from and never falling back to the Madrid/PNSG crosswalk; carries the real OAPN visitor-pressure figure.
+- `src/socioeconomic/alpine_indicators.py` (issue #22) — parses IECA/SIMA's "Andalucía pueblo a pueblo" municipal fact sheets into real population/economy figures, one committed snapshot per municipality (`src/socioeconomic/snapshot/sierra_nevada_municipal_indicators.json`, built by `scripts/build_alpine_municipal_indicators.py`). IECA's own suppression marks (`*`/`-`, small-municipality statistical secrecy) parse to `None` with an explicit caveat, never a fabricated number.
 - `src/validation/alpine_plots.py` (issue #11) — deterministic candidate BACI plot coordinates sampled inside an asset's real local/control SCM zones, for the not-yet-executed field campaign.
+- `src/validation/aemet_snow.py` (issue #21) — real AEMET OpenData client for Sierra Nevada's mountain-zone forecast (`nev1`); requires `AEMET_API_KEY` (free registration). `fetch_nivological_info()` exists but is verified to **not** cover Sierra Nevada (AEMET's avalanche bulletin only serves the Pyrenees) — no default `area`, so it can't be called assuming coverage that doesn't exist.
 - `etl_raster_processor.py` — `run_alpine_multitile()` (winter B03/B08/B11/SCL) and `run_alpine_multitile_summer()` (summer B02/B04/B08/B11/SCL, real vectorised EVI) mosaic across all 4 MGRS tiles (30SVF/30SWF/30SVG/30SWG) independently, then merge in cloud-ascending order.
 - `scripts/build_alpine_snow_series.py`, `scripts/build_alpine_scm_zones.py` — orchestrate the live-STAC runs behind #8 and #9's committed `clean_assets/sierra_nevada_*.{json,csv}` outputs.
-- Tests: `tests/unit/test_alpine_*.py`, `tests/unit/test_zonal_stats.py`, `tests/unit/test_alpine_plots.py`, `tests/unit/test_alpine_socioeconomic.py`, `tests/unit/test_validation.py`.
+- Tests: `tests/unit/test_alpine_*.py`, `tests/unit/test_zonal_stats.py`, `tests/unit/test_alpine_plots.py`, `tests/unit/test_alpine_socioeconomic.py`, `tests/unit/test_alpine_indicators.py`, `tests/unit/test_aemet_snow.py`, `tests/unit/test_validation.py`.
 
 ## Alpine non-negotiables
 
@@ -90,10 +94,11 @@ SNTO should become a decision-intelligence layer for protected natural tourism d
 - Do not blur real, calibrated, synthetic, or simulated evidence.
 - Do not overclaim scientific validity before validation — nothing in this edition is field-validated until issue #11's campaign actually runs.
 - Preserve scientific transparency and methodological caveats.
-- Don't confuse inherited `docs/roadmap/*.md` (upstream's v2.0/v3.0 narrative) with this fork's actual backlog (GitHub issues #6–#12 under milestone `Alpine 0.1.0`).
+- Don't confuse inherited `docs/roadmap/*.md` (upstream's v2.0/v3.0 narrative) with this fork's actual backlog (GitHub issues #6–#12, #21, #22 under milestone `Alpine 0.1.0`).
 
 ## Next Recommended Actions
 
 1. Run the Sierra Nevada field validation campaign designed in `docs/alpine_field_validation_protocol.md` (issue #11) — this is physical fieldwork (plots, penetrometer, snow transect), not something to execute from this environment. Publish the agreement results (`bootstrap_spearman_ci`, `control_impact_contrast`) honestly, whatever they show.
 2. Once #11 closes with published results, do the visual QA + release pass for #12 — the milestone's finish line.
-3. Longer-term, non-blocking: wire the two real snow-verification sources #11 documents but does not yet integrate (AEMET OpenData API, Cetursa's daily snow bulletin), and source real IECA/REDIAM municipal population/economy data for the 25 Sierra Nevada municipalities (#10 shipped the crosswalk only).
+3. Issue #21 remains open: Cetursa's ski-resort snow bulletin needs either an undocumented internal endpoint or headless rendering to wire (a plain HTTP fetch returns no data — verified). Not blocking; AEMET already covers the "real independent snow source" need.
+4. Optional, not filed as an issue: the IECA bulk export used to verify #22's data (`Andalucía pueblo a pueblo`, full-Andalucía spreadsheet) carries more real indicators than what's wired — elections, agriculture, real-estate transactions, top-5 business sectors per municipality. File an issue first if pursuing this rather than freelancing in-branch.
