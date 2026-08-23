@@ -6,16 +6,16 @@
 
 De la teledetección Sentinel-2 a la decisión de inversión pública sobre el **Parque Nacional de Sierra Nevada** (Andalucía): innivación invernal, erosión estival de *borreguiles* por BTT y senderismo, atribución causal frente al clima, y traducción financiera TRAGSA para la administración pública (Junta de Andalucía, MITECO, Cetursa Sierra Nevada).
 
-[![Tests](https://img.shields.io/badge/tests-1060%20passing-brightgreen)](#7-tests)
+[![Tests](https://img.shields.io/badge/tests-1150%2B%20passing-brightgreen)](#7-tests)
 [![Python](https://img.shields.io/badge/python-%E2%89%A53.12-blue)](https://www.python.org/)
 [![CI](https://github.com/soroushkarahrodi79-oss/snto-alpine/actions/workflows/ci.yml/badge.svg)](https://github.com/soroushkarahrodi79-oss/snto-alpine/actions/workflows/ci.yml)
-[![Version](https://img.shields.io/badge/versi%C3%B3n-0.1.0.dev0-orange)](#1-estado-del-proyecto)
+[![Version](https://img.shields.io/badge/versi%C3%B3n-0.1.0-blue)](#1-estado-del-proyecto)
 [![Status](https://img.shields.io/badge/estado-prototipo%20·%20sin%20validar-lightgrey)](#1-estado-del-proyecto)
 [![License](https://img.shields.io/badge/uso-acad%C3%A9mico-lightgrey)](LICENSE)
 
 🏗 [Arquitectura](ARCHITECTURE.md) · 🗺 [Hoja de ruta Alpine](docs/roadmap/alpine-v0.1.md) · 🌱 [Observatorio base (del que deriva)](https://github.com/soroushkarahrodi79-oss/snto-smart-tourism-observatory)
 
-> ℹ️ **Edición derivada, versión 0.1.0.dev0.** Este repositorio es un *fork* del [observatorio base SNTO](https://github.com/soroushkarahrodi79-oss/snto-smart-tourism-observatory) y **reutiliza su motor** (EHS, SCM, DCS, capa temporal, persistencia, UI de 4 capas). No hereda su linaje de versiones (v1.0→v2.0), su DOI de Zenodo ni su despliegue en vivo — esos pertenecen al proyecto base. Este README describe **la Edición Alpina**; la relación con el motor heredado se detalla en [§10](#10-relación-con-el-observatorio-base).
+> ℹ️ **Edición derivada, versión 0.1.0.** Este repositorio es un *fork* del [observatorio base SNTO](https://github.com/soroushkarahrodi79-oss/snto-smart-tourism-observatory) y **reutiliza su motor** (EHS, SCM, DCS, capa temporal, persistencia, UI de 4 capas). No hereda su linaje de versiones (v1.0→v2.0), su DOI de Zenodo ni su despliegue en vivo — esos pertenecen al proyecto base. Este README describe **la Edición Alpina**; la relación con el motor heredado se detalla en [§10](#10-relación-con-el-observatorio-base).
 
 </div>
 
@@ -48,19 +48,25 @@ Sierra Nevada afronta **dos amenazas espectralmente opuestas en el mismo macizo*
 
 ## 1. Estado del proyecto
 
-`0.1.0.dev0` — **primera iteración, sin release cortada y sin validación de campo.** El versionado reinicia desde 0.x deliberadamente: es una línea de producto nueva. La madurez del **motor heredado** (arquitectura modular, backend persistente, UI por roles) es del observatorio base; la **adaptación alpina** está en fase de prototipo.
+`0.1.0` — **primera release, prototipo reproducible sin validación de campo.** El versionado reinicia desde 0.x deliberadamente: es una línea de producto nueva. La madurez del **motor heredado** (arquitectura modular, backend persistente, UI por roles) es del observatorio base; la **adaptación alpina** es un prototipo que cierra el hito `Alpine 0.1.0`.
 
 | Componente alpino | Estado |
 |---|---|
-| **Índices alpinos (NDSI + doble temporada)** — `src/features/alpine_spectral.py` | 🟡 Implementado y con tests. Verano usa la serie GEE real de 53 activos; invierno dispone de una capa real de febrero de 2024 para 43/53 activos. Falta cobertura multitesela y una serie NDSI multitemporal. |
+| **Geometrías reales de sendero** — `src/platform/alpine_trail_geoms.py` | ✅ 53/53 trazas OAPN reales (`clean_assets/sierra_nevada_trails.geojson`, issue #6). El mapa dibuja la traza completa en lugar de centroide+jitter. |
+| **Índices alpinos (NDSI + doble temporada)** — `src/features/alpine_spectral.py` | ✅ Verano: serie GEE real de 53 activos. Invierno: mosaico multitesela real 30SVF/30SWF/30SVG/30SWG, serie Dic 2023–Mar 2024 con CI bootstrap (52/53 activos; 1 fuera de toda huella STAC, documentado — issue #7/#8). |
 | **Buffer de erosión escalado por pendiente** — `src/geospatial/alpine_dem.py` | 🟡 Implementado y con tests. Requiere DEM Copernicus vía STAC en ejecución real. |
-| **SCM alpino (control emparejado por altitud)** — `src/spatial_causality/alpine_causality.py` | 🟡 Implementado y con tests. Evidencia `SIMULATED` hasta disponer de zonas reales. |
-| **ROI público (TRAGSA × pendiente + socioeconómico)** — `src/risk_engine/public_roi.py` | 🟡 Implementado. Cifras socioeconómicas *proxy*, **no** INE/observadas. |
-| **Dashboard alpino (pestaña de doble temporada)** — `src/platform/alpine_dashboard.py` + `src/ui/tabs/tab_alpine.py` | 🟡 Implementado y cableado con 53 activos; el mapa usa NDSI real parcial en invierno y pendiente para 53/53 en verano. Sin captura ni despliegue propios. |
-| **Territorio Sierra Nevada registrado** — `src/config/territories.py` | ✅ `TerritoryConfig` real (bbox del macizo, teselas 30SVF/30SWF/30SVG/30SWG). |
-| **Validación de campo** | ⛔ **No realizada.** Nada de la Edición Alpina está validado sobre el terreno. |
+| **SCM alpino (control emparejado por altitud)** — `src/spatial_causality/alpine_causality.py` | ✅ 52/53 activos con `evidence_class=REAL`; zonas de control emparejadas por altitud ±50 m. 1 activo sin control válido (`NO_VALID_CONTROL` explícito — issue #9). |
+| **ROI público (TRAGSA × pendiente)** — `src/risk_engine/public_roi.py` | 🟡 Implementado. Tarifa base real (TRAGSA 2023); factor pendiente ×1,0→×1,8 es supuesto de planificación, no tarifa publicada. |
+| **Dashboard alpino** — `src/platform/alpine_dashboard.py` + `src/ui/tabs/tab_alpine.py` | ✅ 53 activos cableados con trazas reales; conmutador Invierno/Verano; simulador 50K–1M €; matriz TPI; contexto municipal real IECA/SIMA. Sin despliegue en producción. |
+| **Territorio Sierra Nevada** — `src/config/territories.py` | ✅ `TerritoryConfig` real (bbox del macizo, teselas 30SVF/30SWF/30SVG/30SWG). |
+| **Crosswalk INE andaluz** — `src/socioeconomic/alpine_mapping.py` | ✅ Cruce INE Granada/Almería real para 25 municipios; figura de visitantes OAPN real (≈734.295, 2023) — issue #10. Nunca usa proxies del PNSG/Madrid. |
+| **Indicadores municipales IECA/SIMA** — `src/socioeconomic/alpine_indicators.py` | ✅ Fichas reales para 24/24 municipios: población, envejecimiento, cambio demográfico, paro, hostelería, establecimientoss, transacciones inmobiliarias, superficie agrícola, consumo eléctrico, ingresos/gastos por habitante — con secreto estadístico (`*`) parseado a `None`, no a cero (issues #22, #27). |
+| **Fuentes de nieve independientes** — `src/validation/aemet_snow.py` / `cetursa_snow.py` | 🟡 AEMET OpenData `nev1` y Cetursa (Umbraco JSON, sin autenticación) ambos cableados y verificados en vivo. Sin datos de invierno disponibles en temporada cerrada; verificación retroactiva imposible (sin archivo histórico) — issue #21. |
+| **Validación de campo** | ⛔ **No realizada.** Protocolo BACI diseñado (`docs/alpine_field_validation_protocol.md`); la campaña no se ha ejecutado — issue #11. |
 
-🟡 = implementado y verificado con tests (1.060 superados, 1 omitido), **no** validado en campo ni ejecutado sobre datos reales completos.
+✅ = dato real observado o geometría real OAPN/INE/IECA. 🟡 = implementado y con tests, dato o cobertura aún parcial. ⛔ = no disponible.
+
+**1.150+ tests superados, 1 omitido** — suite completa incluyendo los módulos alpinos nuevos (`test_alpine_trail_geoms`, `test_alpine_scm_zones`, `test_alpine_snow_series`, `test_alpine_indicators`, `test_aemet_snow`, `test_cetursa_snow`, `test_zonal_stats`, etc.).
 
 ---
 
@@ -131,11 +137,19 @@ La conversión oficial vive en `src.metrics.semantics`: `health = 100 − stress
 | Módulo | Aportación sobre el motor base |
 |---|---|
 | `src/features/alpine_spectral.py` | NDSI, máscara SCL estacional, discriminación nieve/agua (suelo NIR), cota de nieve, duración del manto, índice de degradación de borreguiles. Reutiliza `compute_evi`/`compute_ndmi` del módulo base sin redefinirlos. |
-| `src/geospatial/alpine_dem.py` | **Escalado del corredor por magnitud de pendiente.** El buffer base calcula la pendiente y la descarta (`_, aspect_deg = ...`): conoce *hacia dónde* corre el agua, no *con cuánta fuerza*. Aquí el lado de aguas abajo pasa de 60 a 80 m entre 20° y 30°; el de aguas arriba se mantiene en 15 m, porque la escorrentía no sube. |
-| `src/spatial_causality/alpine_causality.py` | **Zona de control emparejada por altitud.** El anillo base de 200–1000 m puede abarcar de pinar a roquedo periglaciar; atribuir ese gradiente altitudinal a los ciclistas es un error de bulto. El anillo se estrecha a 200–500 m y se intersecta con la banda del DEM ±50 m de la cota del sendero. La clasificación «roderas antropogénicas» exige exceso de degradación **y** puerta de pendiente. |
-| `src/risk_engine/public_roi.py` | Tarifa TRAGSA de 15,50 €/m ajustada por pendiente (×1,0 → ×1,8, alta montaña) y traducida a empleos e ingresos hosteleros dependientes. Tarifa base centralizada en `src/config/constants.py`. |
+| `src/geospatial/alpine_dem.py` | **Escalado del corredor por magnitud de pendiente.** El lado de aguas abajo pasa de 60 a 80 m entre 20° y 30°; el de aguas arriba se mantiene en 15 m. |
+| `src/geospatial/zonal_stats.py` | Estadística zonal poligonal sobre rásteres: reprojecta la zona al grid del ráster, rasteriza y calcula la media de píxeles válidos. Usado por el pipeline de zonas SCM reales. |
+| `src/spatial_causality/alpine_causality.py` | **Zona de control emparejada por altitud.** Anillo 200–500 m intersectado con la banda DEM ±50 m del sendero. La clasificación «roderas» exige exceso de degradación **y** puerta de pendiente. |
+| `src/spatial_causality/alpine_scm_zones.py` | Conecta la causalidad alpina con observaciones mensuales reales EVI/NDMI por zona, con fallback explícito `NO_VALID_CONTROL` cuando una zona carece de píxeles válidos suficientes. |
+| `src/risk_engine/public_roi.py` | Tarifa TRAGSA 15,50 €/m ajustada por pendiente (×1,0→×1,8) y traducida a empleos e ingresos hosteleros dependientes. Tarifa base en `src/config/constants.py`. |
+| `src/platform/alpine_trail_geoms.py` | Carga las 53 trazas cartográficas reales OAPN desde `clean_assets/sierra_nevada_trails.geojson` para el mapa PyDeck, sustituyendo el centroide+jitter de la aproximación anterior. |
 | `src/platform/alpine_dashboard.py` | Constructores puros (sin Streamlit) del mapa PyDeck y la matriz TPI por temporada. |
-| `src/ui/tabs/tab_alpine.py` | Superficie Streamlit: conmutador de temporada, mapa, simulador presupuestario (50 K–1 M €) y matriz TPI (TIER I–IV con distintivos de alerta). |
+| `src/ui/tabs/tab_alpine.py` | Superficie Streamlit: conmutador Invierno/Verano, mapa con trazas reales, simulador presupuestario (50K–1M €), matriz TPI (TIER I–IV) y tabla de indicadores municipales reales IECA/SIMA. |
+| `src/socioeconomic/alpine_mapping.py` | Cruce INE Granada/Almería real para 25 municipios (sin fallback al padrón de Madrid/PNSG), con la figura de visitantes OAPN Sierra Nevada 2023. |
+| `src/socioeconomic/alpine_indicators.py` | Parser de fichas SIMA «Andalucía pueblo a pueblo»: extrae indicadores reales (población, economía, inmobiliario, energía) para 24 municipios, con secreto estadístico parseado a `None`. Snapshot compilado en `src/socioeconomic/snapshot/`. |
+| `src/validation/aemet_snow.py` | Cliente AEMET OpenData para la zona de montaña `nev1`: previsión nivológica en tiempo real. Requiere `AEMET_API_KEY` (registro gratuito). |
+| `src/validation/cetursa_snow.py` | Cliente del «parte de nieve» de Cetursa vía el backend Umbraco (`umb.sierranevada.es/umbraco/api/parte/previsiones`), JSON sin autenticación. Extrae espesores por sector, temperaturas y riesgo de alud. `has_snow_data()` detecta la temporada cerrada (sentinel `9999`). |
+| `src/validation/alpine_plots.py` | Generador determinista de parcelas BACI candidatas dentro de las zonas SCM reales, para la campaña de campo no ejecutada (issue #11). |
 
 Ingesta NDSI y regeneración de la serie por sendero:
 
@@ -165,14 +179,18 @@ Módulos **específicamente alpinos** marcados con 🏔; el resto es motor hered
 
 ```
 snto-alpine/
-├── README.md · ARCHITECTURE.md · requirements.txt · pyproject.toml
+├── README.md · ARCHITECTURE.md · CITATION.cff · requirements.txt · pyproject.toml
 ├── app.py                              # dashboard Streamlit (pestaña 🏔 alpina cableada)
 │
-├── etl_raster_processor.py             # 🏔 --territory sierra_nevada → NDSI + SCL
+├── etl_raster_processor.py             # 🏔 --territory sierra_nevada → NDSI + SCL + mosaico
 ├── etl_raster_intersection.py          # 🏔 SNTO_TERRITORY=sierra_nevada → buffers escalados
 │
-├── scripts/gee_templates_oapn/
-│   └── pn_sierra_nevada.js             # 🏔 plantilla GEE con NDSI + máscara estacional
+├── scripts/
+│   ├── gee_templates_oapn/
+│   │   └── pn_sierra_nevada.js         # 🏔 plantilla GEE con NDSI + máscara estacional
+│   ├── build_alpine_snow_series.py     # 🏔 genera sierra_nevada_snow_series.{csv,json}
+│   ├── build_alpine_scm_zones.py       # 🏔 genera sierra_nevada_scm_zones.{csv,json}
+│   └── build_alpine_municipal_indicators.py  # 🏔 scrapa fichas SIMA → snapshot JSON
 │
 ├── src/
 │   ├── features/
@@ -180,15 +198,27 @@ snto-alpine/
 │   │   └── alpine_spectral.py          # 🏔 NDSI, máscara estacional, cota de nieve
 │   ├── geospatial/
 │   │   ├── geometry.py                 #    DEM STAC, slope/aspect, buffer asimétrico (motor)
-│   │   └── alpine_dem.py               # 🏔 escalado del corredor por pendiente
+│   │   ├── alpine_dem.py               # 🏔 escalado del corredor por pendiente
+│   │   └── zonal_stats.py              # 🏔 estadística zonal poligonal sobre rásteres
 │   ├── spatial_causality/
 │   │   ├── analyzer.py                 #    SCM base
-│   │   └── alpine_causality.py         # 🏔 control emparejado por altitud
+│   │   ├── alpine_causality.py         # 🏔 control emparejado por altitud
+│   │   └── alpine_scm_zones.py         # 🏔 zonas SCM reales con observaciones mensuales
 │   ├── risk_engine/
 │   │   └── public_roi.py               # 🏔 coste TRAGSA × pendiente + ROI socioeconómico
 │   ├── platform/
 │   │   ├── map_layers.py · charts.py   #    PyDeck + matriz TPI (motor)
-│   │   └── alpine_dashboard.py         # 🏔 mapa y matriz por temporada
+│   │   ├── alpine_dashboard.py         # 🏔 mapa y matriz por temporada
+│   │   └── alpine_trail_geoms.py       # 🏔 carga trazas OAPN reales → mapa
+│   ├── socioeconomic/
+│   │   ├── alpine_mapping.py           # 🏔 cruce INE andaluz + visitantes OAPN reales
+│   │   ├── alpine_indicators.py        # 🏔 parser fichas SIMA, 24 municipios reales
+│   │   └── snapshot/
+│   │       └── sierra_nevada_municipal_indicators.json  # 🏔 snapshot IECA/SIMA compilado
+│   ├── validation/
+│   │   ├── aemet_snow.py               # 🏔 cliente AEMET OpenData nev1 (requiere API key)
+│   │   ├── cetursa_snow.py             # 🏔 cliente Cetursa parte de nieve (sin auth)
+│   │   └── alpine_plots.py             # 🏔 parcelas BACI candidatas para campaña de campo
 │   ├── ui/tabs/
 │   │   └── tab_alpine.py               # 🏔 pestaña «Observatorio alpino»
 │   ├── config/
@@ -198,11 +228,24 @@ snto-alpine/
 │                                       #    territorial, intervention, socioeconomic, ... (motor)
 │
 ├── tests/unit/
-│   ├── test_alpine_pipeline.py         # 🏔 84 casos: NDSI, máscara, pendiente, atribución, ROI
-│   └── test_alpine_dashboard.py        # 🏔 28 casos: rampas de color, deck, matriz, badges
+│   ├── test_alpine_pipeline.py         # 🏔 NDSI, máscara, pendiente, atribución, ROI
+│   ├── test_alpine_dashboard.py        # 🏔 rampas de color, deck, matriz, badges
+│   ├── test_alpine_trail_geoms.py      # 🏔 geometrías reales OAPN
+│   ├── test_alpine_scm_zones.py        # 🏔 zonas SCM con control real
+│   ├── test_alpine_snow_series.py      # 🏔 serie NDSI multitemporal
+│   ├── test_alpine_indicators.py       # 🏔 indicadores IECA/SIMA (secreto estadístico)
+│   ├── test_aemet_snow.py              # 🏔 cliente AEMET
+│   ├── test_cetursa_snow.py            # 🏔 cliente Cetursa + centinelas temporada cerrada
+│   ├── test_zonal_stats.py             # 🏔 estadística zonal
+│   └── ...                             #    suite heredada del motor
 │
-└── clean_assets/timeseries/
-    └── pn_sierra_nevada_gee_timeseries.csv   # 53 activos × 66 meses (GEE real; sin NDSI aún)
+└── clean_assets/
+    ├── sierra_nevada_trails.geojson          # 🏔 53 trazas OAPN reales
+    ├── sierra_nevada_asset_layers.csv        # 🏔 NDSI + pendiente por activo
+    ├── sierra_nevada_ndsi_manifest.csv       # 🏔 manifiesto mosaico NDSI multitesela
+    ├── sierra_nevada_snow_series.{csv,json}  # 🏔 serie dic 2023–mar 2024
+    ├── sierra_nevada_scm_zones.{csv,json}    # 🏔 zonas SCM reales 52/53 activos
+    └── sierra_nevada_municipios_ine.csv      # 🏔 cruce INE Granada/Almería
 ```
 
 ---
@@ -232,16 +275,25 @@ python etl_raster_processor.py --territory sierra_nevada --date-range "2024-01-0
 # → escribe clean_S2_NDSI.tif, clean_S2_SCL.tif, clean_S2_B03_green.tif
 ```
 
-### Serie por sendero (opcional, regeneración GEE)
+### Serie de innivación multitemporal (activos comprometidos)
 
-La capa ligera versionada `clean_assets/sierra_nevada_asset_layers.csv` contiene
-NDSI de febrero de 2024 para 43/53 activos y pendiente para 53/53. Se genera con:
+La capa versionada `clean_assets/sierra_nevada_snow_series.{csv,json}` contiene
+la serie mensual dic 2023–mar 2024 de NDSI, cota de nieve y CI bootstrap para
+52/53 activos (1 activo queda fuera de toda huella STAC — documentado en el
+manifiesto). Generada con:
+
+```bash
+python scripts/build_alpine_snow_series.py
+```
+
+Para regenerar `clean_assets/sierra_nevada_asset_layers.csv` (NDSI + pendiente
+de resumen por activo):
 
 ```bash
 python scripts/build_alpine_asset_layers.py
 ```
 
-Pega `scripts/gee_templates_oapn/pn_sierra_nevada.js` en [code.earthengine.google.com](https://code.earthengine.google.com) para regenerar `pn_sierra_nevada_gee_timeseries.csv` **con la columna `ndsi`** y construir la serie multitemporal que todavía falta.
+Pega `scripts/gee_templates_oapn/pn_sierra_nevada.js` en [code.earthengine.google.com](https://code.earthengine.google.com) para ampliar la serie a temporadas adicionales.
 
 ### Dashboard
 
@@ -257,7 +309,7 @@ streamlit run app.py   # selecciona Sierra Nevada → pestaña «Observatorio al
 pytest -q
 ```
 
-- **1.060 passing, 1 skipped, 0 regresiones** — incluye los casos propios de la edición alpina (`test_alpine_pipeline.py`, `test_alpine_dashboard.py`, `test_alpine_fixtures.py` y `test_alpine_asset_layers.py`) sobre la suite heredada, más los contratos de roadmap y aislamiento de despliegue.
+- **1.150+ passing, 1 skipped, 0 regresiones** — incluye todos los módulos alpinos: `test_alpine_pipeline.py`, `test_alpine_dashboard.py`, `test_alpine_trail_geoms.py`, `test_alpine_scm_zones.py`, `test_alpine_snow_series.py`, `test_alpine_indicators.py`, `test_aemet_snow.py`, `test_cetursa_snow.py`, `test_zonal_stats.py`, `test_scm_real_zones.py`, `test_real_trails_semantics.py` y `test_alpine_plots.py`, más la suite heredada y los contratos de roadmap y aislamiento de despliegue.
 - CI (`ci.yml`, GitHub Actions, Python 3.12 / Ubuntu): `ruff` bloqueante sobre los módulos mantenidos —**incluidos los alpinos**—, suite con cobertura ≥ 80 %, `mypy` y un job de PostgreSQL real. El despliegue Alpine es manual, tiene doble confirmación y está deshabilitado por defecto.
 - Los tests corren **offline**: STAC (`pystac-client`), `rasterio` y `pydeck` se sustituyen por stubs; el DEM se simula con transforms `affine`.
 
@@ -267,13 +319,11 @@ pytest -q
 
 La transparencia metodológica es parte del valor académico del proyecto.
 
-- **Cobertura invernal parcial:** existe una capa NDSI real de febrero de 2024 para 43/53 activos; diez activos quedan fuera de la huella de la escena. Todavía no es una serie de duración del manto y debe completarse con mosaico multitesela y varias fechas.
-- **Posición aproximada de los activos:** el NDSI y la pendiente se muestrean en centroide municipal + *jitter*, no sobre la traza real del sendero. Son valores indicativos, no de precisión topográfica; la sustitución por geometrías reales es el siguiente hito de datos.
-- **Cifras socioeconómicas = escenario proxy:** empleos e ingresos de `public_roi.py` derivan de `visitor_capacity_annual` y de parámetros de literatura (22,50 €/visitante, 2.500 visitantes/empleo), **no** de observación INE/Andalucía. Toda salida lleva `EvidenceClass`; una `SIMULATED` no sostiene decisión de gasto por sí sola.
-- **Coste TRAGSA de alta montaña:** la tarifa base de 15,50 €/m es de orden de magnitud (TRAGSA 2023); el **factor de pendiente ×1,0→×1,8 es un supuesto de planificación**, no una tarifa oficial de alta montaña publicada.
-- **SCM alpino sin zonas reales:** la atribución roderas-vs-clima usa hoy zonas simuladas (`EvidenceClass.SIMULATED`). El emparejamiento por altitud requiere el DEM Copernicus en ejecución real.
-- **Snapshot socioeconómico heredado:** el `src/socioeconomic/` heredado contiene municipios de la Comunidad de Madrid, **no de Andalucía**; el ROI alpino no lo usa (emplea proxies), pero la capa socioeconómica del motor no está re-abastecida para Sierra Nevada.
-- **Sin validación de campo:** nada está contrastado sobre el terreno (penetrómetro, parcelas de cobertura, erosión medida). No se afirma validación.
+- **Cobertura invernal 52/53:** 1 activo queda fuera de la huella de todas las teselas STAC disponibles; su NDSI es `NaN` en todo el dataset, no interpolado. El manifiesto (`sierra_nevada_ndsi_manifest.csv`) lo identifica explícitamente. La serie cubre dic 2023–mar 2024 (4 meses); temporadas adicionales requieren re-ejecutar `build_alpine_snow_series.py` sobre escenas STAC nuevas.
+- **Coste TRAGSA de alta montaña:** la tarifa base de 15,50 €/m es de orden de magnitud (TRAGSA 2023); el **factor de pendiente ×1,0→×1,8 es un supuesto de planificación**, no una tarifa oficial de alta montaña publicada. El buffer escalado necesita el DEM Copernicus via STAC en ejecución real.
+- **Empleos e ingresos = proxy:** los campos `dependent_jobs` e `hospitality_revenue_eur` de `public_roi.py` derivan de parámetros de literatura (22,50 €/visitante, 2.500 visitantes/empleo), **no** de observación INE/Andalucía. Toda salida lleva `EvidenceClass`; una `SIMULATED` no sostiene decisión de gasto por sí sola. Las cifras de población, economía y establecimientos del contexto municipal **sí** son reales (IECA/SIMA); los empleos/ingresos del ROI **no**.
+- **Fuentes de nieve sin archivo histórico:** AEMET (`nev1`) y Cetursa (Umbraco API) sólo sirven datos en tiempo real — ninguna tiene archivo histórico descargable. La verificación cruzada prospectiva con el dataset de innivación (#8) se realizará durante el invierno 2026–2027 (issue #21).
+- **Sin validación de campo:** nada está contrastado sobre el terreno (penetrómetro, parcelas de cobertura, erosión medida). El protocolo BACI está diseñado (`docs/alpine_field_validation_protocol.md`), pero la campaña no se ha ejecutado (issue #11). No se afirma validación hasta que esa campaña publique resultados.
 
 ---
 
@@ -306,6 +356,10 @@ Lo que aporta esta edición es **únicamente la capa alpina** descrita en [§2](
 | Sentinel-2 L2A (NDVI/NDMI/EVI/NDSI) | ESA / Copernicus | Datos abiertos Copernicus (uso libre con atribución) | *Contiene datos Copernicus Sentinel-2 modificados* |
 | DEM GLO-30 (pendiente / orientación) | Copernicus | Datos abiertos Copernicus | *Copernicus DEM — producto ESA* |
 | Cartografía de sendas y rutas BTT | OAPN (Red de Parques Nacionales) / OSM | Reutilización institucional con cita · ODbL | *Cartografía OAPN — P.N. Sierra Nevada* · *© OpenStreetMap contributors* |
+| Fichas municipales IECA/SIMA | Junta de Andalucía — IECA | Reutilización con cita (portal datos abiertos Junta) | *IECA — «Andalucía pueblo a pueblo», SIMA* |
+| Visitantes Red de Parques Nacionales | OAPN (MITECO) | Datos públicos con atribución | *OAPN — Encuesta de visitantes SIR, 2023* |
+| Pronóstico nivológico Sierra Nevada | AEMET OpenData | Uso libre con atribución (API gratuita, registro requerido) | *Agencia Estatal de Meteorología (AEMET)* |
+| Parte de nieve Cetursa | Cetursa Sierra Nevada | Consumo legítimo de API pública sin autenticación | *Cetursa Sierra Nevada S.A.* |
 | Cartografía ambiental y usos del suelo | Junta de Andalucía — REDIAM | Reutilización con cita | *REDIAM, Junta de Andalucía* |
 | Padrón municipal, estadística de turismo | INE | Datos abiertos INE (reutilización con cita) | *Instituto Nacional de Estadística (INE)* |
 
@@ -321,7 +375,7 @@ El código se distribuye para uso académico y de investigación con atribución
 
 ### Cómo citar
 
-> ⚠️ **La Edición Alpina no tiene DOI propio todavía** (no se ha depositado en Zenodo). Los DOI `10.5281/zenodo.20818269` y `10.5281/zenodo.21472647` pertenecen al **observatorio base**, no a este repositorio; no los uses para citar la Edición Alpina. Mientras no exista depósito, cita este repositorio por su URL y *commit*.
+> ⚠️ **La Edición Alpina no tiene DOI propio todavía** (no se ha depositado en Zenodo; esta es la primera release, v0.1.0). Los DOI `10.5281/zenodo.20818269` y `10.5281/zenodo.21472647` pertenecen al **observatorio base**, no a este repositorio; no los uses para citar la Edición Alpina. Mientras no exista depósito, cita este repositorio por su URL y *tag* `v0.1.0`.
 
 Para citar el **marco base** del que deriva, ver el [observatorio base](https://github.com/soroushkarahrodi79-oss/snto-smart-tourism-observatory) y su DOI de Zenodo.
 
@@ -330,5 +384,5 @@ Fichero de cita: [`CITATION.cff`](CITATION.cff) · Contribuciones: [`CONTRIBUTIN
 ---
 
 <div align="center">
-<sub>SNTO v0.1.0.dev0 · Python ≥ 3.12 · 1060 tests passing · agosto 2026</sub>
+<sub>SNTO Alpine Edition v0.1.0 · Python ≥ 3.12 · 1150+ tests passing · agosto 2026</sub>
 </div>

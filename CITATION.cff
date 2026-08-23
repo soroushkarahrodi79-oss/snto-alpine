@@ -26,8 +26,8 @@ url: "https://github.com/soroushkarahrodi79-oss/snto-alpine"
 # Licencia de uso académico/no-comercial: ver fichero LICENSE (no es un identificador SPDX estándar).
 # Versión propia 0.x: nueva línea de producto, sin releases y sin validación de
 # campo. No hereda el linaje de versiones del observatorio base.
-version: "0.1.0.dev0"
-# Sin date-released: no se ha cortado ninguna release de la Edición Alpina.
+version: "0.1.0"
+date-released: "2026-08-23"
 keywords:
   - remote-sensing
   - sentinel-2

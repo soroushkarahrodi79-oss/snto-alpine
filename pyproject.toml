@@ -4,10 +4,10 @@ build-backend = "setuptools.backends.legacy:build"
 
 [project]
 name = "snto"
-# Alpine Edition versioning restarts from 0.x: this is a new, unreleased,
-# field-unvalidated product line. It does NOT inherit the base observatory's
-# v1.0→v2.0 release lineage. Drop the .dev0 marker when the first release is cut.
-version = "0.1.0.dev0"
+# Alpine Edition versioning restarts from 0.x: new product line, does NOT inherit
+# the base observatory's v1.0→v2.0 release lineage. Field campaign (#11) not yet
+# executed — this is a reproducible prototype release, not a validated product.
+version = "0.1.0"
 requires-python = ">=3.12"
 dependencies = []
 
