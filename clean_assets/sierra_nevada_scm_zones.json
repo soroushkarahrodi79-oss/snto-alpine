@@ -1,0 +1,1054 @@
+{
+  "n_assets": 53,
+  "n_attributed": 52,
+  "n_no_valid_control": 1,
+  "assets": [
+    {
+      "asset_id": "pn_sierra_nevada_senderismo_transnevada_rf_valor_fuente_de_las_primeras_agua_000",
+      "classification": "MIXED",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "LOW",
+        "attribution_index": 0.19544,
+        "local_degradation": 0.46287,
+        "control_degradation": 0.26743,
+        "mean_slope_deg": 14.67,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.463 vs altitude-matched control 0.267 (±50 m band, 200–500 m annulus); attribution index +0.195; mean slope 14.7° (below the 20° runoff-concentration threshold).",
+        "plain_language": "Hay indicios de exceso de degradación en el corredor, pero no concluyentes: o la señal es débil o la pendiente no basta para atribuirla a roderas.",
+        "management_implication": "Mantener seguimiento y reforzar la evidencia antes de comprometer presupuesto de restauración."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_senderismo_transnevada_rg_yegen_mecina_bombaron_yegen_001",
+      "classification": "MIXED",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "LOW",
+        "attribution_index": 0.11945,
+        "local_degradation": 0.52138,
+        "control_degradation": 0.40193,
+        "mean_slope_deg": 16.75,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.521 vs altitude-matched control 0.402 (±50 m band, 200–500 m annulus); attribution index +0.119; mean slope 16.7° (below the 20° runoff-concentration threshold).",
+        "plain_language": "Hay indicios de exceso de degradación en el corredor, pero no concluyentes: o la señal es débil o la pendiente no basta para atribuirla a roderas.",
+        "management_implication": "Mantener seguimiento y reforzar la evidencia antes de comprometer presupuesto de restauración."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_senderismo_transnevada_rh_capileira_refugio_poqueira_002",
+      "classification": "MIXED",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "LOW",
+        "attribution_index": 0.07689,
+        "local_degradation": 0.43262,
+        "control_degradation": 0.35572,
+        "mean_slope_deg": 12.91,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.433 vs altitude-matched control 0.356 (±50 m band, 200–500 m annulus); attribution index +0.077; mean slope 12.9° (below the 20° runoff-concentration threshold).",
+        "plain_language": "Hay indicios de exceso de degradación en el corredor, pero no concluyentes: o la señal es débil o la pendiente no basta para atribuirla a roderas.",
+        "management_implication": "Mantener seguimiento y reforzar la evidencia antes de comprometer presupuesto de restauración."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_senderismo_transnevada_rj_portugos_barranco_bermejo_portugo_003",
+      "classification": "MIXED",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "LOW",
+        "attribution_index": 0.1482,
+        "local_degradation": 0.24079,
+        "control_degradation": 0.09259,
+        "mean_slope_deg": 17.83,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.241 vs altitude-matched control 0.093 (±50 m band, 200–500 m annulus); attribution index +0.148; mean slope 17.8° (below the 20° runoff-concentration threshold).",
+        "plain_language": "Hay indicios de exceso de degradación en el corredor, pero no concluyentes: o la señal es débil o la pendiente no basta para atribuirla a roderas.",
+        "management_implication": "Mantener seguimiento y reforzar la evidencia antes de comprometer presupuesto de restauración."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_senderismo_transnevada_rk_padre_eterno_ar_puente_palo_padre_004",
+      "classification": "MIXED",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "LOW",
+        "attribution_index": 0.11157,
+        "local_degradation": 0.37662,
+        "control_degradation": 0.26504,
+        "mean_slope_deg": 15.99,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.377 vs altitude-matched control 0.265 (±50 m band, 200–500 m annulus); attribution index +0.112; mean slope 16.0° (below the 20° runoff-concentration threshold).",
+        "plain_language": "Hay indicios de exceso de degradación en el corredor, pero no concluyentes: o la señal es débil o la pendiente no basta para atribuirla a roderas.",
+        "management_implication": "Mantener seguimiento y reforzar la evidencia antes de comprometer presupuesto de restauración."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_senderismo_transnevada_rc_abrucena_la_polarda_005",
+      "classification": "MACROCLIMATE_DRIVEN",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "HIGH",
+        "attribution_index": -0.03483,
+        "local_degradation": 0.32382,
+        "control_degradation": 0.35865,
+        "mean_slope_deg": 14.77,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.324 vs altitude-matched control 0.359 (±50 m band, 200–500 m annulus); attribution index -0.035; mean slope 14.8° (below the 20° runoff-concentration threshold).",
+        "plain_language": "El corredor y el terreno de control se degradan a un ritmo similar. El patrón apunta a sequía regional, no al uso del sendero.",
+        "management_implication": "La restauración local no corregiría la causa. Priorizar seguimiento y medidas a escala de macizo."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_senderismo_transnevada_rd_laujar_andarax_loma_raspa_laujar__006",
+      "classification": "MACROCLIMATE_DRIVEN",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "HIGH",
+        "attribution_index": -0.20596,
+        "local_degradation": 0.35222,
+        "control_degradation": 0.55818,
+        "mean_slope_deg": 13.51,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.352 vs altitude-matched control 0.558 (±50 m band, 200–500 m annulus); attribution index -0.206; mean slope 13.5° (below the 20° runoff-concentration threshold).",
+        "plain_language": "El corredor y el terreno de control se degradan a un ritmo similar. El patrón apunta a sequía regional, no al uso del sendero.",
+        "management_implication": "La restauración local no corregiría la causa. Priorizar seguimiento y medidas a escala de macizo."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_senderismo_transnevada_ri_niguelas_la_rinconada_niguelas_007",
+      "classification": "MACROCLIMATE_DRIVEN",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "HIGH",
+        "attribution_index": -0.00982,
+        "local_degradation": 0.49631,
+        "control_degradation": 0.50614,
+        "mean_slope_deg": 20.54,
+        "slope_gate_passed": true,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.496 vs altitude-matched control 0.506 (±50 m band, 200–500 m annulus); attribution index -0.010; mean slope 20.5° (above the 20° runoff-concentration threshold).",
+        "plain_language": "El corredor y el terreno de control se degradan a un ritmo similar. El patrón apunta a sequía regional, no al uso del sendero.",
+        "management_implication": "La restauración local no corregiría la causa. Priorizar seguimiento y medidas a escala de macizo."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_senderismo_acequias_del_poqueira_008",
+      "classification": "MACROCLIMATE_DRIVEN",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "HIGH",
+        "attribution_index": -0.0244,
+        "local_degradation": 0.27787,
+        "control_degradation": 0.30228,
+        "mean_slope_deg": 12.27,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.278 vs altitude-matched control 0.302 (±50 m band, 200–500 m annulus); attribution index -0.024; mean slope 12.3° (below the 20° runoff-concentration threshold).",
+        "plain_language": "El corredor y el terreno de control se degradan a un ritmo similar. El patrón apunta a sequía regional, no al uso del sendero.",
+        "management_implication": "La restauración local no corregiría la causa. Priorizar seguimiento y medidas a escala de macizo."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_senderismo_canal_de_la_espartera_arenales_del_trevenque_009",
+      "classification": "MACROCLIMATE_DRIVEN",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "HIGH",
+        "attribution_index": -0.17122,
+        "local_degradation": 0.48194,
+        "control_degradation": 0.65316,
+        "mean_slope_deg": 13.52,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.482 vs altitude-matched control 0.653 (±50 m band, 200–500 m annulus); attribution index -0.171; mean slope 13.5° (below the 20° runoff-concentration threshold).",
+        "plain_language": "El corredor y el terreno de control se degradan a un ritmo similar. El patrón apunta a sequía regional, no al uso del sendero.",
+        "management_implication": "La restauración local no corregiría la causa. Priorizar seguimiento y medidas a escala de macizo."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_senderismo_cerro_huenes_010",
+      "classification": "MACROCLIMATE_DRIVEN",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "HIGH",
+        "attribution_index": -0.32463,
+        "local_degradation": 0.2081,
+        "control_degradation": 0.53273,
+        "mean_slope_deg": 11.21,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.208 vs altitude-matched control 0.533 (±50 m band, 200–500 m annulus); attribution index -0.325; mean slope 11.2° (below the 20° runoff-concentration threshold).",
+        "plain_language": "El corredor y el terreno de control se degradan a un ritmo similar. El patrón apunta a sequía regional, no al uso del sendero.",
+        "management_implication": "La restauración local no corregiría la causa. Priorizar seguimiento y medidas a escala de macizo."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_senderismo_el_aguadero_011",
+      "classification": "MACROCLIMATE_DRIVEN",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "HIGH",
+        "attribution_index": -0.10045,
+        "local_degradation": 0.27948,
+        "control_degradation": 0.37993,
+        "mean_slope_deg": 13.74,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.279 vs altitude-matched control 0.380 (±50 m band, 200–500 m annulus); attribution index -0.100; mean slope 13.7° (below the 20° runoff-concentration threshold).",
+        "plain_language": "El corredor y el terreno de control se degradan a un ritmo similar. El patrón apunta a sequía regional, no al uso del sendero.",
+        "management_implication": "La restauración local no corregiría la causa. Priorizar seguimiento y medidas a escala de macizo."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_senderismo_haza_larguilla_012",
+      "classification": "MACROCLIMATE_DRIVEN",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "HIGH",
+        "attribution_index": -0.0146,
+        "local_degradation": 0.75469,
+        "control_degradation": 0.76929,
+        "mean_slope_deg": 11.79,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.755 vs altitude-matched control 0.769 (±50 m band, 200–500 m annulus); attribution index -0.015; mean slope 11.8° (below the 20° runoff-concentration threshold).",
+        "plain_language": "El corredor y el terreno de control se degradan a un ritmo similar. El patrón apunta a sequía regional, no al uso del sendero.",
+        "management_implication": "La restauración local no corregiría la causa. Priorizar seguimiento y medidas a escala de macizo."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_senderismo_hoya_del_portillo_refugio_poqueira_013",
+      "classification": "MACROCLIMATE_DRIVEN",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "HIGH",
+        "attribution_index": -0.21751,
+        "local_degradation": 0.42828,
+        "control_degradation": 0.64579,
+        "mean_slope_deg": 14.85,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.428 vs altitude-matched control 0.646 (±50 m band, 200–500 m annulus); attribution index -0.218; mean slope 14.8° (below the 20° runoff-concentration threshold).",
+        "plain_language": "El corredor y el terreno de control se degradan a un ritmo similar. El patrón apunta a sequía regional, no al uso del sendero.",
+        "management_implication": "La restauración local no corregiría la causa. Priorizar seguimiento y medidas a escala de macizo."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_senderismo_jerez_del_marquesado_postero_alto_014",
+      "classification": "MIXED",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "LOW",
+        "attribution_index": 0.12262,
+        "local_degradation": 0.25358,
+        "control_degradation": 0.13097,
+        "mean_slope_deg": 13.39,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.254 vs altitude-matched control 0.131 (±50 m band, 200–500 m annulus); attribution index +0.123; mean slope 13.4° (below the 20° runoff-concentration threshold).",
+        "plain_language": "Hay indicios de exceso de degradación en el corredor, pero no concluyentes: o la señal es débil o la pendiente no basta para atribuirla a roderas.",
+        "management_implication": "Mantener seguimiento y reforzar la evidencia antes de comprometer presupuesto de restauración."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_senderismo_ragua_aldeire_015",
+      "classification": "MACROCLIMATE_DRIVEN",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "MODERATE",
+        "attribution_index": 0.05514,
+        "local_degradation": 0.12746,
+        "control_degradation": 0.07233,
+        "mean_slope_deg": 10.99,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.127 vs altitude-matched control 0.072 (±50 m band, 200–500 m annulus); attribution index +0.055; mean slope 11.0° (below the 20° runoff-concentration threshold).",
+        "plain_language": "El corredor y el terreno de control se degradan a un ritmo similar. El patrón apunta a sequía regional, no al uso del sendero.",
+        "management_implication": "La restauración local no corregiría la causa. Priorizar seguimiento y medidas a escala de macizo."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_senderismo_transnevada_invierno_016",
+      "classification": "MACROCLIMATE_DRIVEN",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "HIGH",
+        "attribution_index": -0.0358,
+        "local_degradation": 0.33866,
+        "control_degradation": 0.37446,
+        "mean_slope_deg": 11.74,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.339 vs altitude-matched control 0.374 (±50 m band, 200–500 m annulus); attribution index -0.036; mean slope 11.7° (below the 20° runoff-concentration threshold).",
+        "plain_language": "El corredor y el terreno de control se degradan a un ritmo similar. El patrón apunta a sequía regional, no al uso del sendero.",
+        "management_implication": "La restauración local no corregiría la causa. Priorizar seguimiento y medidas a escala de macizo."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_senderismo_transnevada_verano_017",
+      "classification": "MACROCLIMATE_DRIVEN",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "HIGH",
+        "attribution_index": -0.01391,
+        "local_degradation": 0.3178,
+        "control_degradation": 0.33172,
+        "mean_slope_deg": 14.46,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.318 vs altitude-matched control 0.332 (±50 m band, 200–500 m annulus); attribution index -0.014; mean slope 14.5° (below the 20° runoff-concentration threshold).",
+        "plain_language": "El corredor y el terreno de control se degradan a un ritmo similar. El patrón apunta a sequía regional, no al uso del sendero.",
+        "management_implication": "La restauración local no corregiría la causa. Priorizar seguimiento y medidas a escala de macizo."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_senderismo_transnevada_ra_guejar_sierra_pena_partida_018",
+      "classification": "MACROCLIMATE_DRIVEN",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "HIGH",
+        "attribution_index": -0.11055,
+        "local_degradation": 0.50406,
+        "control_degradation": 0.61461,
+        "mean_slope_deg": 15.92,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.504 vs altitude-matched control 0.615 (±50 m band, 200–500 m annulus); attribution index -0.111; mean slope 15.9° (below the 20° runoff-concentration threshold).",
+        "plain_language": "El corredor y el terreno de control se degradan a un ritmo similar. El patrón apunta a sequía regional, no al uso del sendero.",
+        "management_implication": "La restauración local no corregiría la causa. Priorizar seguimiento y medidas a escala de macizo."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_senderismo_transnevada_rb_lanteira_postero_alto_lanteira_019",
+      "classification": "MACROCLIMATE_DRIVEN",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "HIGH",
+        "attribution_index": -0.07446,
+        "local_degradation": 0.29633,
+        "control_degradation": 0.37079,
+        "mean_slope_deg": 12.01,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.296 vs altitude-matched control 0.371 (±50 m band, 200–500 m annulus); attribution index -0.074; mean slope 12.0° (below the 20° runoff-concentration threshold).",
+        "plain_language": "El corredor y el terreno de control se degradan a un ritmo similar. El patrón apunta a sequía regional, no al uso del sendero.",
+        "management_implication": "La restauración local no corregiría la causa. Priorizar seguimiento y medidas a escala de macizo."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_senderismo_transnevada_re_bayarcal_laguna_seca_020",
+      "classification": "MIXED",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "LOW",
+        "attribution_index": 0.10385,
+        "local_degradation": 0.15535,
+        "control_degradation": 0.05149,
+        "mean_slope_deg": 13.86,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.155 vs altitude-matched control 0.051 (±50 m band, 200–500 m annulus); attribution index +0.104; mean slope 13.9° (below the 20° runoff-concentration threshold).",
+        "plain_language": "Hay indicios de exceso de degradación en el corredor, pero no concluyentes: o la señal es débil o la pendiente no basta para atribuirla a roderas.",
+        "management_implication": "Mantener seguimiento y reforzar la evidencia antes de comprometer presupuesto de restauración."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_senderismo_la_cebadilla_021",
+      "classification": "MIXED",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "LOW",
+        "attribution_index": 0.14357,
+        "local_degradation": 0.25748,
+        "control_degradation": 0.11391,
+        "mean_slope_deg": 11.88,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.257 vs altitude-matched control 0.114 (±50 m band, 200–500 m annulus); attribution index +0.144; mean slope 11.9° (below the 20° runoff-concentration threshold).",
+        "plain_language": "Hay indicios de exceso de degradación en el corredor, pero no concluyentes: o la señal es débil o la pendiente no basta para atribuirla a roderas.",
+        "management_implication": "Mantener seguimiento y reforzar la evidencia antes de comprometer presupuesto de restauración."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_senderismo_la_silleta_022",
+      "classification": "MIXED",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "LOW",
+        "attribution_index": 0.11072,
+        "local_degradation": 0.72449,
+        "control_degradation": 0.61377,
+        "mean_slope_deg": 4.67,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.724 vs altitude-matched control 0.614 (±50 m band, 200–500 m annulus); attribution index +0.111; mean slope 4.7° (below the 20° runoff-concentration threshold).",
+        "plain_language": "Hay indicios de exceso de degradación en el corredor, pero no concluyentes: o la señal es débil o la pendiente no basta para atribuirla a roderas.",
+        "management_implication": "Mantener seguimiento y reforzar la evidencia antes de comprometer presupuesto de restauración."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_senderismo_lanjaron_tello_023",
+      "classification": "MACROCLIMATE_DRIVEN",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "HIGH",
+        "attribution_index": -0.35789,
+        "local_degradation": 0.18175,
+        "control_degradation": 0.53964,
+        "mean_slope_deg": 19.81,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.182 vs altitude-matched control 0.540 (±50 m band, 200–500 m annulus); attribution index -0.358; mean slope 19.8° (below the 20° runoff-concentration threshold).",
+        "plain_language": "El corredor y el terreno de control se degradan a un ritmo similar. El patrón apunta a sequía regional, no al uso del sendero.",
+        "management_implication": "La restauración local no corregiría la causa. Priorizar seguimiento y medidas a escala de macizo."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_senderismo_molinos_de_isfalada_024",
+      "classification": "MACROCLIMATE_DRIVEN",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "HIGH",
+        "attribution_index": -0.15667,
+        "local_degradation": 0.58377,
+        "control_degradation": 0.74044,
+        "mean_slope_deg": 5.8,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.584 vs altitude-matched control 0.740 (±50 m band, 200–500 m annulus); attribution index -0.157; mean slope 5.8° (below the 20° runoff-concentration threshold).",
+        "plain_language": "El corredor y el terreno de control se degradan a un ritmo similar. El patrón apunta a sequía regional, no al uso del sendero.",
+        "management_implication": "La restauración local no corregiría la causa. Priorizar seguimiento y medidas a escala de macizo."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_senderismo_monterrey_025",
+      "classification": "MACROCLIMATE_DRIVEN",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "HIGH",
+        "attribution_index": -0.42718,
+        "local_degradation": 0.26629,
+        "control_degradation": 0.69347,
+        "mean_slope_deg": 14.93,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.266 vs altitude-matched control 0.693 (±50 m band, 200–500 m annulus); attribution index -0.427; mean slope 14.9° (below the 20° runoff-concentration threshold).",
+        "plain_language": "El corredor y el terreno de control se degradan a un ritmo similar. El patrón apunta a sequía regional, no al uso del sendero.",
+        "management_implication": "La restauración local no corregiría la causa. Priorizar seguimiento y medidas a escala de macizo."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_senderismo_puente_palo_026",
+      "classification": "MACROCLIMATE_DRIVEN",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "HIGH",
+        "attribution_index": 0.0,
+        "local_degradation": 0.0,
+        "control_degradation": 0.0,
+        "mean_slope_deg": 17.54,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.000 vs altitude-matched control 0.000 (±50 m band, 200–500 m annulus); attribution index +0.000; mean slope 17.5° (below the 20° runoff-concentration threshold).",
+        "plain_language": "El corredor y el terreno de control se degradan a un ritmo similar. El patrón apunta a sequía regional, no al uso del sendero.",
+        "management_implication": "La restauración local no corregiría la causa. Priorizar seguimiento y medidas a escala de macizo."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_senderismo_ragua_hoyos_de_pura_027",
+      "classification": "MACROCLIMATE_DRIVEN",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "MODERATE",
+        "attribution_index": 0.05444,
+        "local_degradation": 0.08547,
+        "control_degradation": 0.03103,
+        "mean_slope_deg": 10.73,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.085 vs altitude-matched control 0.031 (±50 m band, 200–500 m annulus); attribution index +0.054; mean slope 10.7° (below the 20° runoff-concentration threshold).",
+        "plain_language": "El corredor y el terreno de control se degradan a un ritmo similar. El patrón apunta a sequía regional, no al uso del sendero.",
+        "management_implication": "La restauración local no corregiría la causa. Priorizar seguimiento y medidas a escala de macizo."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_senderismo_ragua_lagunilla_seca_028",
+      "classification": "MACROCLIMATE_DRIVEN",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "HIGH",
+        "attribution_index": -0.07628,
+        "local_degradation": 0.18391,
+        "control_degradation": 0.26018,
+        "mean_slope_deg": 13.75,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.184 vs altitude-matched control 0.260 (±50 m band, 200–500 m annulus); attribution index -0.076; mean slope 13.8° (below the 20° runoff-concentration threshold).",
+        "plain_language": "El corredor y el terreno de control se degradan a un ritmo similar. El patrón apunta a sequía regional, no al uso del sendero.",
+        "management_implication": "La restauración local no corregiría la causa. Priorizar seguimiento y medidas a escala de macizo."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_senderismo_rio_alhama_029",
+      "classification": "MACROCLIMATE_DRIVEN",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "MODERATE",
+        "attribution_index": 0.02353,
+        "local_degradation": 0.51075,
+        "control_degradation": 0.48723,
+        "mean_slope_deg": 15.99,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.511 vs altitude-matched control 0.487 (±50 m band, 200–500 m annulus); attribution index +0.024; mean slope 16.0° (below the 20° runoff-concentration threshold).",
+        "plain_language": "El corredor y el terreno de control se degradan a un ritmo similar. El patrón apunta a sequía regional, no al uso del sendero.",
+        "management_implication": "La restauración local no corregiría la causa. Priorizar seguimiento y medidas a escala de macizo."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_senderismo_rio_bermejo_030",
+      "classification": "NO_VALID_CONTROL",
+      "control_altitude_matched": true,
+      "fallback_reason": "insufficient summer observations (local=1, control=3, need >= 2)",
+      "attribution": null
+    },
+    {
+      "asset_id": "pn_sierra_nevada_senderismo_rio_grande_de_los_berchules_031",
+      "classification": "MACROCLIMATE_DRIVEN",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "HIGH",
+        "attribution_index": -0.00518,
+        "local_degradation": 0.2938,
+        "control_degradation": 0.29897,
+        "mean_slope_deg": 24.27,
+        "slope_gate_passed": true,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.294 vs altitude-matched control 0.299 (±50 m band, 200–500 m annulus); attribution index -0.005; mean slope 24.3° (above the 20° runoff-concentration threshold).",
+        "plain_language": "El corredor y el terreno de control se degradan a un ritmo similar. El patrón apunta a sequía regional, no al uso del sendero.",
+        "management_implication": "La restauración local no corregiría la causa. Priorizar seguimiento y medidas a escala de macizo."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_senderismo_trevelez_siete_lagunas_032",
+      "classification": "MIXED",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "LOW",
+        "attribution_index": 0.15527,
+        "local_degradation": 0.26479,
+        "control_degradation": 0.10952,
+        "mean_slope_deg": 14.3,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.265 vs altitude-matched control 0.110 (±50 m band, 200–500 m annulus); attribution index +0.155; mean slope 14.3° (below the 20° runoff-concentration threshold).",
+        "plain_language": "Hay indicios de exceso de degradación en el corredor, pero no concluyentes: o la señal es débil o la pendiente no basta para atribuirla a roderas.",
+        "management_implication": "Mantener seguimiento y reforzar la evidencia antes de comprometer presupuesto de restauración."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_senderismo_ubeire_033",
+      "classification": "MACROCLIMATE_DRIVEN",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "HIGH",
+        "attribution_index": -0.07786,
+        "local_degradation": 0.22427,
+        "control_degradation": 0.30213,
+        "mean_slope_deg": 8.35,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.224 vs altitude-matched control 0.302 (±50 m band, 200–500 m annulus); attribution index -0.078; mean slope 8.4° (below the 20° runoff-concentration threshold).",
+        "plain_language": "El corredor y el terreno de control se degradan a un ritmo similar. El patrón apunta a sequía regional, no al uso del sendero.",
+        "management_implication": "La restauración local no corregiría la causa. Priorizar seguimiento y medidas a escala de macizo."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_senderismo_sulayr_034",
+      "classification": "MACROCLIMATE_DRIVEN",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "HIGH",
+        "attribution_index": -0.10155,
+        "local_degradation": 0.19692,
+        "control_degradation": 0.29847,
+        "mean_slope_deg": 16.56,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.197 vs altitude-matched control 0.298 (±50 m band, 200–500 m annulus); attribution index -0.102; mean slope 16.6° (below the 20° runoff-concentration threshold).",
+        "plain_language": "El corredor y el terreno de control se degradan a un ritmo similar. El patrón apunta a sequía regional, no al uso del sendero.",
+        "management_implication": "La restauración local no corregiría la causa. Priorizar seguimiento y medidas a escala de macizo."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_senderismo_carril_cicloturista_la_zubia_cumbres_verdes_035",
+      "classification": "MACROCLIMATE_DRIVEN",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "HIGH",
+        "attribution_index": -0.01805,
+        "local_degradation": 0.71042,
+        "control_degradation": 0.72847,
+        "mean_slope_deg": 4.05,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.710 vs altitude-matched control 0.728 (±50 m band, 200–500 m annulus); attribution index -0.018; mean slope 4.0° (below the 20° runoff-concentration threshold).",
+        "plain_language": "El corredor y el terreno de control se degradan a un ritmo similar. El patrón apunta a sequía regional, no al uso del sendero.",
+        "management_implication": "La restauración local no corregiría la causa. Priorizar seguimiento y medidas a escala de macizo."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_senderismo_dehesa_del_camarate_036",
+      "classification": "MIXED",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "LOW",
+        "attribution_index": 0.12122,
+        "local_degradation": 0.13018,
+        "control_degradation": 0.00896,
+        "mean_slope_deg": 8.64,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.130 vs altitude-matched control 0.009 (±50 m band, 200–500 m annulus); attribution index +0.121; mean slope 8.6° (below the 20° runoff-concentration threshold).",
+        "plain_language": "Hay indicios de exceso de degradación en el corredor, pero no concluyentes: o la señal es débil o la pendiente no basta para atribuirla a roderas.",
+        "management_implication": "Mantener seguimiento y reforzar la evidencia antes de comprometer presupuesto de restauración."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_senderismo_pueblos_del_poqueira_037",
+      "classification": "MIXED",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "LOW",
+        "attribution_index": 0.10624,
+        "local_degradation": 0.10624,
+        "control_degradation": 0.0,
+        "mean_slope_deg": 10.78,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.106 vs altitude-matched control 0.000 (±50 m band, 200–500 m annulus); attribution index +0.106; mean slope 10.8° (below the 20° runoff-concentration threshold).",
+        "plain_language": "Hay indicios de exceso de degradación en el corredor, pero no concluyentes: o la señal es débil o la pendiente no basta para atribuirla a roderas.",
+        "management_implication": "Mantener seguimiento y reforzar la evidencia antes de comprometer presupuesto de restauración."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_senderismo_ragua_barranco_del_hornillo_038",
+      "classification": "MACROCLIMATE_DRIVEN",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "MODERATE",
+        "attribution_index": 0.0139,
+        "local_degradation": 0.07044,
+        "control_degradation": 0.05654,
+        "mean_slope_deg": 13.11,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.070 vs altitude-matched control 0.057 (±50 m band, 200–500 m annulus); attribution index +0.014; mean slope 13.1° (below the 20° runoff-concentration threshold).",
+        "plain_language": "El corredor y el terreno de control se degradan a un ritmo similar. El patrón apunta a sequía regional, no al uso del sendero.",
+        "management_implication": "La restauración local no corregiría la causa. Priorizar seguimiento y medidas a escala de macizo."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_ciclismo_transnevada_rf_valor_fuente_de_las_primeras_agua_039",
+      "classification": "MIXED",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "LOW",
+        "attribution_index": 0.19544,
+        "local_degradation": 0.46287,
+        "control_degradation": 0.26743,
+        "mean_slope_deg": 14.67,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.463 vs altitude-matched control 0.267 (±50 m band, 200–500 m annulus); attribution index +0.195; mean slope 14.7° (below the 20° runoff-concentration threshold).",
+        "plain_language": "Hay indicios de exceso de degradación en el corredor, pero no concluyentes: o la señal es débil o la pendiente no basta para atribuirla a roderas.",
+        "management_implication": "Mantener seguimiento y reforzar la evidencia antes de comprometer presupuesto de restauración."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_ciclismo_transnevada_rg_yegen_mecina_bombaron_yegen_040",
+      "classification": "MIXED",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "LOW",
+        "attribution_index": 0.11945,
+        "local_degradation": 0.52138,
+        "control_degradation": 0.40193,
+        "mean_slope_deg": 16.75,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.521 vs altitude-matched control 0.402 (±50 m band, 200–500 m annulus); attribution index +0.119; mean slope 16.7° (below the 20° runoff-concentration threshold).",
+        "plain_language": "Hay indicios de exceso de degradación en el corredor, pero no concluyentes: o la señal es débil o la pendiente no basta para atribuirla a roderas.",
+        "management_implication": "Mantener seguimiento y reforzar la evidencia antes de comprometer presupuesto de restauración."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_ciclismo_transnevada_rh_capileira_refugio_poqueira_041",
+      "classification": "MIXED",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "LOW",
+        "attribution_index": 0.07689,
+        "local_degradation": 0.43262,
+        "control_degradation": 0.35572,
+        "mean_slope_deg": 12.91,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.433 vs altitude-matched control 0.356 (±50 m band, 200–500 m annulus); attribution index +0.077; mean slope 12.9° (below the 20° runoff-concentration threshold).",
+        "plain_language": "Hay indicios de exceso de degradación en el corredor, pero no concluyentes: o la señal es débil o la pendiente no basta para atribuirla a roderas.",
+        "management_implication": "Mantener seguimiento y reforzar la evidencia antes de comprometer presupuesto de restauración."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_ciclismo_transnevada_rj_portugos_barranco_bermejo_portugo_042",
+      "classification": "MIXED",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "LOW",
+        "attribution_index": 0.1482,
+        "local_degradation": 0.24079,
+        "control_degradation": 0.09259,
+        "mean_slope_deg": 17.83,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.241 vs altitude-matched control 0.093 (±50 m band, 200–500 m annulus); attribution index +0.148; mean slope 17.8° (below the 20° runoff-concentration threshold).",
+        "plain_language": "Hay indicios de exceso de degradación en el corredor, pero no concluyentes: o la señal es débil o la pendiente no basta para atribuirla a roderas.",
+        "management_implication": "Mantener seguimiento y reforzar la evidencia antes de comprometer presupuesto de restauración."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_ciclismo_transnevada_rk_padre_eterno_ar_puente_palo_padre_043",
+      "classification": "MIXED",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "LOW",
+        "attribution_index": 0.11157,
+        "local_degradation": 0.37662,
+        "control_degradation": 0.26504,
+        "mean_slope_deg": 15.99,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.377 vs altitude-matched control 0.265 (±50 m band, 200–500 m annulus); attribution index +0.112; mean slope 16.0° (below the 20° runoff-concentration threshold).",
+        "plain_language": "Hay indicios de exceso de degradación en el corredor, pero no concluyentes: o la señal es débil o la pendiente no basta para atribuirla a roderas.",
+        "management_implication": "Mantener seguimiento y reforzar la evidencia antes de comprometer presupuesto de restauración."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_ciclismo_transnevada_rc_abrucena_la_polarda_044",
+      "classification": "MACROCLIMATE_DRIVEN",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "HIGH",
+        "attribution_index": -0.03483,
+        "local_degradation": 0.32382,
+        "control_degradation": 0.35865,
+        "mean_slope_deg": 14.77,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.324 vs altitude-matched control 0.359 (±50 m band, 200–500 m annulus); attribution index -0.035; mean slope 14.8° (below the 20° runoff-concentration threshold).",
+        "plain_language": "El corredor y el terreno de control se degradan a un ritmo similar. El patrón apunta a sequía regional, no al uso del sendero.",
+        "management_implication": "La restauración local no corregiría la causa. Priorizar seguimiento y medidas a escala de macizo."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_ciclismo_transnevada_rd_laujar_andarax_loma_raspa_laujar__045",
+      "classification": "MACROCLIMATE_DRIVEN",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "HIGH",
+        "attribution_index": -0.20596,
+        "local_degradation": 0.35222,
+        "control_degradation": 0.55818,
+        "mean_slope_deg": 13.51,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.352 vs altitude-matched control 0.558 (±50 m band, 200–500 m annulus); attribution index -0.206; mean slope 13.5° (below the 20° runoff-concentration threshold).",
+        "plain_language": "El corredor y el terreno de control se degradan a un ritmo similar. El patrón apunta a sequía regional, no al uso del sendero.",
+        "management_implication": "La restauración local no corregiría la causa. Priorizar seguimiento y medidas a escala de macizo."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_ciclismo_transnevada_ri_niguelas_la_rinconada_niguelas_046",
+      "classification": "MACROCLIMATE_DRIVEN",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "HIGH",
+        "attribution_index": -0.00982,
+        "local_degradation": 0.49631,
+        "control_degradation": 0.50614,
+        "mean_slope_deg": 20.54,
+        "slope_gate_passed": true,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.496 vs altitude-matched control 0.506 (±50 m band, 200–500 m annulus); attribution index -0.010; mean slope 20.5° (above the 20° runoff-concentration threshold).",
+        "plain_language": "El corredor y el terreno de control se degradan a un ritmo similar. El patrón apunta a sequía regional, no al uso del sendero.",
+        "management_implication": "La restauración local no corregiría la causa. Priorizar seguimiento y medidas a escala de macizo."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_ciclismo_transnevada_invierno_047",
+      "classification": "MACROCLIMATE_DRIVEN",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "HIGH",
+        "attribution_index": -0.0358,
+        "local_degradation": 0.33866,
+        "control_degradation": 0.37446,
+        "mean_slope_deg": 11.74,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.339 vs altitude-matched control 0.374 (±50 m band, 200–500 m annulus); attribution index -0.036; mean slope 11.7° (below the 20° runoff-concentration threshold).",
+        "plain_language": "El corredor y el terreno de control se degradan a un ritmo similar. El patrón apunta a sequía regional, no al uso del sendero.",
+        "management_implication": "La restauración local no corregiría la causa. Priorizar seguimiento y medidas a escala de macizo."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_ciclismo_transnevada_verano_048",
+      "classification": "MACROCLIMATE_DRIVEN",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "HIGH",
+        "attribution_index": -0.01391,
+        "local_degradation": 0.3178,
+        "control_degradation": 0.33172,
+        "mean_slope_deg": 14.46,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.318 vs altitude-matched control 0.332 (±50 m band, 200–500 m annulus); attribution index -0.014; mean slope 14.5° (below the 20° runoff-concentration threshold).",
+        "plain_language": "El corredor y el terreno de control se degradan a un ritmo similar. El patrón apunta a sequía regional, no al uso del sendero.",
+        "management_implication": "La restauración local no corregiría la causa. Priorizar seguimiento y medidas a escala de macizo."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_ciclismo_transnevada_ra_guejar_sierra_pena_partida_049",
+      "classification": "MACROCLIMATE_DRIVEN",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "HIGH",
+        "attribution_index": -0.11055,
+        "local_degradation": 0.50406,
+        "control_degradation": 0.61461,
+        "mean_slope_deg": 15.92,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.504 vs altitude-matched control 0.615 (±50 m band, 200–500 m annulus); attribution index -0.111; mean slope 15.9° (below the 20° runoff-concentration threshold).",
+        "plain_language": "El corredor y el terreno de control se degradan a un ritmo similar. El patrón apunta a sequía regional, no al uso del sendero.",
+        "management_implication": "La restauración local no corregiría la causa. Priorizar seguimiento y medidas a escala de macizo."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_ciclismo_transnevada_rb_lanteira_postero_alto_lanteira_050",
+      "classification": "MACROCLIMATE_DRIVEN",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "HIGH",
+        "attribution_index": -0.07446,
+        "local_degradation": 0.29633,
+        "control_degradation": 0.37079,
+        "mean_slope_deg": 12.01,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.296 vs altitude-matched control 0.371 (±50 m band, 200–500 m annulus); attribution index -0.074; mean slope 12.0° (below the 20° runoff-concentration threshold).",
+        "plain_language": "El corredor y el terreno de control se degradan a un ritmo similar. El patrón apunta a sequía regional, no al uso del sendero.",
+        "management_implication": "La restauración local no corregiría la causa. Priorizar seguimiento y medidas a escala de macizo."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_ciclismo_transnevada_re_bayarcal_laguna_seca_051",
+      "classification": "MIXED",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "LOW",
+        "attribution_index": 0.10385,
+        "local_degradation": 0.15535,
+        "control_degradation": 0.05149,
+        "mean_slope_deg": 13.86,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.155 vs altitude-matched control 0.051 (±50 m band, 200–500 m annulus); attribution index +0.104; mean slope 13.9° (below the 20° runoff-concentration threshold).",
+        "plain_language": "Hay indicios de exceso de degradación en el corredor, pero no concluyentes: o la señal es débil o la pendiente no basta para atribuirla a roderas.",
+        "management_implication": "Mantener seguimiento y reforzar la evidencia antes de comprometer presupuesto de restauración."
+      }
+    },
+    {
+      "asset_id": "pn_sierra_nevada_ciclismo_carril_cicloturista_la_zubia_cumbres_verdes_052",
+      "classification": "MACROCLIMATE_DRIVEN",
+      "control_altitude_matched": true,
+      "fallback_reason": null,
+      "attribution": {
+        "confidence": "HIGH",
+        "attribution_index": -0.01805,
+        "local_degradation": 0.71042,
+        "control_degradation": 0.72847,
+        "mean_slope_deg": 4.05,
+        "slope_gate_passed": false,
+        "n_observations": 3,
+        "data_source": "scm_real:alpine",
+        "evidence_class": "real",
+        "technical_rationale": "Local degradation 0.710 vs altitude-matched control 0.728 (±50 m band, 200–500 m annulus); attribution index -0.018; mean slope 4.0° (below the 20° runoff-concentration threshold).",
+        "plain_language": "El corredor y el terreno de control se degradan a un ritmo similar. El patrón apunta a sequía regional, no al uso del sendero.",
+        "management_implication": "La restauración local no corregiría la causa. Priorizar seguimiento y medidas a escala de macizo."
+      }
+    }
+  ]
+}

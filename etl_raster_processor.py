@@ -79,6 +79,8 @@ _KEYS_B11: tuple[str, ...] = ("swir16", "B11")
 # Alpine Edition additions: green drives NDSI, SCL drives the snow-permissive mask
 _KEYS_B03: tuple[str, ...] = ("green", "B03")
 _KEYS_SCL: tuple[str, ...] = ("scl",   "SCL")
+# Alpine Edition summer additions (issue #9): blue drives EVI's aerosol term
+_KEYS_B02: tuple[str, ...] = ("blue",  "B02")
 
 # GDAL environment hints that activate HTTP range-request optimisation for COGs
 _GDAL_COG_ENV: dict[str, str] = {
@@ -252,6 +254,36 @@ def compute_normalised_index(
     with np.errstate(divide="ignore", invalid="ignore"):
         result = np.where(denom == 0.0, 0.0, (a - b) / denom)
     return result.astype(np.float32)
+
+
+def compute_evi_array(
+    nir_dn: np.ndarray,
+    red_dn: np.ndarray,
+    blue_dn: np.ndarray,
+    G: float = 2.5,
+    C1: float = 6.0,
+    C2: float = 7.5,
+    L: float = 1.0,
+) -> np.ndarray:
+    """Array counterpart of :func:`src.features.spectral.compute_evi`.
+
+    Unlike :func:`compute_normalised_index`, EVI is not a pure ratio — the
+    ``+L`` canopy term does not cancel a shared scale factor — so, unlike the
+    NDVI/NDMI/NDSI calls elsewhere in this module, the raw Sentinel-2 digital
+    numbers must be converted to surface reflectance (``/10000``) before the
+    formula applies. Re-implements the scalar formula vectorised rather than
+    calling ``compute_evi`` per-pixel, which would be too slow over a
+    multi-megapixel scene window.
+    """
+    nir = nir_dn.astype(np.float32) / 10000.0
+    red = red_dn.astype(np.float32) / 10000.0
+    blue = blue_dn.astype(np.float32) / 10000.0
+    denom = nir + C1 * red - C2 * blue + L
+    with np.errstate(divide="ignore", invalid="ignore"):
+        evi = np.where(
+            denom == 0.0, 0.0, G * (nir - red) / np.where(denom == 0.0, 1.0, denom)
+        )
+    return evi.astype(np.float32)
 
 
 # ── Writer ────────────────────────────────────────────────────────────────────
@@ -582,6 +614,158 @@ def run_alpine_multitile(
 
     manifest_out = manifest_path or (
         PROJECT_ROOT / "clean_assets" / "sierra_nevada_ndsi_manifest.csv"
+    )
+    write_manifest_csv(manifest, manifest_out)
+    print(f"  Manifest written to {manifest_out}")
+    result_paths["manifest"] = manifest_out
+
+    print(DIV)
+    print(f"  Done. {len(outputs)} GeoTIFFs + manifest written.")
+
+    return result_paths
+
+
+# ── Alpine Edition: multi-tile summer EVI/NDMI mosaic (issue #9) ──────────────
+
+def run_alpine_multitile_summer(
+    bbox: tuple[float, float, float, float],
+    mgrs_tiles: tuple[str, ...],
+    date_range: str,
+    max_cloud_pct: float = MAX_CLOUD_PCT,
+    clean_dir: Path = CLEAN_DIR,
+    manifest_path: Path | None = None,
+) -> dict[str, Path]:
+    """Summer EVI/NDMI/NDVI mosaic across every MGRS tile in *mgrs_tiles*.
+
+    The summer counterpart of :func:`run_alpine_multitile`: same per-tile
+    search / boundless-read / cloud-ordered mosaic strategy, but reading
+    B02/B04/B08/B11/SCL (blue/red/nir/swir/scene-class) instead of
+    B03/B08/B11/SCL, because the summer product needs EVI and NDMI rather than
+    NDSI. Writes ``clean_S2_EVI.tif`` (via :func:`compute_evi_array`) and
+    ``clean_S2_NDMI.tif``/``clean_S2_NDVI.tif`` (via
+    :func:`compute_normalised_index`, reused unchanged since both are pure
+    ratios) alongside the raw bands and the SCL mosaic, plus the same
+    tile/scene/date/coverage manifest as the winter path.
+
+    Args:
+        bbox: full territory bbox (W, S, E, N) in EPSG:4326.
+        mgrs_tiles: MGRS tile codes to search and mosaic independently.
+        date_range: STAC ``datetime`` filter, e.g. ``"2024-07-01/2024-07-31"``.
+        manifest_path: override for the committed manifest CSV.
+    """
+    clean_dir.mkdir(parents=True, exist_ok=True)
+
+    ref_h = ref_w = None
+    ref_transform = ref_crs = None
+    b02_tiles: list[np.ndarray] = []
+    b04_tiles: list[np.ndarray] = []
+    b08_tiles: list[np.ndarray] = []
+    b11_tiles: list[np.ndarray] = []
+    scl_tiles: list[np.ndarray] = []
+    manifest: list[TileManifestEntry] = []
+
+    print(f"  Searching {len(mgrs_tiles)} MGRS tiles: {', '.join(mgrs_tiles)}")
+    for tile in mgrs_tiles:
+        print(f"  [{tile}] searching STAC …")
+        item = search_best_item(bbox, date_range, max_cloud_pct, mgrs_tile=tile)
+        cloud_pct = float(item.properties.get("eo:cloud_cover", 100))
+        print(f"  [{tile}] {item.id}  date={item.datetime}  cloud={cloud_pct:.1f}%")
+
+        href_b02 = resolve_asset_href(item, *_KEYS_B02)
+        href_b04 = resolve_asset_href(item, *_KEYS_B04)
+        href_b08 = resolve_asset_href(item, *_KEYS_B08)
+        href_b11 = resolve_asset_href(item, *_KEYS_B11)
+        href_scl = resolve_asset_href(item, *_KEYS_SCL)
+
+        b02, tr, crs = read_cog_window(href_b02, bbox, boundless=True)
+        if ref_h is None:
+            ref_h, ref_w = b02.shape
+            ref_transform, ref_crs = tr, crs
+        elif b02.shape != (ref_h, ref_w):
+            b02, _, _ = read_cog_window(
+                href_b02, bbox, out_shape=(ref_h, ref_w), boundless=True
+            )
+
+        b04, _, _ = read_cog_window(
+            href_b04, bbox, out_shape=(ref_h, ref_w), boundless=True
+        )
+        b08, _, _ = read_cog_window(
+            href_b08, bbox, out_shape=(ref_h, ref_w), boundless=True
+        )
+        b11, _, _ = read_cog_window(
+            href_b11, bbox, out_shape=(ref_h, ref_w),
+            resampling=Resampling.bilinear, boundless=True,
+        )
+        scl, _, _ = read_cog_window(
+            href_scl, bbox, out_shape=(ref_h, ref_w),
+            resampling=Resampling.nearest, boundless=True,
+        )
+
+        cov = coverage_fraction(b02, nodata=0)
+        print(f"  [{tile}] valid coverage of the full bbox grid: {cov:.1%}")
+        manifest.append(TileManifestEntry(
+            tile=tile,
+            scene_id=str(item.id),
+            date=str(item.datetime)[:10],
+            cloud_pct=cloud_pct,
+            coverage_pct=cov * 100,
+        ))
+
+        b02_tiles.append(b02.astype(np.uint16))
+        b04_tiles.append(b04.astype(np.uint16))
+        b08_tiles.append(b08.astype(np.uint16))
+        b11_tiles.append(np.clip(b11, 0, 65535).astype(np.uint16))
+        scl_tiles.append(scl.astype(np.uint8))
+        print()
+
+    order = sorted(range(len(mgrs_tiles)), key=lambda i: manifest[i].cloud_pct)
+    b02_mosaic = merge_first_valid([b02_tiles[i] for i in order], nodata=0)
+    b04_mosaic = merge_first_valid([b04_tiles[i] for i in order], nodata=0)
+    b08_mosaic = merge_first_valid([b08_tiles[i] for i in order], nodata=0)
+    b11_mosaic = merge_first_valid([b11_tiles[i] for i in order], nodata=0)
+    scl_mosaic = merge_first_valid([scl_tiles[i] for i in order], nodata=0)
+    mosaic_cov = coverage_fraction(b02_mosaic, nodata=0)
+    print(f"  Combined mosaic coverage of the full bbox: {mosaic_cov:.1%}")
+
+    print("  Computing EVI, NDMI, NDVI over the mosaic …")
+    evi = compute_evi_array(b08_mosaic, b04_mosaic, b02_mosaic)
+    ndmi = compute_normalised_index(b08_mosaic, b11_mosaic)
+    ndvi = compute_normalised_index(b08_mosaic, b04_mosaic)
+    uncovered = b02_mosaic == 0
+    evi[uncovered] = -9999.0
+    ndmi[uncovered] = -9999.0
+    ndvi[uncovered] = -9999.0
+    print()
+
+    band_profile: dict = {
+        "driver": "GTiff", "dtype": "uint16", "width": ref_w, "height": ref_h,
+        "count": 1, "crs": ref_crs, "transform": ref_transform, "compress": "lzw",
+    }
+    scl_profile: dict = {**band_profile, "dtype": "uint8"}
+    index_profile: dict = {**band_profile, "dtype": "float32", "nodata": -9999.0}
+
+    outputs: list[tuple[str, np.ndarray, dict]] = [
+        ("clean_S2_B02_blue.tif", b02_mosaic, band_profile),
+        ("clean_S2_B04_red.tif",  b04_mosaic, band_profile),
+        ("clean_S2_B08_nir.tif",  b08_mosaic, band_profile),
+        ("clean_S2_B11_swir.tif", b11_mosaic, band_profile),
+        ("clean_S2_SCL.tif",      scl_mosaic, scl_profile),
+        ("clean_S2_EVI.tif",      evi,        index_profile),
+        ("clean_S2_NDMI.tif",     ndmi,       index_profile),
+        ("clean_S2_NDVI.tif",     ndvi,       index_profile),
+    ]
+    result_paths: dict[str, Path] = {}
+    print("  Writing mosaicked GeoTIFFs:")
+    for fname, data, profile in outputs:
+        out_path = clean_dir / fname
+        write_tif(out_path, data, profile)
+        size_mb = out_path.stat().st_size / 1_048_576
+        print(f"    {fname:<30}  {size_mb:5.1f} MB")
+        result_paths[fname] = out_path
+    print()
+
+    manifest_out = manifest_path or (
+        PROJECT_ROOT / "clean_assets" / "sierra_nevada_scm_manifest.csv"
     )
     write_manifest_csv(manifest, manifest_out)
     print(f"  Manifest written to {manifest_out}")
