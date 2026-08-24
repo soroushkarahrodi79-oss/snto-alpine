@@ -24,8 +24,8 @@ authors:
 repository-code: "https://github.com/soroushkarahrodi79-oss/snto-alpine"
 url: "https://github.com/soroushkarahrodi79-oss/snto-alpine"
 # Licencia de uso académico/no-comercial: ver fichero LICENSE (no es un identificador SPDX estándar).
-# Versión propia 0.x: nueva línea de producto, sin releases y sin validación de
-# campo. No hereda el linaje de versiones del observatorio base.
+# Versión propia 0.x: línea derivada con release v0.1.0; sin validación de
+# campo. No hereda el linaje de versiones ni el DOI del observatorio base.
 version: "0.1.0"
 date-released: "2026-08-23"
 keywords:
