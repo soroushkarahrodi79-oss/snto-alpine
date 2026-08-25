@@ -2,7 +2,7 @@
 
 # 🏔 Smart Natural Tourism Observatory — Alpine Edition (Sierra Nevada Pilot)
 
-**Capa de inteligencia para la decisión en espacios naturales protegidos de alta montaña.** Código abierto, para uso académico.
+**Capa de inteligencia para la decisión en espacios naturales protegidos de alta montaña.** Source-available, para uso académico y de investigación.
 
 De la teledetección Sentinel-2 a la decisión de inversión pública sobre el **Parque Nacional de Sierra Nevada** (Andalucía): innivación invernal, erosión estival de *borreguiles* por BTT y senderismo, atribución causal frente al clima, y traducción financiera TRAGSA para la administración pública (Junta de Andalucía, MITECO, Cetursa Sierra Nevada).
 
