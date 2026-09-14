@@ -13,7 +13,7 @@ De la teledetección Sentinel-2 a la decisión de inversión pública sobre el *
 [![Status](https://img.shields.io/badge/estado-prototipo%20·%20sin%20validar-lightgrey)](#1-estado-del-proyecto)
 [![License](https://img.shields.io/badge/uso-acad%C3%A9mico-lightgrey)](LICENSE)
 
-🏗 [Arquitectura](ARCHITECTURE.md) · 🗺 [Hoja de ruta Alpine](docs/roadmap/alpine-v0.1.md) · 🌱 [Observatorio base (del que deriva)](https://github.com/soroushkarahrodi79-oss/snto-smart-tourism-observatory)
+🏗 [Arquitectura](ARCHITECTURE.md) · 🗺 [Hoja de ruta Alpine](docs/roadmap/alpine-v0.1.md) · 📋 [Estado del proyecto](PROJECT_STATUS.md) · 🌱 [Observatorio base (del que deriva)](https://github.com/soroushkarahrodi79-oss/snto-smart-tourism-observatory)
 
 > ℹ️ **Edición derivada, versión 0.1.0.** Este repositorio es un *fork* del [observatorio base SNTO](https://github.com/soroushkarahrodi79-oss/snto-smart-tourism-observatory) y **reutiliza su motor** (EHS, SCM, DCS, capa temporal, persistencia, UI de 4 capas). No hereda su linaje de versiones (v1.0→v2.0), su DOI de Zenodo ni su despliegue en vivo — esos pertenecen al proyecto base. Este README describe **la Edición Alpina**; la relación con el motor heredado se detalla en [§10](#10-relación-con-el-observatorio-base).
 
